@@ -17,7 +17,7 @@ public interface StagiaireDao {
 
      List<Inscription> getListeInscriptionbyUser(Stagiaire stagiaire);
 
-     void registerUserToSession(Stagiaire stagiaire, int idSession);
+     boolean registerUserToSession(Stagiaire stagiaire, int idSession);
 
   
     

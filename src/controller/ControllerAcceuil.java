@@ -49,7 +49,7 @@ public class ControllerAcceuil implements ControllerInterface {
         VueAcceuil vueAcceuil = new VueAcceuil();
         vueAcceuil.choices();
         int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 4) {
+        while (menuchoice < 1 || menuchoice > 4 ) {
             vueAcceuil.error();
             menuchoice = sc.nextInt();
         }

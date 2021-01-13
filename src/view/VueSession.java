@@ -25,6 +25,7 @@ public class VueSession {
 
     public void resultsListSession(List<Session> listSession) {
         for (Session s : listSession) {
+            System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("idSession: " + s.getIdSession() + " \n" + "idFormateur: " + s.getIdformateur() + " \n" + "idLocal: " + s.getIdLocal().getNomLocal() + " \n" + "dateDébut: " + s.getDateDebut() + " \n" + "dateFin: " + s.getDateFin());
         }
     }

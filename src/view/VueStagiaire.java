@@ -49,6 +49,12 @@ public class VueStagiaire {
     }
 
     public void zeroInscription() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("Vous avez aucune inscription");
+    }
+
+    public void erreurDoubleInscription() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("Vous êtes déjà inscrit à cette session");
     }
 }

@@ -17,45 +17,35 @@ import java.util.List;
 
 public interface CentreDao {
 
-    List<Statut> getAllStatut();
+    public List<Statut> getAllStatut();
 
-    List<Formation> getAllFormation();
+    public List<Formation> getAllFormation();
 
-    List<Formation> searchFormation(String search);
+    public List<Formation> searchFormation(String search);
 
+    public Formation getFormationyId(int idFormation);
 
+    public Session getSessionbyId(int idSession);
 
-    Formation getFormationyId(int idFormation);
+    public User getUserbyId(int idUser);
 
-    Session getSessionbyId(int idSession);
+    public Formateur getFormateurbyId(int idFormateur);
 
-    User getUserbyId(int idUser);
+    public Local getLocalById(int idLocal);
 
-    Formateur getFormateurbyId(int idFormateur);
+    public Statut getStatutById(int idStatut);
 
-    Local getLocalById(int idLocal);
+    public Role getRoleById(int idRole);
 
-    Statut getStatutById(int idStatut);
+    public void createNewFormation(Formation formation);
 
-    Role getRoleById(int idRole);
+    public void updateFormation(Formation formation);
 
-    void createNewFormation(Formation formation);
+    public List<Formateur> getAllFormateur();
 
-    void updateFormation(Formation formation);
+    public List<Inscription> listeInscriptionbySession(Session session);
 
-    List<Formateur> getAllFormateur();
-
-     List<Inscription> listeInscriptionbySession(Session session);
-
-     List<Session> listeSessionbyFormation(Formation formation);
-
-
-
-
-
-
- 
-
+    public List<Session> listeSessionbyFormation(Formation formation);
 
 
 }

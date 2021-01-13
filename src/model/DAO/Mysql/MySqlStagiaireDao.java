@@ -62,28 +62,39 @@ public class MySqlStagiaireDao implements StagiaireDao {
     }
 
     @Override
-    public void registerUserToSession(Stagiaire stagiaire, int idSession) {
+    public boolean registerUserToSession(Stagiaire stagiaire, int idSession) {
         Connection c;
         ResultSet rs = null;
         PreparedStatement ps = null;
+        boolean result = false;
         int statutPaiement = 0;
         int notificationPaiement = 0;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "INSERT INTO inscription(idSession, idUser, statutPaiement, notificationPaiement) VALUES (?, ?,?,?)";
+        String sql = "SELECT idSession FROM inscription WHERE idUser = ?  AND idSession = ?";
+        String sql2 = "INSERT INTO inscription(idSession, idUser, statutPaiement, notificationPaiement) VALUES (?, ?,?,?)";
 
         try {
             ps = c.prepareStatement(sql);
+            ps.setInt(1, stagiaire.getIdUser());
+            ps.setInt(2, idSession);
+            rs = ps.executeQuery();
+            
+            if(!rs.next()){
+            result = true;
+            ps = c.prepareStatement(sql2);
             ps.setInt(1, idSession);
             ps.setInt(2, stagiaire.getIdUser());
             ps.setInt(3, statutPaiement);
             ps.setInt(4, notificationPaiement);
             ps.executeUpdate();
+            }
         } catch (SQLException sqle) {
             System.err.println("MySqlUserDao, method registerUserToSession(Stagiaire stagiaire, int idSession): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
+        return result;
 
     }
 }

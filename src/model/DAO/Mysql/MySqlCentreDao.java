@@ -126,7 +126,7 @@ public class MySqlCentreDao implements CentreDao {
         Connection c = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
-        Session session = new Session();
+        Session session = null;
         c = MySqlDaoFactory.getInstance().getConnection();
         String sql = "SELECT * FROM session where idSession = ? ";
 
@@ -185,7 +185,7 @@ public class MySqlCentreDao implements CentreDao {
         Formation formation = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT * FROM formation where idFormation = ? ";
+        String sql = "SELECT idFormation, nomFormation, prix, duree, participantMax, participantMin  FROM formation where idFormation = ? ";
 
         try {
             ps = c.prepareStatement(sql);
@@ -210,7 +210,7 @@ public class MySqlCentreDao implements CentreDao {
         User u = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT * FROM user where idUser = ? ";
+        String sql = "SELECT idUser, nom, prenom, adresse, email, password, role, statut FROM user where idUser = ? ";
 
         try {
             ps = c.prepareStatement(sql);
@@ -452,5 +452,11 @@ public class MySqlCentreDao implements CentreDao {
         }
         return listInscription;
     }
+
+
+
+
+
+
 
 }

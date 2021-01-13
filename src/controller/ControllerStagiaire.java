@@ -117,10 +117,11 @@ class ControllerStagiaire implements ControllerInterface {
         VueFormation vueFormation = new VueFormation();
         VueSession vueSession = new VueSession();
         vueFormation.resultsListFormation(facade.getCentre().getAllFormation());
+        int selFormation;
         Formation formation = null;
         do {
             vueFormation.inputFormationId();
-            int selFormation = sc.nextInt();
+            selFormation = sc.nextInt();
             formation = facade.getCentre().getFormationbyId(selFormation);
         } while (formation == null);
 
@@ -135,9 +136,13 @@ class ControllerStagiaire implements ControllerInterface {
                 selSession = sc.nextInt();
             } while (facade.getCentre().getSessionbyId(selSession) == null);
             //vérfier ici si il est déjà inscrit pour cette session
-            user.registerUserToSession(selSession);
-            vueStagiaire.StatutInscription(user, facade.getCentre().getSessionbyId(selSession));
+            if (!user.registerUserToSession(selSession)) {
+                vueStagiaire.erreurDoubleInscription();
+            } else {
+                vueStagiaire.StatutInscription(user, facade.getCentre().getSessionbyId(selSession));
+            }
         }
+
         loginStagiaire(user);
     }
 

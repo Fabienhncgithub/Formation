@@ -39,10 +39,10 @@ public class Stagiaire extends User {
         return listeInscription;
     }
 
-    public void registerUserToSession(int idSession) {
+    public boolean registerUserToSession(int idSession) {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         StagiaireDao stagiaireDao = factory.createStagiaireDao();
-        stagiaireDao.registerUserToSession(this, idSession);
+       return stagiaireDao.registerUserToSession(this, idSession);
     }
 
 }
