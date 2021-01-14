@@ -10,11 +10,13 @@ package model;
  * @author Fabien
  */
 public class Inscription {
+    private Session idSession;
     private User idUser;
     private int statutPaiement;
     private int notificationPaiement;
 
-    public Inscription(User idUser, int statutPaiement, int notificationPaiement) {
+    public Inscription(Session idSession, User idUser, int statutPaiement, int notificationPaiement) {
+        this.idSession = idSession;
         this.idUser = idUser;
         this.statutPaiement = statutPaiement;
         this.notificationPaiement = notificationPaiement;
@@ -24,6 +26,18 @@ public class Inscription {
     public Inscription() {
     }
 
+
+
+    public Session getIdSession() {
+        return idSession;
+    }
+
+    public void setIdSession(Session idSession) {
+        this.idSession = idSession;
+    }
+
+    
+    
 
     public User getIdUser() {
         return idUser;

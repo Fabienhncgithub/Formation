@@ -44,7 +44,7 @@ public class VueStagiaire {
     public void resultsListInscription(List<Inscription> inscriptionsList) {
         for (Inscription i : inscriptionsList) {
               System.out.println("------------------------------------------------------------------------------------------------------");
-            System.out.println("Nom formation: "   + " \n" + "idUser: " + i.getIdUser().getNom() + " \n" + "statutPaiement: " + i.getStatutPaiement() + " \n" + "notificationPaiement: " + i.getNotificationPaiement());
+            System.out.println("Nom formation: " + i.getIdSession().getFormation().getNomFormation() + " \n"  + " \n" + "Local: " + i.getIdSession().getIdLocal().getNomLocal() + " \n" + " \n" + "Date de début: "+ i.getIdSession().getDateDebut() + " \n" + " \n" + "Date de fin: "+ i.getIdSession().getDateFin()+ " \n" + " \n" + "Statut paiement: " + i.getStatutPaiement() + " \n"+ " \n" + "notificationPaiement: " + i.getNotificationPaiement());
         }
     }
 

@@ -48,8 +48,14 @@ public class ControllerAcceuil implements ControllerInterface {
         AbstractDaoFactory.setFactory(MySqlDaoFactory.getInstance());
         VueAcceuil vueAcceuil = new VueAcceuil();
         vueAcceuil.choices();
+
+        while (!sc.hasNextInt()) {
+            vueAcceuil.errorInput();
+            sc.nextLine();
+        }
+
         int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 4 ) {
+        while (menuchoice < 1 || menuchoice > 4) {
             vueAcceuil.error();
             menuchoice = sc.nextInt();
         }
@@ -73,29 +79,35 @@ public class ControllerAcceuil implements ControllerInterface {
         User user = null;
         String email = null;
         String password = null;
-        VueAdmin menuAdmin = new VueAdmin();
-        vueAcceuil.login();
-        email = sc.next();
-        if (!email.isEmpty() || email != null) {
-            do {
-                vueAcceuil.newUserPassword();
-                password = sc.next();
-            } while (password.isEmpty() || password == null);
-        }
-        controllerAcceuil.setUsr(User.login(email, password));
+        do {
+            vueAcceuil.login();
+          
+            email = sc.next();
+        } while (email.isEmpty() || email == null);
+        do {
+            vueAcceuil.newUserPassword();
+            password = sc.next();
+        } while (password.isEmpty() || password == null);
+ 
+        controllerAcceuil.setUsr(User.login(email.trim(), password.trim()));
         if (controllerAcceuil.getUsr() instanceof Stagiaire) {
             controllerStagiaire.loginStagiaire((Stagiaire) controllerAcceuil.getUsr());
         } else if (controllerAcceuil.getUsr() instanceof Admin) {
             controllerAdmin.adminChoices(controllerAcceuil.getUsr());
         } else {
+            vueAcceuil.errorlogin();
             loginUser();
         }
     }
 
     public void searchCatalogue() {
         vueFormation.cataloguesChoices();
+        while (!sc.hasNextInt()) {
+            vueAcceuil.errorInput();
+            sc.nextLine();
+        }
         int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 4) {
+        while (menuchoice < 1 || menuchoice > 3) {
             vueFormation.error();
             menuchoice = sc.nextInt();
         }
@@ -108,11 +120,9 @@ public class ControllerAcceuil implements ControllerInterface {
                 searchFormation(vueFormation);
                 break;
             case 3:
-                //ControllerStagiaire.annulerSession(user);
-                break;
-            case 4:
                 firstMenu();
                 break;
+
         }
         firstMenu();
     }

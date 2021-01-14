@@ -11,6 +11,7 @@ import java.util.Scanner;
 public interface ControllerInterface {
 
     public Scanner sc = new Scanner(System.in);
+    public Scanner stringScanner = new Scanner(System.in);
     public Facade facade = new Facade();
     public Controller controller = new Controller();
     public ControllerAcceuil controllerAcceuil = new ControllerAcceuil();

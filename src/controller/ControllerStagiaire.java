@@ -42,17 +42,27 @@ class ControllerStagiaire implements ControllerInterface {
     public void registerUser(VueAcceuil vueAcceuil) {
         User user = new Stagiaire();
         vueAcceuil.newUserNom();
+
+        while (!sc.hasNext("[A-Za-z]*")) {
+            vueAcceuil.errorInputString();
+            sc.nextLine();
+        }
         String nom = sc.next();
-        user.setNom(nom);
+        user.setNom(nom.trim());
         vueAcceuil.newUserPrenom();
+
+        while (!sc.hasNext("[A-Za-z]*")) {
+            vueAcceuil.errorInputString();
+            sc.nextLine();
+        }
         String prenom = sc.next();
-        user.setPrenom(prenom);
+        user.setPrenom(prenom.trim());
         vueAcceuil.newUseradresse();
         String adresse = sc.next();
-        user.setAdresse(adresse);
+        user.setAdresse(adresse.trim());
         vueAcceuil.newUseremail();
         String email = sc.next();
-        user.setEmail(email);
+        user.setEmail(email.trim());
         vueAcceuil.newUserPassword();
         String password = sc.next();
         user.setPassword(password);
@@ -73,6 +83,10 @@ class ControllerStagiaire implements ControllerInterface {
     void loginStagiaire(Stagiaire user) {
         VueStagiaire vueStagiaire = new VueStagiaire();
         vueStagiaire.stagiaireChoices(user);
+        while (!sc.hasNextInt()) {
+            vueAcceuil.errorInput();
+            sc.nextLine();
+        }
         int menuchoice = sc.nextInt();
         while (menuchoice < 1 || menuchoice > 5) {
             vueAcceuil.error();
@@ -100,15 +114,23 @@ class ControllerStagiaire implements ControllerInterface {
         VueAcceuil VueAcceuil = new VueAcceuil();
         int id = user.getIdUser();
         VueAcceuil.newUserNom();
+        while (!sc.hasNext("[A-Za-z]*")) {
+            vueAcceuil.errorInputString();
+            sc.nextLine();
+        }
         String nom = sc.next();
         VueAcceuil.newUserPrenom();
-        String prenom = sc.next();
+        while (!sc.hasNext("[A-Za-z]*")) {
+            vueAcceuil.errorInputString();
+            sc.nextLine();
+        }
+        String prenom = sc.nextLine();
         VueAcceuil.newUseradresse();
-        String adresse = sc.next();
+        String adresse = sc.nextLine();
         VueAcceuil.newUseremail();
-        String email = sc.next();
+        String email = sc.nextLine();
         VueAcceuil.newUserPassword();
-        String password = sc.next();
+        String password = sc.nextLine();
         user.modificationUser(id, nom, prenom, adresse, email, password);
         loginStagiaire(user);
     }
@@ -121,6 +143,10 @@ class ControllerStagiaire implements ControllerInterface {
         Formation formation = null;
         do {
             vueFormation.inputFormationId();
+            while (!sc.hasNextInt()) {
+                vueAcceuil.errorInput();
+                sc.nextLine();
+            }
             selFormation = sc.nextInt();
             formation = facade.getCentre().getFormationbyId(selFormation);
         } while (formation == null);
@@ -133,9 +159,14 @@ class ControllerStagiaire implements ControllerInterface {
             int selSession = 0;
             do {
                 VueSession.inputSessionId();
+
+                while (!sc.hasNextInt()) {
+                    vueAcceuil.errorInput();
+                    sc.nextLine();
+                }
                 selSession = sc.nextInt();
             } while (facade.getCentre().getSessionbyId(selSession) == null);
-            //vérfier ici si il est déjà inscrit pour cette session
+
             if (!user.registerUserToSession(selSession)) {
                 vueStagiaire.erreurDoubleInscription();
             } else {

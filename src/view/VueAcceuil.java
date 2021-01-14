@@ -29,59 +29,100 @@ public class VueAcceuil {
     }
 
     public void error() {
-        System.out.println("Erreur! ce choix n'éxiste pas");
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
+        System.out.println("Erreur! ce choix n'éxiste pas");
         choices();
     }
 
     public void newUserName() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+
         System.out.println("entrer votre nom");
 
     }
 
     public void newUserStatut() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+
         System.out.println("Entrez votre statut");
     }
 
     public void login() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Entrez votre Login");
     }
 
     public void newUserNom() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Entrez votre nom");
     }
 
     public void newUserPrenom() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Entrez votre prenom");
     }
 
     public void newUseradresse() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Entrez votre adresse");
     }
 
     public void newUseremail() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Entrez votre email");
     }
 
     public void newUserPassword() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Entrez votre mot de passe");
     }
 
     public void resultListStatut(List<Statut> listStatut) {
         Iterator<Statut> statutsitr = listStatut.iterator();
         while (statutsitr.hasNext()) {
+            System.out.println("");
             Statut s = statutsitr.next();
             System.out.println(s.getIdStatut() + " - " + s.getNomStatut());
         }
     }
 
     public void success() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Opération(s) efffectuée(s) avec succès");
     }
 
     public void exit() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Tapez 0 pour quitter");
+    }
+
+    public void errorInput() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("ceci n'est pas un nombre");
+    }
+
+    public void errorInputString() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("ceci n'est pas un mot");
+    }
+
+    public void errorlogin() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Cet utilidateur ou le mot de passe n'existe pas");
     }
 
 }

@@ -24,6 +24,8 @@ public class Stagiaire extends User {
     public Stagiaire() {
     }
 
+
+
     public List<Inscription> getListeInscription() {
         return listeInscription;
     }

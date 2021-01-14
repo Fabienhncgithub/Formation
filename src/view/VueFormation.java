@@ -25,7 +25,7 @@ public class VueFormation {
         System.out.println("");
         System.out.println("Tapez 2 Faire une recherche dans la liste de formation");
         System.out.println("");
-        System.out.println("Tapez 3 exit");
+        System.out.println("Tapez 3 Quitter");
     }
 
     public void newFormation() {
@@ -37,47 +37,54 @@ public class VueFormation {
             System.out.println("idFormation: " + f.getIdFormation() + " \n" + "Formation: " + f.getNomFormation() + "\n" + "Prix: " + f.getPrix() + " €" + " \n" + "Duree: " + f.getDuree() + " jours" + " \n" + "Participants max: " + f.getParticipantMax() + " \n" + "Participant min: " + f.getParticipantMin());
         }
     }
-    
-    
-    
 
     public void choicesCrud() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("Tapez 1 pour la création d'une formation");
+        System.out.println("");
         System.out.println("Tapez 2 pour l'affichage des formations");
+        System.out.println("");
         System.out.println("Tapez 3 pour gérer une formation ou une session");
+        System.out.println("");
         System.out.println("Tapez 4 pour revenir au menu précédent");
     }
 
     public void error() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("Erreur! ce choix n'éxiste pas");
-        System.out.println("");
-        choicesCrud();
+        System.out.println("Réessayer avec une selection correcte");
+        
     }
 
     public void inputFormationNom() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("Entrez le nom de la formation");
     }
 
     public void inputFormationId() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Entrez le code de la formation");
 
     }
 
     public void inputFormationPrix() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("encodez le prix de la formation");
     }
 
     public void inputFormationDuree() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("encodez le temps en jour de formation de la formation");
     }
 
     public void inputFormationParticipantMin() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("encodez le nombre minimum de participant");
     }
 
     public void inputFormationParticipantMax() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("encodez le nombre maximum de participant");
     }
 

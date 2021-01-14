@@ -128,7 +128,7 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         Session session = null;
         c = MySqlDaoFactory.getInstance().getConnection();
-        String sql = "SELECT * FROM session where idSession = ? ";
+        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin FROM session JOIN formation ON session.idFormation = formation.idFormation where session.idSession = ? ";
 
         try {
             ps = c.prepareStatement(sql);
@@ -137,6 +137,7 @@ public class MySqlCentreDao implements CentreDao {
             if (rs.next()) {
                 session = new Session(
                         rs.getInt("idSession"),
+                        new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin")),
                         getFormateurbyId(rs.getInt("idFormateur")),
                         getLocalById(rs.getInt("idLocal")),
                         rs.getDate("dateDebut"), rs.getDate("dateFin"));
@@ -156,14 +157,16 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Session> listSession = new ArrayList<>();
-        String sql = "SELECT idSession, idFormation,idLocal,dateDebut,dateFin  FROM session WHERE idFormation =?";
+        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin FROM session JOIN formation ON session.idFormation = formation.idFormation where formation.idFormation = ? ";
+
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, formation.getIdFormation());
             rs = ps.executeQuery();
             while (rs.next()) {
                 Session session = new Session(rs.getInt("idSession"),
-                        getFormateurbyId(rs.getInt("idFormation")),
+                         new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin")),
+                           getFormateurbyId(rs.getInt("idFormateur")),
                         getLocalById(rs.getInt("idLocal")),
                         rs.getDate("dateDebut"),
                         rs.getDate("dateFin"));
