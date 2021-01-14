@@ -25,7 +25,7 @@ public interface UserDao {
 
 
 
-    void deletelInscription(User user, int idSession);
+    public boolean deletelInscription(User user, int idSession);
 
     void deleteFormation(Formation formation);
 

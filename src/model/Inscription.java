@@ -14,12 +14,14 @@ public class Inscription {
     private User idUser;
     private int statutPaiement;
     private int notificationPaiement;
+    private boolean annule;
 
-    public Inscription(Session idSession, User idUser, int statutPaiement, int notificationPaiement) {
+    public Inscription(Session idSession, User idUser, int statutPaiement, int notificationPaiement, boolean annule) {
         this.idSession = idSession;
         this.idUser = idUser;
         this.statutPaiement = statutPaiement;
         this.notificationPaiement = notificationPaiement;
+        this.annule = annule;
     }
 
 
@@ -62,6 +64,14 @@ public class Inscription {
 
     public void setNotificationPaiement(int notificationPaiement) {
         this.notificationPaiement = notificationPaiement;
+    }
+
+    public boolean getAnnule() {
+        return annule;
+    }
+
+    public void setAnnule(boolean annule) {
+        this.annule = annule;
     }
     
     

@@ -17,7 +17,7 @@ import java.util.List;
 public class VueStagiaire {
 
     public void stagiaireChoices(User user) {
-                      System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("Bonjour " + user.getNom() + " , vous êtes connecté");
         System.out.println("");
         System.out.println("Tapez 1 pour modifier vos informations personnelles");
@@ -42,9 +42,15 @@ public class VueStagiaire {
     }
 
     public void resultsListInscription(List<Inscription> inscriptionsList) {
+        String statut;
         for (Inscription i : inscriptionsList) {
-              System.out.println("------------------------------------------------------------------------------------------------------");
-            System.out.println("Nom formation: " + i.getIdSession().getFormation().getNomFormation() + " \n"  + " \n" + "Local: " + i.getIdSession().getIdLocal().getNomLocal() + " \n" + " \n" + "Date de début: "+ i.getIdSession().getDateDebut() + " \n" + " \n" + "Date de fin: "+ i.getIdSession().getDateFin()+ " \n" + " \n" + "Statut paiement: " + i.getStatutPaiement() + " \n"+ " \n" + "notificationPaiement: " + i.getNotificationPaiement());
+            if (!i.getAnnule()) {
+                statut = "inscrit";
+            } else {
+                statut = "annulé";
+            }
+            System.out.println("------------------------------------------------------------------------------------------------------");
+            System.out.println("Numero de session: " + i.getIdSession().getIdSession() + " \n" + " \n" + "Nom formation: " + i.getIdSession().getFormation().getNomFormation() + " \n" + " \n" + "Local: " + i.getIdSession().getIdLocal().getNomLocal() + " \n" + " \n" + "Date de début: " + i.getIdSession().getDateDebut() + " \n" + " \n" + "Date de fin: " + i.getIdSession().getDateFin() + " \n" + " \n" + "Statut paiement: " + i.getStatutPaiement() + " \n" + " \n" + "notificationPaiement: " + i.getNotificationPaiement() + " \n" + " \n" + "Statut inscription: " + statut);
         }
     }
 

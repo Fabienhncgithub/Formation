@@ -46,7 +46,7 @@ public class MySqlStagiaireDao implements StagiaireDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Inscription> listInscription = new ArrayList<>();
-        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal, inscription.statutPaiement, inscription.notificationPaiement FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN inscription ON session.idSession  = inscription.idSession JOIN user ON user.idUser = inscription.idUser JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE inscription.idUser = ?";
+        String sql = "SELECT inscription.annule, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal, inscription.statutPaiement, inscription.notificationPaiement, inscription.annule FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN inscription ON session.idSession  = inscription.idSession JOIN user ON user.idUser = inscription.idUser JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE inscription.idUser = ? and inscription.annule = 0";
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, stagiaire.getIdUser());
@@ -65,7 +65,8 @@ public class MySqlStagiaireDao implements StagiaireDao {
                          new Role(rs.getInt("idRole"), rs.getString("nomRole")),
                          new Statut(rs.getInt("idStatut"), rs.getString("nomStatut"))),
                         rs.getInt("statutPaiement"),
-                        rs.getInt("notificationPaiement"));
+                        rs.getInt("notificationPaiement"),
+                         rs.getBoolean("annule"));
                 listInscription.add(inscription);
             }
         } catch (SQLException sqle) {

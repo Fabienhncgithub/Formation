@@ -86,12 +86,12 @@ public class MySqlUserDao implements UserDao {
                 } else if (role == 2) {
                     u = new Admin(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
                             new Role(rs.getInt("role"), rs.getString("role")));
-                 } else if (role == 3) {
+                } else if (role == 3) {
                     u = new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
                             new Role(rs.getInt("role"), rs.getString("role")));
-                
-                } 
-                 
+
+                }
+
 //                 else {
 //                    System.out.println("no role");
 ////                }
@@ -132,31 +132,38 @@ public class MySqlUserDao implements UserDao {
         }
     }
 
-  
-
-
-
     @Override
-    public void deletelInscription(User user, int idSession) {
+    public boolean deletelInscription(User user, int idSession) {
+        boolean result = false;
         Connection c;
         ResultSet rs = null;
         PreparedStatement ps = null;
-        int statutPaiement = 0;
-        int notificationPaiement = 0;
+
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "DELETE from inscription WHERE idSession = ? and idUser = ?";
+        String sql = "SELECT inscription.annule, inscription.idSession, inscription.idUser FROM session JOIN inscription ON session.idSession = inscription.idSession WHERE inscription.idSession = ? AND inscription.idUser = ?";
+        String sql2 = "UPDATE inscription SET annule = 1 where inscription.idSession = ? and inscription.idUser = ? ";
 
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, idSession);
             ps.setInt(2, user.getIdUser());
-            ps.executeUpdate();
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                result = true;
+                ps = c.prepareStatement(sql2);
+                ps.setInt(1, idSession);
+                ps.setInt(2, user.getIdUser());
+                 
+                ps.executeUpdate();
+            }
         } catch (SQLException sqle) {
-            System.err.println("MySqlUserDao, method insertUser(User u): \n" + sqle.getMessage());
+            System.err.println("MySqlUserDao, method deletelInscription(User user, int idSession): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
+        return result;
     }
 
     @Override
@@ -180,12 +187,5 @@ public class MySqlUserDao implements UserDao {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
     }
-
-
-
-
-
- 
-
 
 }

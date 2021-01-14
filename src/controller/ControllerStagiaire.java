@@ -99,7 +99,7 @@ class ControllerStagiaire implements ControllerInterface {
             case 2:
                 SelectFormation(user);
                 break;
-            case 3:
+            case 3:    
                 deleteInscription(user);
                 break;
             case 4:
@@ -197,7 +197,11 @@ class ControllerStagiaire implements ControllerInterface {
         VueSession.inputSessionId();
         vueAcceuil.exit();
         int idSession = sc.nextInt();
-        stagiaire.deletelInscription(idSession);
+        if(stagiaire.deletelInscription(idSession)){
+            System.out.println("deleted");
+        }else{
+            System.out.println("not deleted");
+        }
     }
 
 }

@@ -102,7 +102,6 @@ public class VueAcceuil {
     }
 
     public void exit() {
-        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Tapez 0 pour quitter");
     }

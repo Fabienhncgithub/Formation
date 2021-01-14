@@ -159,10 +159,10 @@ public abstract class User {
 
 
 
-    public void deletelInscription(int idSession) {
+    public boolean deletelInscription(int idSession) {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         UserDao userDao = factory.createUserDao();
-        userDao.deletelInscription(this, idSession);
+        return userDao.deletelInscription(this, idSession);
     }
 
     public void deleteFormation(Formation formation) {
