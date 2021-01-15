@@ -115,4 +115,10 @@ public class VueFormation {
         System.out.println("");
         System.out.println("cette formation n'existe pas");
     }
+
+    public void inputError() {
+             System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("il n'est pas possible d'enregistrer cette formation");
+    }
 }

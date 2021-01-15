@@ -17,6 +17,7 @@ import model.Stagiaire;
 import model.Statut;
 import model.User;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -501,20 +502,19 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql1 = "SELECT idSession, idFormation, idformateur, idLocal, dateDebut, dateFin, supprime FROM session WHERE idFormateur = ? AND ? NOT BETWEEN dateDebut AND dateFin AND ? NOT BETWEEN dateDebut AND dateFin";
-
-        String sql2 = "INSERT INTO formation(nomFormation, prix, duree, participantMax, participantMin) VALUES (?, ?, ?, ?, ?)";
+        //   String sql1 = "SELECT idSession, idFormation, idformateur, idLocal, dateDebut, dateFin, supprime FROM session WHERE idFormateur = ? AND ? NOT BETWEEN dateDebut AND dateFin AND ? NOT BETWEEN dateDebut AND dateFin";
+        String sql2 = "INSERT INTO Session(idformation, idformateur, idLocal, dateDebut, dateFin) VALUES (?, ?, ?, ?, ?)";
 
         try {
-            ps = c.prepareStatement(sql2);
+            //  ps = c.prepareStatement(sql2);
             // ps.setInt(1, formation.get);
-
+            result = true;
             ps = c.prepareStatement(sql2);
-            ps.setString(1, session.getFormation().getNomFormation());
-            ps.setDouble(2, session.getFormation().getPrix());
-            ps.setInt(3, session.getFormation().getDuree());
-            ps.setInt(4, session.getFormation().getParticipantMax());
-            ps.setInt(5, session.getFormation().getParticipantMin());
+            ps.setInt(1, session.getFormation().getIdFormation());
+            ps.setInt(2, session.getIdformateur().getIdUser());
+            ps.setInt(3, session.getIdLocal().getIdLocal());
+            ps.setDate(4, new java.sql.Date(session.getDateDebut().getTime()));
+            ps.setDate(5, new java.sql.Date(session.getDateFin().getTime()));
             ps.executeUpdate();
         } catch (SQLException sqle) {
             System.err.println("MySqlUserDao, method createNewFormation(): \n" + sqle.getMessage());
@@ -540,7 +540,7 @@ public class MySqlCentreDao implements CentreDao {
             ps = c.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Local local = new Local(rs.getInt("idLocal"),rs.getString("nomLocal"));
+                Local local = new Local(rs.getInt("idLocal"), rs.getString("nomLocal"));
                 listLocal.add(local);
 
             }

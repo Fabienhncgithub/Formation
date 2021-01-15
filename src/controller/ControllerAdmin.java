@@ -13,7 +13,11 @@ import view.VueAcceuil;
 import view.VueAdmin;
 import view.VueFormation;
 import com.sun.deploy.uitoolkit.impl.fx.ui.resources.ResourceManager;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import model.Local;
 import model.Session;
@@ -400,18 +404,55 @@ class ControllerAdmin implements ControllerInterface {
         } while (facade.getCentre().getLocalById(idLocal) == null);
         session.setIdLocal(facade.getCentre().getLocalById(idLocal));
 
-        String dob;
+        String dateDebut;
         boolean result = false;
         do {
             vueSession.newDateDebut();
-            dob = sc.nextLine();
+            dateDebut = sc.next();
+            sc.nextLine();
             //Regular expression to accept date in MM-DD-YYY format
-            String regex = "^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$";
-            result = dob.matches(regex);
+            String regex = "^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$";
+            result = dateDebut.matches(regex);
         } while (!result);
+        Date date = null;
 
-     
+        try {
+            DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            formatter.setLenient(false);
+            date = formatter.parse(dateDebut);
+            session.setDateDebut(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String dateFin;
+        boolean res = false;
+        do {
+            vueSession.newDateFin();
+            dateFin = sc.next();
+            sc.nextLine();
+            //Regular expression to accept date in MM-DD-YYY format
+            String regex = "^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$";
+            result = dateDebut.matches(regex);
+        } while (!result);
+        Date datef = null;
 
+        try {
+            DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            formatter.setLenient(false);
+            datef = formatter.parse(dateFin);
+            session.setDateFin(datef);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (facade.getCentre().CreateNewSession(session)) {
+            vueAcceuil.success();
+            crudSelectedFormation(user, formation);
+
+        } else {
+            vueFormation.inputError();
+            crudSelectedFormation(user, formation);
+
+        }
     }
 
 }

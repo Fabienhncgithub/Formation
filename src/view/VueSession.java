@@ -89,12 +89,12 @@ public class VueSession {
     public void newDateDebut() {
             System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");
-            System.out.println("Encodez une date de début valide: ");
+            System.out.println("Encodez une date de début valide dd-MM-yyyy: ");
         }
         public void newDateFin() {
             System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");
-            System.out.println("Encodez une date de fin valide: ");
+            System.out.println("Encodez une date de fin valide dd-MM-yyyy: ");
         }
 
 }
