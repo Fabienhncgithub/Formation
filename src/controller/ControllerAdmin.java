@@ -143,12 +143,9 @@ class ControllerAdmin implements ControllerInterface {
                 deleteFormation(user, formation);
                 break;
             case 3:
-                CrudSession(user, formation);
+                crudSelectedSession(user, formation);
                 break;
             case 4:
-                createSession(user, formation);
-                break;
-            case 5:
                 menuAdmin.choices(user);
                 break;
 
@@ -326,24 +323,23 @@ class ControllerAdmin implements ControllerInterface {
         selectFormateur(user);
     }
 
-    private void CrudSession(User user, Formation formation) {
-
-        if (facade.getCentre().listeSessionbyFormation(formation).isEmpty()) {
-            vueSession.zeroSession();
-            crudSelectedFormation(user, formation);
-
-        } else {
-            vueSession.resultsListSession(facade.getCentre().listeSessionbyFormation(formation));
-        }
-        VueSession.inputSessionId();
-        int idSession = sc.nextInt();
-
-        Session selectedSession = facade.getCentre().getSessionbyId(idSession);
-        crudSelectedSession(user, formation, selectedSession);
-
-    }
-
-    public void crudSelectedSession(User user, Formation formation, Session session) {
+//    private void CrudSession(User user, Formation formation) {
+//        
+//        if (facade.getCentre().listeSessionbyFormation(formation).isEmpty()) {
+//            vueSession.zeroSession();
+//            crudSelectedFormation(user, formation);
+//            
+//        } else {
+//            vueSession.resultsListSession(facade.getCentre().listeSessionbyFormation(formation));
+//        }
+//        VueSession.inputSessionId();
+//        int idSession = sc.nextInt();
+//        
+//        Session selectedSession = facade.getCentre().getSessionbyId(idSession);
+//        crudSelectedSession(user, formation, selectedSession);
+//        
+//    }
+    public void crudSelectedSession(User user, Formation formation) {
         VueAdmin menuAdmin = new VueAdmin();
         vueSession.crudSelectedSession();
         int menuchoice = sc.nextInt();
@@ -353,13 +349,13 @@ class ControllerAdmin implements ControllerInterface {
         }
         switch (menuchoice) {
             case 1:
-                //createSession(user, formation);
+                createSession(user, formation);
                 break;
             case 2:
                 //  updateSession(user, session);
                 break;
             case 3:
-                deleteSession(user, session);
+                // deleteSession(user, session);
                 break;
             case 5:
                 menuAdmin.choices(user);
@@ -424,8 +420,11 @@ class ControllerAdmin implements ControllerInterface {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         String dateFin;
         boolean res = false;
+        Date datef = null;
+        int verifDate;
         do {
             vueSession.newDateFin();
             dateFin = sc.next();
@@ -433,25 +432,27 @@ class ControllerAdmin implements ControllerInterface {
             //Regular expression to accept date in MM-DD-YYY format
             String regex = "^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$";
             result = dateDebut.matches(regex);
-        } while (!result);
-        Date datef = null;
+            try {
+                DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                formatter.setLenient(false);
+                datef = formatter.parse(dateFin);
 
-        try {
-            DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-            formatter.setLenient(false);
-            datef = formatter.parse(dateFin);
-            session.setDateFin(datef);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+             verifDate = datef.compareTo(date);
+        } while (!result || verifDate<0);
+      
+
+        session.setDateFin(datef);
+
         if (facade.getCentre().CreateNewSession(session)) {
             vueAcceuil.success();
-            crudSelectedFormation(user, formation);
+            crudSelectedSession(user, formation);
 
         } else {
-            vueFormation.inputError();
-            crudSelectedFormation(user, formation);
-
+            vueSession.formateurNotAvailable();
+            crudSelectedSession(user, formation);
         }
     }
 

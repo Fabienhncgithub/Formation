@@ -103,11 +103,9 @@ public class VueFormation {
         System.out.println("");
         System.out.println("Tapez 2 pour supprimer la formation");
         System.out.println("");
-        System.out.println("Tapez 3 pour la modifcation une session à cette formation");
+        System.out.println("Tapez 3 pour la création, modifcation ou suppression de session à cette formation");
         System.out.println("");
-        System.out.println("Tapez 4 pour créer une session pour cette formation");
-        System.out.println("");
-        System.out.println("Tapez 5 pour revenir au menu précédent");
+        System.out.println("Tapez 4 pour revenir au menu précédent");
     }
 
     public void zeroFormation() {

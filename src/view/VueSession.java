@@ -97,4 +97,10 @@ public class VueSession {
             System.out.println("Encodez une date de fin valide dd-MM-yyyy: ");
         }
 
+    public void formateurNotAvailable() {
+             System.out.println("------------------------------------------------------------------------------------------------------");
+            System.out.println("");
+            System.out.println("Ce prof n'est pas disponible pour ces dates");
+    }
+
 }

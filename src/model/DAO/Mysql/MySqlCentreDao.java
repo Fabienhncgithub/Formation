@@ -502,20 +502,25 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        //   String sql1 = "SELECT idSession, idFormation, idformateur, idLocal, dateDebut, dateFin, supprime FROM session WHERE idFormateur = ? AND ? NOT BETWEEN dateDebut AND dateFin AND ? NOT BETWEEN dateDebut AND dateFin";
+        String sql1 = "SELECT idSession, idFormation, idformateur, idLocal, dateDebut, dateFin, supprime FROM session WHERE supprime = 0 AND idFormateur = ? AND ?  BETWEEN dateDebut AND dateFin AND ?  BETWEEN dateDebut AND dateFin";
         String sql2 = "INSERT INTO Session(idformation, idformateur, idLocal, dateDebut, dateFin) VALUES (?, ?, ?, ?, ?)";
 
         try {
-            //  ps = c.prepareStatement(sql2);
-            // ps.setInt(1, formation.get);
-            result = true;
-            ps = c.prepareStatement(sql2);
-            ps.setInt(1, session.getFormation().getIdFormation());
-            ps.setInt(2, session.getIdformateur().getIdUser());
-            ps.setInt(3, session.getIdLocal().getIdLocal());
-            ps.setDate(4, new java.sql.Date(session.getDateDebut().getTime()));
-            ps.setDate(5, new java.sql.Date(session.getDateFin().getTime()));
-            ps.executeUpdate();
+            ps = c.prepareStatement(sql1);
+            ps.setInt(1, session.getIdformateur().getIdUser());
+            ps.setDate(2, new java.sql.Date(session.getDateDebut().getTime()));
+            ps.setDate(3, new java.sql.Date(session.getDateFin().getTime()));
+            rs = ps.executeQuery();
+            if (!rs.next()) {
+                result = true;
+                ps = c.prepareStatement(sql2);
+                ps.setInt(1, session.getFormation().getIdFormation());
+                ps.setInt(2, session.getIdformateur().getIdUser());
+                ps.setInt(3, session.getIdLocal().getIdLocal());
+                ps.setDate(4, new java.sql.Date(session.getDateDebut().getTime()));
+                ps.setDate(5, new java.sql.Date(session.getDateFin().getTime()));
+                ps.executeUpdate();
+            }
         } catch (SQLException sqle) {
             System.err.println("MySqlUserDao, method createNewFormation(): \n" + sqle.getMessage());
         } finally {
