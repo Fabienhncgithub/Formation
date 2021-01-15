@@ -8,6 +8,7 @@ package view;
 import model.Formateur;
 import model.User;
 import java.util.List;
+import model.Session;
 
 /**
  *
@@ -54,13 +55,16 @@ public class VueAdmin {
     }
 
     public void error(User user) {
-        System.out.println("Erreur! ce choix n'éxiste pas");
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
+        System.out.println("Erreur! ce choix n'éxiste pas");
         choices(user);
     }
 
     public void choiceSelection() {
-        System.out.println("choisir l'ID");
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("selectionner le numero");
     }
 
     public void modificationFormationChoices() {
@@ -76,25 +80,34 @@ public class VueAdmin {
     }
 
     public void modificationFormationError() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Erreur! ");
         System.out.println("");
         modificationFormationChoices();
     }
 
     public void newFormation() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Entrez le formation et ensuite prix et durée en jours: ");
     }
 
     public void research() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Entrez le nom de la formation: ");
     }
 
     public void createNomFormation() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Entrez le nom de la ");
     }
 
     public void choicesFormateurCrud() {
         System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Tapez 1 pour l'affichage des formateurs");
         System.out.println("");
         System.out.println("Tapez 2 pour la création d'un formateur");
@@ -113,12 +126,14 @@ public class VueAdmin {
     public void resultsListFormateur(List<Formateur> listFormateur) {
         for (Formateur f : listFormateur) {
             System.out.println("------------------------------------------------------------------------------------------------------");
-            System.out.println("idFormateur: " + f.getIdUser() + " \n"+ " \n"  + "Nom formateur: " + f.getNom() + " \n" + " \n" + "Role: " + f.getRole().getNomRole());
+            System.out.println("");
+            System.out.println("idFormateur: " + f.getIdUser() + " \n" + " \n" + "Nom formateur: " + f.getNom() + " \n" + " \n" + "Role: " + f.getRole().getNomRole());
         }
     }
 
     public void choicesFormateurCrudModif() {
         System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Tapez 1 pour modifier le formateur");
         System.out.println("");
         System.out.println("Tapez 2 pour supprimer le formateur");
@@ -127,9 +142,16 @@ public class VueAdmin {
     }
 
     public void inputFormateurId() {
-          System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Tapez le code du formateur");
     }
 
+    public void resultsListInformationsFormateur(List<Session> informationsFormateurList) {
+        for (Session s : informationsFormateurList) {
+            System.out.println("------------------------------------------------------------------------------------------------------");
+            System.out.println("");
+            System.out.println("Formation: " + s.getFormation().getNomFormation() + " \n" + " \n" + "Formateur: " + s.getIdformateur().getNom() + " \n" + " \n" + "Date de début: " + s.getDateDebut() + " \n" + " \n" + "Date de fin: " + s.getDateFin() + " \n" + " \n" + "Local: " + s.getIdLocal().getNomLocal());
+        }
+    }
 }

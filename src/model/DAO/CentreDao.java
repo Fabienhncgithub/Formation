@@ -47,5 +47,11 @@ public interface CentreDao {
 
     public List<Session> listeSessionbyFormation(Formation formation);
 
+    public List<Session> listeInformationsByFormateurs();
+
+    public boolean CreateNewSession(Session session);
+
+    public List<Local> getAllLocal();
+
 
 }

@@ -15,6 +15,7 @@ import view.VueFormation;
 import com.sun.deploy.uitoolkit.impl.fx.ui.resources.ResourceManager;
 import java.util.ArrayList;
 import java.util.List;
+import model.Local;
 import model.Session;
 import view.VueSession;
 
@@ -54,7 +55,7 @@ class ControllerAdmin implements ControllerInterface {
 
                 break;
             case 3:
-
+                showInformationToFormateur(user);
                 break;
             case 4:
 
@@ -141,7 +142,7 @@ class ControllerAdmin implements ControllerInterface {
                 CrudSession(user, formation);
                 break;
             case 4:
-            //    createSession(user, formation);
+                createSession(user, formation);
                 break;
             case 5:
                 menuAdmin.choices(user);
@@ -161,6 +162,8 @@ class ControllerAdmin implements ControllerInterface {
     public Formation inputFormation(User user, Formation formation) {
         vueFormation.inputFormationNom();
         String nomFormation = sc.next();
+        sc.nextLine();
+
         formation.setNomFormation(nomFormation);
         int prix = 0;
         do {
@@ -194,13 +197,18 @@ class ControllerAdmin implements ControllerInterface {
     public void updateFormation(User user, Formation formation) {
         formation = inputFormation(user, formation);
         facade.getCentre().updateFormation(formation);
+        crudFormation(user);
 
     }
 
     public void selectFormation(User user) {
         vueFormation.resultsListFormation(facade.getCentre().getAllFormation());
-        vueFormation.inputFormationId();
-        int idFormation = sc.nextInt();
+        int idFormation;
+        do {
+            vueFormation.inputFormationId();
+            idFormation = sc.nextInt();
+        } while (facade.getCentre().getFormationbyId(idFormation) == null);
+
         crudSelectedFormation(user, facade.getCentre().getFormationbyId(idFormation));
     }
 
@@ -252,9 +260,8 @@ class ControllerAdmin implements ControllerInterface {
         String password = sc.next();
         formateur.setPassword(password);
         formateur.setRole(new Role(3, "formateur"));
-         formateur.registerFormateur();
-       
-        
+        formateur.registerFormateur();
+
         crudFormateur(user);
     }
 
@@ -319,6 +326,8 @@ class ControllerAdmin implements ControllerInterface {
 
         if (facade.getCentre().listeSessionbyFormation(formation).isEmpty()) {
             vueSession.zeroSession();
+            crudSelectedFormation(user, formation);
+
         } else {
             vueSession.resultsListSession(facade.getCentre().listeSessionbyFormation(formation));
         }
@@ -343,7 +352,7 @@ class ControllerAdmin implements ControllerInterface {
                 //createSession(user, formation);
                 break;
             case 2:
-              //  updateSession(user, session);
+                //  updateSession(user, session);
                 break;
             case 3:
                 deleteSession(user, session);
@@ -357,8 +366,52 @@ class ControllerAdmin implements ControllerInterface {
 
     private void deleteSession(User user, Session session) {
         session.deleteSession();
-        System.out.println("DELETE DONE");
     }
 
-  
+    private void showInformationToFormateur(User user) {
+        /*TODO verifier la requete*/
+
+        List<Session> informationsFormateurList = facade.getCentre().listeInformationsByFormateurs();
+        vueAdmin.resultsListInformationsFormateur(informationsFormateurList);
+
+        adminChoices(user);
+
+    }
+
+    private void createSession(User user, Formation formation) {
+        Session session = new Session();
+        session.setFormation(formation);
+
+        int idFormateur;
+        do {
+            vueSession.newFormateur();
+            List<Formateur> listFormateur = facade.getCentre().getAllFormateur();
+            vueSession.resultListformateur(listFormateur);
+            idFormateur = sc.nextInt();
+        } while (facade.getCentre().getFormateurbyId(idFormateur) == null);
+        session.setIdformateur(facade.getCentre().getFormateurbyId(idFormateur));
+
+        int idLocal;
+        do {
+            vueSession.newLocal();
+            List<Local> lisLocal = facade.getCentre().getAllLocal();
+            vueSession.resultListLocal(lisLocal);
+            idLocal = sc.nextInt();
+        } while (facade.getCentre().getLocalById(idLocal) == null);
+        session.setIdLocal(facade.getCentre().getLocalById(idLocal));
+
+        String dob;
+        boolean result = false;
+        do {
+            vueSession.newDateDebut();
+            dob = sc.nextLine();
+            //Regular expression to accept date in MM-DD-YYY format
+            String regex = "^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$";
+            result = dob.matches(regex);
+        } while (!result);
+
+     
+
+    }
+
 }

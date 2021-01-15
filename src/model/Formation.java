@@ -21,9 +21,10 @@ public class Formation {
     private int duree;
     private int participantMax;
     private int participantMin = 0;
+    private boolean supprime;
     private List<Session> listeSession;
 
-    public Formation(int idFormation, String nomFormation, double prix, int duree, int participantMax, int participantMin) {
+    public Formation(int idFormation, String nomFormation, double prix, int duree, int participantMax, int participantMin, boolean supprime) {
         this.idFormation = idFormation;
         this.nomFormation = nomFormation;
         this.prix = prix;
@@ -91,12 +92,31 @@ public class Formation {
         this.participantMin = participantMin;
     }
 
+    public List<Session> getListeSession() {
+        return listeSession;
+    }
+
+    public void setListeSession(List<Session> listeSession) {
+        this.listeSession = listeSession;
+    }
+
+    public boolean isSupprime() {
+        return supprime;
+    }
+
+    public void setSupprime(boolean supprime) {
+        this.supprime = supprime;
+    }
+    
+    
+
     public List<Session> listeSessionbyFormation() {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         CentreDao centreDao = factory.createCentreDao();
         listeSession = centreDao.listeSessionbyFormation(this);
         return listeSession;
     }
+    
 
 
 

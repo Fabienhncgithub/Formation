@@ -175,14 +175,14 @@ public class MySqlUserDao implements UserDao {
         int notificationPaiement = 0;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "DELETE from formation WHERE idFormation = ? ";
+        String sql = "UPDATE formation SET supprime =1 WHERE idFormation = ? ";
 
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, formation.getIdFormation());
             ps.executeUpdate();
         } catch (SQLException sqle) {
-            System.err.println("MySqlUserDao, method insertUser(User u): \n" + sqle.getMessage());
+            System.err.println("MySqlUserDao, method deleteFormation(Formation formation): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }

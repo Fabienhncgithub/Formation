@@ -9,7 +9,6 @@ import model.DAO.CentreDao;
 import model.DAO.AbstractDaoFactory;
 import java.util.List;
 
-
 /**
  *
  * @author Fabien
@@ -96,19 +95,32 @@ public class Centre {
         CentreDao centreDao = factory.createCentreDao();
         return centreDao.getAllFormateur();
     }
-    
-    
-    public List<Session>listeSessionbyFormation(Formation formation){
-       AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+
+    public List<Session> listeSessionbyFormation(Formation formation) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         CentreDao centreDao = factory.createCentreDao();
         return centreDao.listeSessionbyFormation(formation);
-    
+
     }
 
-   
+    public List<Session> listeInformationsByFormateurs() {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.listeInformationsByFormateurs();
+    }
 
- 
+    public boolean CreateNewSession(Session session) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.CreateNewSession(session);
 
- 
+    }
+
+    public List<Local> getAllLocal() {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.getAllLocal();
+
+    }
 
 }

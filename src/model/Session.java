@@ -23,15 +23,17 @@ public class Session {
     private Local idLocal;
     private Date dateDebut;
     private Date dateFin;
+    private boolean supprime;
     private List<Inscription> listeInscriptionbySession;
 
-    public Session(int idSession,Formation formation,Formateur idformateur, Local idLocal, Date dateDebut, Date dateFin) {
+    public Session(int idSession,Formation formation,Formateur idformateur, Local idLocal, Date dateDebut, Date dateFin, boolean supprime) {
         this.idSession = idSession;
         this.formation = formation;
         this.idformateur = idformateur;
         this.idLocal = idLocal;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.supprime = supprime;
     }
 
     //getformationbyidSession
@@ -92,6 +94,18 @@ public class Session {
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
     }
+
+    public boolean isSupprime() {
+        return supprime;
+    }
+
+    public void setSupprime(boolean supprime) {
+        this.supprime = supprime;
+    }
+    
+    
+    
+    
 
     public void deleteSession() {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();

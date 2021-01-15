@@ -74,7 +74,7 @@ class ControllerStagiaire implements ControllerInterface {
             vueAcceuil.resultListStatut(listStatut);
             idStatut = sc.nextInt();
             vueAcceuil.newUserStatut();
-        } while (idStatut <= 0);
+        } while (facade.getCentre().getStatutById(idStatut) == null);
         user.setStatut(new Statut(idStatut, listStatut.get(idStatut).getNomStatut()));
         user.registerUser();
         controllerAcceuil.firstMenu();
@@ -197,10 +197,14 @@ class ControllerStagiaire implements ControllerInterface {
         VueSession.inputSessionId();
         vueAcceuil.exit();
         int idSession = sc.nextInt();
-        if(stagiaire.deletelInscription(idSession)){
-            System.out.println("deleted");
+        if(idSession == 0){
+            loginStagiaire(stagiaire);
+       }
+        else if(stagiaire.deletelInscription(idSession)){
+            vueStagiaire.formationAnule();
         }else{
-            System.out.println("not deleted");
+            vueStagiaire.formationNotAnule();
+             loginStagiaire(stagiaire);
         }
     }
 

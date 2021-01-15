@@ -35,16 +35,16 @@ public class VueFormation {
         for (Formation f : formationsList) {
             System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");
-            System.out.println("idFormation: " + f.getIdFormation() + " \n" + "Formation: " + f.getNomFormation() + "\n" + "Prix: " + f.getPrix() + " €" + " \n" + "Duree: " + f.getDuree() + " jours" + " \n" + "Participants max: " + f.getParticipantMax() + " \n" + "Participant min: " + f.getParticipantMin());
+            System.out.println("Code formation: " + f.getIdFormation() + " \n"+ " \n" + "Formation: " + f.getNomFormation() + "\n" + " \n"+ "Prix: " + f.getPrix() + " €" +  " \n"+" \n" + "Duree: " + f.getDuree() + " jours" + " \n" + " \n"+ "Participants max: " + f.getParticipantMax() + " \n"+ " \n" + "Participant min: " + f.getParticipantMin());
         }
     }
 
     public void choicesCrud() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-        System.out.println("Tapez 1 pour la création d'une formation");
+        System.out.println("Tapez 1 pour l'affichage des formations");
         System.out.println("");
-        System.out.println("Tapez 2 pour l'affichage des formations");
+        System.out.println("Tapez 2 pour la création d'une formation");
         System.out.println("");
         System.out.println("Tapez 3 pour gérer une formation ou une session");
         System.out.println("");
@@ -68,7 +68,7 @@ public class VueFormation {
     public void inputFormationId() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-        System.out.println("Entrez le code de la formation");
+        System.out.println("Entrez un code de la formation valide");
 
     }
 
@@ -101,9 +101,9 @@ public class VueFormation {
         System.out.println("");
         System.out.println("Tapez 1 modifier la formation");
         System.out.println("");
-        System.out.println("Tapez 2 pour supprimer la formations");
+        System.out.println("Tapez 2 pour supprimer la formation");
         System.out.println("");
-        System.out.println("Tapez 3 pour la création oumidifcation une session à cette formation");
+        System.out.println("Tapez 3 pour la modifcation une session à cette formation");
         System.out.println("");
         System.out.println("Tapez 4 pour créer une session pour cette formation");
         System.out.println("");

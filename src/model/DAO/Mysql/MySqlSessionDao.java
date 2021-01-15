@@ -38,7 +38,7 @@ class MySqlSessionDao implements SessionDao{
        
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "DELETE from session WHERE idsession = ? ";
+        String sql = "UPDATE session SET supprime = 1  WHERE idsession = ? ";
 
         try {
             ps = c.prepareStatement(sql);

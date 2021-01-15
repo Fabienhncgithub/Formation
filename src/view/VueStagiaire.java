@@ -18,6 +18,7 @@ public class VueStagiaire {
 
     public void stagiaireChoices(User user) {
         System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Bonjour " + user.getNom() + " , vous êtes connecté");
         System.out.println("");
         System.out.println("Tapez 1 pour modifier vos informations personnelles");
@@ -32,12 +33,15 @@ public class VueStagiaire {
     }
 
     public void stagiaireChoicesError(User user) {
-        System.out.println("Erreur! ce choix n'éxiste pas");
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
+        System.out.println("Erreur! ce choix n'éxiste pas");
         stagiaireChoices(user);
     }
 
     public void StatutInscription(User user, Session session) {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Bravo, " + user.getNom() + "est inscrit à la session " + session.getIdSession() + "qui débute le " + session.getDateDebut());
     }
 
@@ -56,11 +60,25 @@ public class VueStagiaire {
 
     public void zeroInscription() {
         System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Vous avez aucune inscription");
     }
 
     public void erreurDoubleInscription() {
         System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
         System.out.println("Vous êtes déjà inscrit à cette session");
+    }
+
+    public void formationAnule() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Vous avez annulé votre inscription à cette session");
+    }
+
+    public void formationNotAnule() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Vous n'avez pas annulé votre inscription à cette session");
     }
 }

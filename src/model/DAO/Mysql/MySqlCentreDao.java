@@ -76,13 +76,13 @@ public class MySqlCentreDao implements CentreDao {
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Formation> listFormation = new ArrayList<>();
 
-        String sql = "SELECT * FROM formation";
+        String sql = "SELECT idFormation, nomFormation, prix, duree, participantMax, participantMin, supprime FROM formation where supprime = 0";
 
         try {
             ps = c.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Formation formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMin"), rs.getInt("participantMax"));
+                Formation formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMin"), rs.getInt("participantMax"), rs.getBoolean("supprime"));
                 listFormation.add(formation);
             }
         } catch (SQLException sqle) {
@@ -128,7 +128,7 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         Session session = null;
         c = MySqlDaoFactory.getInstance().getConnection();
-        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin FROM session JOIN formation ON session.idFormation = formation.idFormation where session.idSession = ? ";
+        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime FROM session JOIN formation ON session.idFormation = formation.idFormation where session.idSession = ? ";
 
         try {
             ps = c.prepareStatement(sql);
@@ -137,10 +137,10 @@ public class MySqlCentreDao implements CentreDao {
             if (rs.next()) {
                 session = new Session(
                         rs.getInt("idSession"),
-                        new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin")),
+                        new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
                         getFormateurbyId(rs.getInt("idFormateur")),
                         getLocalById(rs.getInt("idLocal")),
-                        rs.getDate("dateDebut"), rs.getDate("dateFin"));
+                        rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getBoolean("supprime"));
             }
         } catch (SQLException sqle) {
             System.err.println("MySqlCentreDAO, getSessionbyId(int idSession): \n" + sqle.getMessage());
@@ -157,7 +157,7 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Session> listSession = new ArrayList<>();
-        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin FROM session JOIN formation ON session.idFormation = formation.idFormation where formation.idFormation = ? ";
+        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime, formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime FROM session JOIN formation ON session.idFormation = formation.idFormation where formation.idFormation = ? ";
 
         try {
             ps = c.prepareStatement(sql);
@@ -165,11 +165,12 @@ public class MySqlCentreDao implements CentreDao {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Session session = new Session(rs.getInt("idSession"),
-                         new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin")),
-                           getFormateurbyId(rs.getInt("idFormateur")),
+                        new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
+                        getFormateurbyId(rs.getInt("idFormateur")),
                         getLocalById(rs.getInt("idLocal")),
                         rs.getDate("dateDebut"),
-                        rs.getDate("dateFin"));
+                        rs.getDate("dateFin"),
+                        rs.getBoolean("supprime"));
                 listSession.add(session);
             }
         } catch (SQLException sqle) {
@@ -188,14 +189,14 @@ public class MySqlCentreDao implements CentreDao {
         Formation formation = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT idFormation, nomFormation, prix, duree, participantMax, participantMin  FROM formation where idFormation = ? ";
+        String sql = "SELECT idFormation, nomFormation, prix, duree, participantMax, participantMin, supprime  FROM formation where idFormation = ? AND supprime = 0";
 
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, idFormation);
             rs = ps.executeQuery();
             if (rs.next()) {
-                formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"));
+                formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime"));
             }
         } catch (SQLException sqle) {
             System.err.println("MySqlCentreDAO, method getFormationyId(): \n" + sqle.getMessage());
@@ -279,7 +280,7 @@ public class MySqlCentreDao implements CentreDao {
         Formateur u = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT * FROM user where idUser = ? ";
+        String sql = "SELECT * FROM user WHERE idUser = ? AND role = 3";
 
         try {
             ps = c.prepareStatement(sql);
@@ -456,10 +457,99 @@ public class MySqlCentreDao implements CentreDao {
         return listInscription;
     }
 
+    @Override
+    public List<Session> listeInformationsByFormateurs() {
+        Connection c = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
 
+        List<Session> listInformationsByFormateur = new ArrayList<>();
+        c = MySqlDaoFactory.getInstance().getConnection();
 
+        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal  FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN user ON user.idUser = session.idFormateur JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal";
 
+        try {
+            ps = c.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
 
+                Session session = new Session(rs.getInt("idSession"),
+                        new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
+                        new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
+                                new Role(rs.getInt("idRole"), rs.getString("nomRole"))),
+                        new Local(rs.getInt("idLocal"), rs.getString("nomLocal")),
+                        rs.getDate("dateDebut"),
+                        rs.getDate("dateFin"),
+                        rs.getBoolean("supprime"));
+                listInformationsByFormateur.add(session);
 
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDAO, method getRoleById(int idRole)): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return listInformationsByFormateur;
+
+    }
+
+    @Override
+    public boolean CreateNewSession(Session session) {
+        boolean result = false;
+        Connection c;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql1 = "SELECT idSession, idFormation, idformateur, idLocal, dateDebut, dateFin, supprime FROM session WHERE idFormateur = ? AND ? NOT BETWEEN dateDebut AND dateFin AND ? NOT BETWEEN dateDebut AND dateFin";
+
+        String sql2 = "INSERT INTO formation(nomFormation, prix, duree, participantMax, participantMin) VALUES (?, ?, ?, ?, ?)";
+
+        try {
+            ps = c.prepareStatement(sql2);
+            // ps.setInt(1, formation.get);
+
+            ps = c.prepareStatement(sql2);
+            ps.setString(1, session.getFormation().getNomFormation());
+            ps.setDouble(2, session.getFormation().getPrix());
+            ps.setInt(3, session.getFormation().getDuree());
+            ps.setInt(4, session.getFormation().getParticipantMax());
+            ps.setInt(5, session.getFormation().getParticipantMin());
+            ps.executeUpdate();
+        } catch (SQLException sqle) {
+            System.err.println("MySqlUserDao, method createNewFormation(): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+
+        return result;
+
+    }
+
+    @Override
+    public List<Local> getAllLocal() {
+        Connection c = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        List<Local> listLocal = new ArrayList<>();
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql = "SELECT idLocal, nomLocal from Local";
+
+        try {
+            ps = c.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Local local = new Local(rs.getInt("idLocal"),rs.getString("nomLocal"));
+                listLocal.add(local);
+
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDAO, method List<Local> getAllLocal()): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return listLocal;
+    }
 
 }
