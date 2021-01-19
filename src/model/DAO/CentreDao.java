@@ -53,5 +53,16 @@ public interface CentreDao {
 
     public List<Local> getAllLocal();
 
+    public List<Formateur> getAllFormateurAvailable(Session session);
+
+    public boolean validationPaiement(int sessionId, User user);
+
+    public List<Inscription> getInscritpionPaiementNotification();
+
+    public void validationStatutPaiment(int sessionId);
+
+    public List<Inscription> resultListStagiaireBySession();
+
+
 
 }

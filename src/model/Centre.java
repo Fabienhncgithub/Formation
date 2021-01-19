@@ -123,4 +123,35 @@ public class Centre {
 
     }
 
+    public List<Formateur> getAllFormateurAvailable(Session session) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.getAllFormateurAvailable(session);
+    }
+
+    public boolean validationPaiement(int sessionId, User user) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.validationPaiement(sessionId, user);
+    }
+
+    public List<Inscription> getInscritpionPaiementNotification() {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.getInscritpionPaiementNotification();
+    }
+
+    public void validationStatutPaiment(int sessionId) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        centreDao.validationStatutPaiment(sessionId);
+    }
+
+    public List<Inscription> resultListStagiaireBySession() {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.resultListStagiaireBySession();
+
+    }
+
 }

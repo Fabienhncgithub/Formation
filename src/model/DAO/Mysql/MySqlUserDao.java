@@ -68,7 +68,7 @@ public class MySqlUserDao implements UserDao {
         User u = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT u.idUser, u.nom, u.prenom, u.adresse, u.email, u.password, u.statut, u.role, r.idRole, r.nomRole, s.idStatut, s.nomStatut from user u, role r, statut s where u.role =  r.idRole and u.email = ? and u.password = ? limit 1";
+        String sql = "SELECT u.idUser, u.nom, u.prenom, u.adresse, u.email, u.password, u.statut, u.role, u.supprime,r.idRole, r.nomRole, s.idStatut, s.nomStatut from user u, role r, statut s where u.role =  r.idRole and u.email = ? and u.password = ? limit 1";
 
         try {
             ps = c.prepareStatement(sql);
@@ -88,7 +88,7 @@ public class MySqlUserDao implements UserDao {
                             new Role(rs.getInt("role"), rs.getString("role")));
                 } else if (role == 3) {
                     u = new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                            new Role(rs.getInt("role"), rs.getString("role")));
+                            new Role(rs.getInt("role"), rs.getString("role")),rs.getBoolean("supprime"));
 
                 }
 

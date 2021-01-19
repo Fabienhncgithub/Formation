@@ -8,6 +8,7 @@ package view;
 import model.Formateur;
 import model.User;
 import java.util.List;
+import model.Inscription;
 import model.Session;
 
 /**
@@ -16,13 +17,13 @@ import model.Session;
  */
 public class VueAdmin {
 
-    public void choices(User user) {
+    public void choices(User user,  List<Inscription> inscritpionPaiementNotification) {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Bonjour " + user.getNom() + " , vous êtes connecté en tant que administrateur");
         System.out.println("");
         System.out.println("");
-        System.out.println("Tapez 1 pour valider les paiements d'inscription en attente");
+        System.out.println("Tapez 1 pour valider les paiements d'inscription en attente ("+ inscritpionPaiementNotification.size()+")");
         System.out.println("");
         System.out.println("Tapez 2 pour sortir la liste des stagiaires inscrit à une session avec le prix et son statut");
         System.out.println("");
@@ -58,7 +59,6 @@ public class VueAdmin {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Erreur! ce choix n'éxiste pas");
-        choices(user);
     }
 
     public void choiceSelection() {
@@ -112,7 +112,7 @@ public class VueAdmin {
         System.out.println("");
         System.out.println("Tapez 2 pour la création d'un formateur");
         System.out.println("");
-        System.out.println("Tapez 3 pour modifier un formateur");
+        System.out.println("Tapez 3 pour modifier ou supprimer un formateur");
         System.out.println("");
         System.out.println("Tapez 4 pour revenir au menu précédent");
     }
@@ -154,4 +154,15 @@ public class VueAdmin {
             System.out.println("Formation: " + s.getFormation().getNomFormation() + " \n" + " \n" + "Formateur: " + s.getIdformateur().getNom() + " \n" + " \n" + "Date de début: " + s.getDateDebut() + " \n" + " \n" + "Date de fin: " + s.getDateFin() + " \n" + " \n" + "Local: " + s.getIdLocal().getNomLocal());
         }
     }
+
+    public void inputPaiement() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Tapez le code session a valider");
+    }
+
+ 
+
+
+
 }

@@ -102,6 +102,17 @@ public class Session {
     public void setSupprime(boolean supprime) {
         this.supprime = supprime;
     }
+
+    public List<Inscription> getListeInscriptionbySession() {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        listeInscriptionbySession = centreDao.listeInscriptionbySession(this);
+        return listeInscriptionbySession;
+    }
+
+    public void setListeInscriptionbySession(List<Inscription> listeInscriptionbySession) {
+        this.listeInscriptionbySession = listeInscriptionbySession;
+    }
     
     
     

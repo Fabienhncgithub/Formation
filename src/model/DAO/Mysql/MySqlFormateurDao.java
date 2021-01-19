@@ -91,12 +91,13 @@ public class MySqlFormateurDao implements FormateurDao {
        
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "DELETE from user WHERE idUser = ? ";
+        String sql = "UPDATE user SET supprime = 1 where idUser = ?";
 
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, formateur.getIdUser());
             ps.executeUpdate();
+            
         } catch (SQLException sqle) {
             System.err.println("MySqlUserDao, method deleteFormateur(Formateur formateur): \n" + sqle.getMessage());
         } finally {

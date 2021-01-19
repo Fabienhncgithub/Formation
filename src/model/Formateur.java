@@ -8,19 +8,20 @@ package model;
 import model.DAO.FormateurDao;
 import model.DAO.AbstractDaoFactory;
 
+
 /**
  *
  * @author Fabien
  */
 public class Formateur extends User {
+    private boolean supprime;
 
-    public Formateur(int idUser, String nom, String prenom, String adresse, String email, String password, Role role) {
+    public Formateur(int idUser, String nom, String prenom, String adresse, String email, String password, Role role, boolean supprime) {
         super(idUser, nom, prenom, adresse, email, password, role);
+        this.supprime = supprime;
     }
 
-    public Formateur(String nom, String prenom, String adresse, String email, String password, Role role) {
-        super(nom, prenom, adresse, email, password, role);
-    }
+ 
 
     public Formateur() {
     }

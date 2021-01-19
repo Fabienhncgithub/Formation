@@ -17,11 +17,13 @@ import model.Local;
  */
 public class VueSession {
 
-    public static void inputSessionId() {
+    public void inputSessionId() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Entrez le code session");
     }
+
+  
 
     public VueSession() {
     }
@@ -30,7 +32,11 @@ public class VueSession {
         for (Session s : listSession) {
             System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");
-            System.out.println("Formation: " + s.getFormation().getNomFormation() + " \n" + " \n" + "idFormateur: " + s.getIdformateur().getNom() + " \n" + " \n" + "idLocal: " + s.getIdLocal().getNomLocal() + " \n" + " \n" + "dateDébut: " + s.getDateDebut() + " \n" + " \n" + "dateFin: " + s.getDateFin());
+            System.out.println("Formation: " + s.getFormation().getNomFormation() 
+                    + " \n" + " \n" + "idFormateur: " + s.getIdformateur().getNom()
+                    + " \n" + " \n" + "idLocal: " + s.getIdLocal().getNomLocal() 
+                    + " \n" + " \n" + "dateDébut: " + s.getDateDebut() 
+                    + " \n" + " \n" + "dateFin: " + s.getDateFin());
         }
     }
 
@@ -43,13 +49,15 @@ public class VueSession {
     public void crudSelectedSession() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-        System.out.println("Tapez 1 créer la session");
+        System.out.println("Tapez 1 pour voir les sessions de cette formation");
         System.out.println("");
-        System.out.println("Tapez 2 modifier la session");
+        System.out.println("Tapez 2 créer la session");
         System.out.println("");
-        System.out.println("Tapez 3 pour supprimer la session");
+        System.out.println("Tapez 3 modifier la session");
         System.out.println("");
-        System.out.println("Tapez 4 pour revenir au menu précédent");
+        System.out.println("Tapez 4 pour supprimer la session");
+        System.out.println("");
+        System.out.println("Tapez 5 pour revenir au menu précédent");
     }
 
     public void error() {

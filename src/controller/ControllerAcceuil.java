@@ -15,6 +15,7 @@ import view.VueFormation;
 import java.util.List;
 import model.DAO.AbstractDaoFactory;
 import model.DAO.Mysql.MySqlDaoFactory;
+import view.VueStagiaire;
 
 /**
  *
@@ -24,6 +25,7 @@ public class ControllerAcceuil implements ControllerInterface {
 
     private VueAdmin vueAdmin = new VueAdmin();
     private VueAcceuil vueAcceuil = new VueAcceuil();
+    private VueStagiaire vueStagiaire = new VueStagiaire();
     private VueFormation vueFormation = new VueFormation();
     private User usr = null;
 
@@ -48,11 +50,8 @@ public class ControllerAcceuil implements ControllerInterface {
         AbstractDaoFactory.setFactory(MySqlDaoFactory.getInstance());
         VueAcceuil vueAcceuil = new VueAcceuil();
         vueAcceuil.choices();
-
-        while (!sc.hasNextInt()) {
-            vueAcceuil.errorInput();
-            sc.nextLine();
-        }
+        
+        controller.checkInt();
 
         int menuchoice = sc.nextInt();
         while (menuchoice < 1 || menuchoice > 4) {
@@ -77,18 +76,20 @@ public class ControllerAcceuil implements ControllerInterface {
 
     public void loginUser() {
         User user = null;
-        String email = null;
-        String password = null;
+        String email;
+        String password;
         do {
             vueAcceuil.login();
-          
             email = sc.next();
+            sc.nextLine();
         } while (email.isEmpty() || email == null);
+
         do {
             vueAcceuil.newUserPassword();
             password = sc.next();
+            sc.nextLine();
         } while (password.isEmpty() || password == null);
- 
+
         controllerAcceuil.setUsr(User.login(email.trim(), password.trim()));
         if (controllerAcceuil.getUsr() instanceof Stagiaire) {
             controllerStagiaire.loginStagiaire((Stagiaire) controllerAcceuil.getUsr());
@@ -102,10 +103,7 @@ public class ControllerAcceuil implements ControllerInterface {
 
     public void searchCatalogue() {
         vueFormation.cataloguesChoices();
-        while (!sc.hasNextInt()) {
-            vueAcceuil.errorInput();
-            sc.nextLine();
-        }
+        controller.checkInt();
         int menuchoice = sc.nextInt();
         while (menuchoice < 1 || menuchoice > 3) {
             vueFormation.error();

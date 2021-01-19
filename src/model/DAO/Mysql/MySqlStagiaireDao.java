@@ -46,7 +46,7 @@ public class MySqlStagiaireDao implements StagiaireDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Inscription> listInscription = new ArrayList<>();
-        String sql = "SELECT inscription.annule, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin,  session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal, inscription.statutPaiement, inscription.notificationPaiement, inscription.annule FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN inscription ON session.idSession  = inscription.idSession JOIN user ON user.idUser = inscription.idUser JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE inscription.idUser = ? and inscription.annule = 0";
+        String sql = "SELECT inscription.annule, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin,  session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal, inscription.statutPaiement, inscription.notificationPaiement, inscription.annule FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN inscription ON session.idSession  = inscription.idSession JOIN user ON user.idUser = inscription.idUser JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE inscription.idUser = ? AND inscription.annule = 0";
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, stagiaire.getIdUser());
@@ -54,20 +54,19 @@ public class MySqlStagiaireDao implements StagiaireDao {
             while (rs.next()) {
                 Inscription inscription = new Inscription(
                         new Session(rs.getInt("idSession"),
-                        new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
-                        
-                        new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                        new Role(rs.getInt("idRole"), rs.getString("nomRole"))),
-                        new Local(rs.getInt("idLocal"),rs.getString("nomLocal")),
-                        rs.getDate("dateDebut"),
-                        rs.getDate("dateFin"),
-                        rs.getBoolean("supprime")),
-                         new Stagiaire(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                         new Role(rs.getInt("idRole"), rs.getString("nomRole")),
-                         new Statut(rs.getInt("idStatut"), rs.getString("nomStatut"))),
+                                new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
+                                new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
+                                        new Role(rs.getInt("idRole"), rs.getString("nomRole")), rs.getBoolean("supprime")),
+                                new Local(rs.getInt("idLocal"), rs.getString("nomLocal")),
+                                rs.getDate("dateDebut"),
+                                rs.getDate("dateFin"),
+                                rs.getBoolean("supprime")),
+                        new Stagiaire(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
+                                new Role(rs.getInt("idRole"), rs.getString("nomRole")),
+                                new Statut(rs.getInt("idStatut"), rs.getString("nomStatut"))),
                         rs.getInt("statutPaiement"),
                         rs.getInt("notificationPaiement"),
-                         rs.getBoolean("annule"));
+                        rs.getBoolean("annule"));
                 listInscription.add(inscription);
             }
         } catch (SQLException sqle) {
@@ -90,22 +89,21 @@ public class MySqlStagiaireDao implements StagiaireDao {
 
         String sql = "SELECT idSession FROM inscription WHERE idUser = ?  AND idSession = ? AND annule = 0";
         String sql2 = "INSERT INTO inscription(idSession, idUser, statutPaiement, notificationPaiement) VALUES (?, ?,?,?)";
-     
 
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, stagiaire.getIdUser());
             ps.setInt(2, idSession);
             rs = ps.executeQuery();
-            
-            if(!rs.next()){
-            result = true;
-            ps = c.prepareStatement(sql2);
-            ps.setInt(1, idSession);
-            ps.setInt(2, stagiaire.getIdUser());
-            ps.setInt(3, statutPaiement);
-            ps.setInt(4, notificationPaiement);
-            ps.executeUpdate();
+
+            if (!rs.next()) {
+                result = true;
+                ps = c.prepareStatement(sql2);
+                ps.setInt(1, idSession);
+                ps.setInt(2, stagiaire.getIdUser());
+                ps.setInt(3, statutPaiement);
+                ps.setInt(4, notificationPaiement);
+                ps.executeUpdate();
             }
         } catch (SQLException sqle) {
             System.err.println("MySqlUserDao, method registerUserToSession(Stagiaire stagiaire, int idSession): \n" + sqle.getMessage());

@@ -27,7 +27,7 @@ public class VueStagiaire {
         System.out.println("");
         System.out.println("Tapez 3 pour annuler une de vos inscriptions");
         System.out.println("");
-        System.out.println("tapez 4 pour consultez la liste de vos inscriptions");
+        System.out.println("tapez 4 pour consultez la liste de vos inscriptions ou valider un paiment");
         System.out.println("");
         System.out.println("tapez 5 pour quitter");
     }
@@ -47,14 +47,28 @@ public class VueStagiaire {
 
     public void resultsListInscription(List<Inscription> inscriptionsList) {
         String statut;
+        String statutPaiement;
+        String notificationPaiement;
         for (Inscription i : inscriptionsList) {
             if (!i.getAnnule()) {
                 statut = "inscrit";
             } else {
                 statut = "annulé";
             }
+        
+            if(i.getNotificationPaiement() == 0){
+                notificationPaiement = " Aucun paiment de votre part";
+            }else{
+                notificationPaiement = " En attente de confirmation de paiement par le système";
+            }
+                if(i.getStatutPaiement() == 0){
+                statutPaiement = " impayé";
+            }else{
+                 statutPaiement = " payé";
+                 notificationPaiement = " payé";
+            }
             System.out.println("------------------------------------------------------------------------------------------------------");
-            System.out.println("Numero de session: " + i.getIdSession().getIdSession() + " \n" + " \n" + "Nom formation: " + i.getIdSession().getFormation().getNomFormation() + " \n" + " \n" + "Local: " + i.getIdSession().getIdLocal().getNomLocal() + " \n" + " \n" + "Date de début: " + i.getIdSession().getDateDebut() + " \n" + " \n" + "Date de fin: " + i.getIdSession().getDateFin() + " \n" + " \n" + "Statut paiement: " + i.getStatutPaiement() + " \n" + " \n" + "notificationPaiement: " + i.getNotificationPaiement() + " \n" + " \n" + "Statut inscription: " + statut);
+            System.out.println("Numero de session: " + i.getIdSession().getIdSession() + " \n" + " \n" + "Nom formation: " + i.getIdSession().getFormation().getNomFormation() + " \n" + " \n" + "Local: " + i.getIdSession().getIdLocal().getNomLocal() + " \n" + " \n" + "Date de début: " + i.getIdSession().getDateDebut() + " \n" + " \n" + "Date de fin: " + i.getIdSession().getDateFin() + " \n" + " \n" + "Statut paiement: " + statutPaiement + " \n" + " \n" + "notification de paiement: " + notificationPaiement + " \n" + " \n" + "Statut inscription: " + statut);
         }
     }
 
@@ -80,5 +94,13 @@ public class VueStagiaire {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Vous n'avez pas annulé votre inscription à cette session");
+    }
+
+    public void validationPaiement() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Tapez 1 pour valider votre paiement pour une de vos inscriptions");
+        System.out.println("");
+        System.out.println("Tapez 2 pour revenir au menu précédent");
     }
 }

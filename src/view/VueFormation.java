@@ -103,7 +103,7 @@ public class VueFormation {
         System.out.println("");
         System.out.println("Tapez 2 pour supprimer la formation");
         System.out.println("");
-        System.out.println("Tapez 3 pour la création, modifcation ou suppression de session à cette formation");
+        System.out.println("Tapez 3 pour la création, modification ou suppression de session à cette formation");
         System.out.println("");
         System.out.println("Tapez 4 pour revenir au menu précédent");
     }

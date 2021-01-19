@@ -32,13 +32,11 @@ public class VueAcceuil {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Erreur! ce choix n'éxiste pas");
-        choices();
     }
 
     public void newUserName() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-
         System.out.println("entrer votre nom");
 
     }
@@ -122,6 +120,12 @@ public class VueAcceuil {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Cet utilidateur ou le mot de passe n'existe pas");
+    }
+
+    public void errorDoubleNotification() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Cette session est déjà payé");
     }
 
 }

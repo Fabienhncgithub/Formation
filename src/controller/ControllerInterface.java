@@ -7,6 +7,9 @@ package controller;
 
 import model.Facade;
 import java.util.Scanner;
+import view.VueAcceuil;
+import view.VueAdmin;
+import view.VueSession;
 
 public interface ControllerInterface {
 
@@ -17,5 +20,8 @@ public interface ControllerInterface {
     public ControllerAcceuil controllerAcceuil = new ControllerAcceuil();
     public ControllerStagiaire controllerStagiaire = new ControllerStagiaire();
     public ControllerAdmin controllerAdmin = new ControllerAdmin();
+    public VueSession vueSession = new VueSession();
+    public  VueAcceuil vueAcceuil = new VueAcceuil();
+    public VueAdmin vueAdmin = new VueAdmin();
 
 }

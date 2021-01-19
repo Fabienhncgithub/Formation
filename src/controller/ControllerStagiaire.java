@@ -5,6 +5,7 @@
  */
 package controller;
 
+import com.mysql.cj.jdbc.interceptors.SessionAssociationInterceptor;
 import static controller.ControllerInterface.facade;
 import static controller.ControllerInterface.sc;
 import model.Formation;
@@ -41,27 +42,19 @@ class ControllerStagiaire implements ControllerInterface {
 
     public void registerUser(VueAcceuil vueAcceuil) {
         User user = new Stagiaire();
-        vueAcceuil.newUserNom();
 
-        while (!sc.hasNext("[A-Za-z]*")) {
-            vueAcceuil.errorInputString();
-            sc.nextLine();
-        }
-        String nom = sc.next();
+        vueAcceuil.newUserNom();
+        sc.nextLine();
+        String nom = sc.nextLine();
         user.setNom(nom.trim());
         vueAcceuil.newUserPrenom();
-
-        while (!sc.hasNext("[A-Za-z]*")) {
-            vueAcceuil.errorInputString();
-            sc.nextLine();
-        }
-        String prenom = sc.next();
+        String prenom = sc.nextLine();
         user.setPrenom(prenom.trim());
         vueAcceuil.newUseradresse();
-        String adresse = sc.next();
+        String adresse = sc.nextLine();
         user.setAdresse(adresse.trim());
         vueAcceuil.newUseremail();
-        String email = sc.next();
+        String email = sc.nextLine();
         user.setEmail(email.trim());
         vueAcceuil.newUserPassword();
         String password = sc.next();
@@ -83,10 +76,7 @@ class ControllerStagiaire implements ControllerInterface {
     void loginStagiaire(Stagiaire user) {
         VueStagiaire vueStagiaire = new VueStagiaire();
         vueStagiaire.stagiaireChoices(user);
-        while (!sc.hasNextInt()) {
-            vueAcceuil.errorInput();
-            sc.nextLine();
-        }
+        controller.checkInt();
         int menuchoice = sc.nextInt();
         while (menuchoice < 1 || menuchoice > 5) {
             vueAcceuil.error();
@@ -99,11 +89,12 @@ class ControllerStagiaire implements ControllerInterface {
             case 2:
                 SelectFormation(user);
                 break;
-            case 3:    
+            case 3:
                 deleteInscription(user);
                 break;
             case 4:
                 inscriptionsByUser(user);
+                break;
             case 5:
                 controllerAcceuil.firstMenu();
                 break;
@@ -114,6 +105,7 @@ class ControllerStagiaire implements ControllerInterface {
         VueAcceuil VueAcceuil = new VueAcceuil();
         int id = user.getIdUser();
         VueAcceuil.newUserNom();
+
         while (!sc.hasNext("[A-Za-z]*")) {
             vueAcceuil.errorInputString();
             sc.nextLine();
@@ -143,10 +135,8 @@ class ControllerStagiaire implements ControllerInterface {
         Formation formation = null;
         do {
             vueFormation.inputFormationId();
-            while (!sc.hasNextInt()) {
-                vueAcceuil.errorInput();
-                sc.nextLine();
-            }
+            sc.nextLine();
+            controller.checkInt();
             selFormation = sc.nextInt();
             formation = facade.getCentre().getFormationbyId(selFormation);
         } while (formation == null);
@@ -158,7 +148,7 @@ class ControllerStagiaire implements ControllerInterface {
             vueSession.resultsListSession(formation.listeSessionbyFormation());
             int selSession = 0;
             do {
-                VueSession.inputSessionId();
+                vueSession.inputSessionId();
 
                 while (!sc.hasNextInt()) {
                     vueAcceuil.errorInput();
@@ -166,7 +156,8 @@ class ControllerStagiaire implements ControllerInterface {
                 }
                 selSession = sc.nextInt();
             } while (facade.getCentre().getSessionbyId(selSession) == null);
-
+            //if(formation.getParticpantMax>session.getListInscription.size()){}
+           // formation.getParticipantMax()>
             if (!user.registerUserToSession(selSession)) {
                 vueStagiaire.erreurDoubleInscription();
             } else {
@@ -189,22 +180,51 @@ class ControllerStagiaire implements ControllerInterface {
 
     public void inscriptionsByUser(Stagiaire stagiaire) {
         inscriptions(stagiaire);
-        loginStagiaire(stagiaire);
+        vueStagiaire.validationPaiement();
+
+        controller.checkInt();
+
+        int choice = sc.nextInt();
+        while (choice < 1 || choice > 2) {
+            vueAcceuil.error();
+            choice = sc.nextInt();
+        }
+        switch (choice) {
+            case 1:
+                int sessionId;
+                do {
+                    vueSession.inputSessionId();
+                    sessionId = sc.nextInt();
+                } while (facade.getCentre().getSessionbyId(sessionId) == null);
+                if (facade.getCentre().validationPaiement(sessionId, stagiaire)) {
+                    vueAcceuil.success();
+                    loginStagiaire(stagiaire);
+                } else {
+                    vueAcceuil.errorDoubleNotification();
+                    loginStagiaire(stagiaire);
+                }
+                break;
+            case 2:
+                loginStagiaire(stagiaire);
+                break;
+
+        }
+
     }
 
     public void deleteInscription(Stagiaire stagiaire) {
         inscriptions(stagiaire);
-        VueSession.inputSessionId();
+        vueSession.inputSessionId();
         vueAcceuil.exit();
         int idSession = sc.nextInt();
-        if(idSession == 0){
+        if (idSession == 0) {
             loginStagiaire(stagiaire);
-       }
-        else if(stagiaire.deletelInscription(idSession)){
+        } else if (stagiaire.deletelInscription(idSession)) {
             vueStagiaire.formationAnule();
-        }else{
+            loginStagiaire(stagiaire);
+        } else {
             vueStagiaire.formationNotAnule();
-             loginStagiaire(stagiaire);
+            loginStagiaire(stagiaire);
         }
     }
 
