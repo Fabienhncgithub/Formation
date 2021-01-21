@@ -84,25 +84,34 @@ public class MySqlFormateurDao implements FormateurDao {
     }
 
     @Override
-    public void deleteFormateur(Formateur formateur) {
+    public boolean deleteFormateur(Formateur formateur) {
+        boolean result  = false;
         Connection c;
         ResultSet rs = null;
         PreparedStatement ps = null;
-       
+
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "UPDATE user SET supprime = 1 where idUser = ?";
+        String sql = "SELECT idFormateur FROM session WHERE (session.dateDebut>CURDATE() OR session.dateFin>CURDATE()) AND idFormateur = ?";
+        String sql2 = "UPDATE user SET supprime = 1 where idUser = ?";
 
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, formateur.getIdUser());
-            ps.executeUpdate();
-            
+            rs = ps.executeQuery();
+
+            if (!rs.next()) {
+                result = true;
+                ps = c.prepareStatement(sql2);
+                ps.setInt(1, formateur.getIdUser());
+                ps.executeUpdate();
+            }
         } catch (SQLException sqle) {
             System.err.println("MySqlUserDao, method deleteFormateur(Formateur formateur): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
+        return result;
     }
 
 }

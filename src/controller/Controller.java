@@ -5,6 +5,10 @@
  */
 package controller;
 
+import static controller.ControllerInterface.facade;
+import java.util.List;
+import model.Formation;
+import model.Session;
 import model.User;
 
 /**
@@ -35,9 +39,24 @@ public class Controller implements ControllerInterface {
     }
 
     public void retourMenuAdmin(int input, User user) {
-
         if (input == 0) {
             controllerAdmin.adminChoices(user);
         }
+    }
+    
+        public void retourMenuAcceuil(String input, User user) {
+        if (input.equals('0')) {
+            controllerAcceuil.firstMenu();
+        }
+    }
+    
+
+    public void getAllSessionByFormation(User user, Formation formation) {
+        List<Session> ListeSession = facade.getCentre().listeSessionbyFormation(formation);
+        vueSession.resultsListSession(ListeSession);
+    }
+
+    public void getAllFormation(User user) {
+        vueFormation.resultsListFormation(facade.getCentre().getAllFormation());
     }
 }

@@ -22,6 +22,7 @@ import view.VueSession;
 import view.VueStagiaire;
 import java.util.ArrayList;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -53,12 +54,18 @@ class ControllerStagiaire implements ControllerInterface {
         vueAcceuil.newUseradresse();
         String adresse = sc.nextLine();
         user.setAdresse(adresse.trim());
-        vueAcceuil.newUseremail();
-        String email = sc.nextLine();
+        
+        String email;
+        do {
+            vueAcceuil.newUseremail();
+            email = sc.nextLine();
+        } while (facade.getCentre().getUserByEmail(email) != null);
+        
         user.setEmail(email.trim());
         vueAcceuil.newUserPassword();
         String password = sc.next();
-        user.setPassword(password);
+        String hasedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        user.setPassword(hasedPassword);
         user.setRole(new Role(1, "stagiaire"));
         vueAcceuil.newUserStatut();
         List<Statut> listStatut = facade.getCentre().getAllStatut();
@@ -123,7 +130,8 @@ class ControllerStagiaire implements ControllerInterface {
         String email = sc.nextLine();
         VueAcceuil.newUserPassword();
         String password = sc.nextLine();
-        user.modificationUser(id, nom, prenom, adresse, email, password);
+        String hasedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        user.modificationUser(id, nom, prenom, adresse, email, hasedPassword);
         loginStagiaire(user);
     }
 
@@ -157,7 +165,7 @@ class ControllerStagiaire implements ControllerInterface {
                 selSession = sc.nextInt();
             } while (facade.getCentre().getSessionbyId(selSession) == null);
             //if(formation.getParticpantMax>session.getListInscription.size()){}
-           // formation.getParticipantMax()>
+            // formation.getParticipantMax()>
             if (!user.registerUserToSession(selSession)) {
                 vueStagiaire.erreurDoubleInscription();
             } else {

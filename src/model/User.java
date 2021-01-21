@@ -77,10 +77,10 @@ public abstract class User {
         m.registerUser(this);
     }
 
-    public static User login(String login, String password) {
+    public static User login(String login) {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         UserDao m = factory.createUserDao();
-        return m.login(login, password);
+        return m.login(login);
     }
 
     public int getIdUser() {

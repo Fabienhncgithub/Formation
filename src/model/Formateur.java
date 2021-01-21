@@ -38,10 +38,10 @@ public class Formateur extends User {
         formateurDao.updateFormateur(this);
     }
 
-    public void deleteFormateur() {
+    public boolean deleteFormateur() {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         FormateurDao formateurDao = factory.createFormateurDao();
-        formateurDao.deleteFormateur(this);
+        return formateurDao.deleteFormateur(this);
     }
 
 }

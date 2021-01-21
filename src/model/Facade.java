@@ -100,6 +100,8 @@ public class Facade {
     public void setInscription(Inscription inscription) {
         this.inscription = inscription;
     }
+
+ 
     
     
 

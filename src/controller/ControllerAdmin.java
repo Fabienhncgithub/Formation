@@ -59,7 +59,7 @@ class ControllerAdmin implements ControllerInterface {
                 validationPaiment(user);
                 break;
             case 2:
-                listStagiaireBySessionPriceStatut(user);
+                ListeStagiaireNySession(user);
                 break;
             case 3:
                 showInformationToFormateur(user);
@@ -89,7 +89,7 @@ class ControllerAdmin implements ControllerInterface {
 
                 break;
             case 12:
-
+                  searchFormateur(user);
                 break;
             case 13:
 
@@ -116,7 +116,8 @@ class ControllerAdmin implements ControllerInterface {
         }
         switch (menuchoice) {
             case 1:
-                getAllFormation(user);
+                controller.getAllFormation(user);
+                crudFormation(user);
                 break;
             case 2:
                 createFormation(user);
@@ -193,11 +194,6 @@ class ControllerAdmin implements ControllerInterface {
         return formation;
     }
 
-    public void getAllFormation(User user) {
-        vueFormation.resultsListFormation(facade.getCentre().getAllFormation());
-        crudFormation(user);
-    }
-
     public void updateFormation(User user, Formation formation) {
         formation = inputFormation(user, formation);
         facade.getCentre().updateFormation(formation);
@@ -206,12 +202,12 @@ class ControllerAdmin implements ControllerInterface {
     }
 
     public void selectFormation(User user) {
-        vueFormation.resultsListFormation(facade.getCentre().getAllFormation());
+        controller.getAllFormation(user);
         int idFormation;
         do {
             vueFormation.inputFormationId();
             idFormation = sc.nextInt();
-              controller.retourMenuAdmin(idFormation, user);
+            controller.retourMenuAdmin(idFormation, user);
         } while (facade.getCentre().getFormationbyId(idFormation) == null);
 
         crudSelectedFormation(user, facade.getCentre().getFormationbyId(idFormation));
@@ -243,7 +239,7 @@ class ControllerAdmin implements ControllerInterface {
                 do {
                     vueAdmin.inputFormateurId();
                     formateurId = sc.nextInt();
-                    
+
                 } while (facade.getCentre().getFormateurbyId(formateurId) == null);
                 selectFormateur(user, formateurId);
                 break;
@@ -325,28 +321,15 @@ class ControllerAdmin implements ControllerInterface {
     }
 
     private void deleteFormateur(User user, Formateur formateur) {
-        formateur.deleteFormateur();
+        if(formateur.deleteFormateur()){
+        vueAcceuil.success();
+        }else{
+        vueAdmin.errorDeleteFormateur();
+        }
         crudFormateur(user);
     }
 
-//    private void CrudSession(User user, Formation formation) {
-//        
-//        if (facade.getCentre().listeSessionbyFormation(formation).isEmpty()) {
-//            vueSession.zeroSession();
-//            crudSelectedFormation(user, formation);
-//            
-//        } else {
-//            vueSession.resultsListSession(facade.getCentre().listeSessionbyFormation(formation));
-//        }
-//        VueSession.inputSessionId();
-//        int idSession = sc.nextInt();
-//        
-//        Session selectedSession = facade.getCentre().getSessionbyId(idSession);
-//        crudSelectedSession(user, formation, selectedSession);
-//        
-//    }
     public void crudSelectedSession(User user, Formation formation) {
-        VueAdmin menuAdmin = new VueAdmin();
         vueSession.crudSelectedSession();
         int menuchoice = sc.nextInt();
         while (menuchoice < 1 || menuchoice > 5) {
@@ -355,7 +338,8 @@ class ControllerAdmin implements ControllerInterface {
         }
         switch (menuchoice) {
             case 1:
-                getAllSessionByFormation(user, formation);
+                controller.getAllSessionByFormation(user, formation);
+                break;
             case 2:
                 createSession(user, formation);
                 break;
@@ -373,16 +357,10 @@ class ControllerAdmin implements ControllerInterface {
         }
     }
 
-    private void deleteSession(User user, Session session) {
-        session.deleteSession();
-    }
-
     private void showInformationToFormateur(User user) {
         /*TODO verifier la requete*/
-
         List<Session> informationsFormateurList = facade.getCentre().listeInformationsByFormateurs();
         vueAdmin.resultsListInformationsFormateur(informationsFormateurList);
-
         adminChoices(user);
 
     }
@@ -450,7 +428,7 @@ class ControllerAdmin implements ControllerInterface {
                 e.printStackTrace();
             }
             verifDate = datef.compareTo(date);
-            
+
         } while (!result || verifDate < 0);
 
         session.setDateFin(datef);
@@ -466,19 +444,14 @@ class ControllerAdmin implements ControllerInterface {
     }
 
     private void showUserBySession(User user) {
-        vueFormation.resultsListFormation(facade.getCentre().getAllFormation());
+        controller.getAllFormation(user);
         int formationId;
         do {
             vueFormation.inputFormationId();
             formationId = sc.nextInt();
             controller.retourMenuAdmin(formationId, user);
         } while (facade.getCentre().getFormationbyId(formationId) == null);
-        // facade.getCentre().get
-    }
-
-    private void getAllSessionByFormation(User user, Formation formation) {
-        List<Session> ListeSession = facade.getCentre().listeSessionbyFormation(formation);
-        vueSession.resultsListSession(ListeSession);
+        //facade.getCentre().get
     }
 
     private void validationPaiment(User user) {
@@ -497,9 +470,70 @@ class ControllerAdmin implements ControllerInterface {
         adminChoices(user);
     }
 
-    private void listStagiaireBySessionPriceStatut(User user) {
-         List<Inscription>listeInscriptionStagiaire = facade.getCentre().resultListStagiaireBySession();
-         
+    private void ListeStagiaireNySession(User user) {
+        vueSession.menuListStagiaireBySession();
+        int menuchoice = sc.nextInt();
+        while (menuchoice < 1 || menuchoice > 5) {
+            vueSession.error();
+            menuchoice = sc.nextInt();
+        }
+        switch (menuchoice) {
+            case 1:
+                resultListStagiaireBySession(user);
+                break;
+            case 2:
+                SearchByFormationSession(user);
+                break;
+            case 3:
+                adminChoices(user);
+                break;
+        }
     }
 
+    private void resultListStagiaireBySession(User user) {
+        int sessionId;
+        do {
+            vueSession.inputSessionId();
+            sc.nextLine();
+            controller.checkInt();
+            sessionId = sc.nextInt();
+            controller.retourMenuAdmin(sessionId, user);
+        } while (facade.getCentre().getSessionbyId(sessionId) == null);
+        vueSession.resulListStagiaireBySession(facade.getCentre().resultListStagiaireBySession(sessionId));
+       ListeStagiaireNySession(user);
+    }
+
+    private void SearchByFormationSession(User user) {
+        List<Formation> formationsList = facade.getCentre().getAllFormation();
+        vueFormation.resultsListFormation(formationsList);
+
+        int sessionId;
+        do {
+            vueFormation.inputFormationId();
+            sc.nextLine();
+            controller.checkInt();
+            sessionId = sc.nextInt();
+            controller.retourMenuAdmin(sessionId, user);
+        } while (facade.getCentre().getSessionbyId(sessionId) == null);
+        controller.getAllSessionByFormation(user, facade.getCentre().getFormationbyId(sessionId));
+        resultListStagiaireBySession(user);
+
+    }
+
+    private void searchFormateur(User user) {
+       controller.getAllFormation(user);
+       int idFormation;
+       do{
+       vueFormation.inputFormationId();
+       idFormation = sc.nextInt();
+       }while(facade.getCentre().getFormationbyId(idFormation)== null);
+       controller.getAllSessionByFormation(user, facade.getCentre().getFormationbyId(idFormation));
+       int idSession;
+       do{
+       vueSession.inputSessionId();
+       idSession = sc.nextInt();
+       }while(facade.getCentre().getSessionbyId(idSession) == null);
+       vueSession.formateurBysession(facade.getCentre().getFormateurBySession(idSession));
+       adminChoices(user);
+    }
 }

@@ -9,6 +9,7 @@ import model.Facade;
 import java.util.Scanner;
 import view.VueAcceuil;
 import view.VueAdmin;
+import view.VueFormation;
 import view.VueSession;
 
 public interface ControllerInterface {
@@ -23,5 +24,6 @@ public interface ControllerInterface {
     public VueSession vueSession = new VueSession();
     public  VueAcceuil vueAcceuil = new VueAcceuil();
     public VueAdmin vueAdmin = new VueAdmin();
+    public VueFormation vueFormation = new VueFormation();
 
 }

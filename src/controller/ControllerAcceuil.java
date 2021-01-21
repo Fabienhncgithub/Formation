@@ -15,6 +15,7 @@ import view.VueFormation;
 import java.util.List;
 import model.DAO.AbstractDaoFactory;
 import model.DAO.Mysql.MySqlDaoFactory;
+import org.mindrot.jbcrypt.BCrypt;
 import view.VueStagiaire;
 
 /**
@@ -48,9 +49,11 @@ public class ControllerAcceuil implements ControllerInterface {
 
     public void firstMenu() {
         AbstractDaoFactory.setFactory(MySqlDaoFactory.getInstance());
+        cleanDB();
+
         VueAcceuil vueAcceuil = new VueAcceuil();
         vueAcceuil.choices();
-        
+
         controller.checkInt();
 
         int menuchoice = sc.nextInt();
@@ -82,15 +85,23 @@ public class ControllerAcceuil implements ControllerInterface {
             vueAcceuil.login();
             email = sc.next();
             sc.nextLine();
-        } while (email.isEmpty() || email == null);
+//            if (Integer.parseInt(email) == 0) {
+//                firstMenu();
+//            }
+        } while (email.isEmpty() || email == null || facade.getCentre().getUserByEmail(email) == null);
 
         do {
             vueAcceuil.newUserPassword();
             password = sc.next();
             sc.nextLine();
-        } while (password.isEmpty() || password == null);
+            if (Integer.parseInt(password) == 0) {
+                firstMenu();
+            }
+        } while (password.isEmpty() || password == null || !BCrypt.checkpw(password, facade.getCentre().getUserByEmail(email).getPassword()));
 
-        controllerAcceuil.setUsr(User.login(email.trim(), password.trim()));
+        
+        controllerAcceuil.setUsr(User.login(email));
+
         if (controllerAcceuil.getUsr() instanceof Stagiaire) {
             controllerStagiaire.loginStagiaire((Stagiaire) controllerAcceuil.getUsr());
         } else if (controllerAcceuil.getUsr() instanceof Admin) {
@@ -125,7 +136,7 @@ public class ControllerAcceuil implements ControllerInterface {
         firstMenu();
     }
 
-    private void searchFormation(VueFormation vueFormation) {
+    public void searchFormation(VueFormation vueFormation) {
         vueFormation.inputFormationNom();
         String search = sc.next();
         List<Formation> formationsList = facade.getCentre().searchFormation(search);
@@ -137,6 +148,11 @@ public class ControllerAcceuil implements ControllerInterface {
         formationsList = facade.getCentre().searchFormation(search.toUpperCase());
         vueFormation.resultsListFormation(formationsList);
         firstMenu();
+    }
+
+    public void cleanDB() {
+        facade.getCentre().cleanDb();
+
     }
 
 }

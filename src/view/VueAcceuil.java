@@ -51,7 +51,7 @@ public class VueAcceuil {
     public void login() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-        System.out.println("Entrez votre Login");
+        System.out.println("Entrez votre Login valide");
     }
 
     public void newUserNom() {
@@ -81,7 +81,7 @@ public class VueAcceuil {
     public void newUserPassword() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-        System.out.println("Entrez votre mot de passe");
+        System.out.println("Entrez votre mot de passe valide");
     }
 
     public void resultListStatut(List<Statut> listStatut) {
@@ -125,7 +125,7 @@ public class VueAcceuil {
     public void errorDoubleNotification() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-        System.out.println("Cette session est déjà payé");
+        System.out.println("Cette opération a déjà été effectué");
     }
 
 }

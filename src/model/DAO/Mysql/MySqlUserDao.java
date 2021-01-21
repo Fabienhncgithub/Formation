@@ -61,19 +61,18 @@ public class MySqlUserDao implements UserDao {
     }
 
     @Override
-    public User login(String email, String password) {
+    public User login(String email) {
         Connection c;
         ResultSet rs = null;
         PreparedStatement ps = null;
         User u = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT u.idUser, u.nom, u.prenom, u.adresse, u.email, u.password, u.statut, u.role, u.supprime,r.idRole, r.nomRole, s.idStatut, s.nomStatut from user u, role r, statut s where u.role =  r.idRole and u.email = ? and u.password = ? limit 1";
+        String sql = "SELECT u.idUser, u.nom, u.prenom, u.adresse, u.email, u.password, u.statut, u.role, u.supprime,r.idRole, r.nomRole, s.idStatut, s.nomStatut from user u, role r, statut s WHERE u.role =  r.idRole AND u.email = ? limit 1";
 
         try {
             ps = c.prepareStatement(sql);
             ps.setString(1, email);
-            ps.setString(2, password);
             rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -89,17 +88,10 @@ public class MySqlUserDao implements UserDao {
                 } else if (role == 3) {
                     u = new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
                             new Role(rs.getInt("role"), rs.getString("role")),rs.getBoolean("supprime"));
-
                 }
-
-//                 else {
-//                    System.out.println("no role");
-////                }
-//            } else {
-//                System.out.println("error connection");
             }
         } catch (SQLException sqle) {
-            System.err.println("MySqlUserDao, method login(User u): \n" + sqle.getMessage());
+            System.err.println("MySqlUserDao, method login(String email, String password): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }

@@ -18,7 +18,7 @@ public interface UserDao {
 
     void registerUser(User user);
 
-    User login(String login, String password);
+    User login(String login);
 
     void modificationUser(int idUser, String nom, String prenom, String adresse, String email, String password);
 

@@ -9,6 +9,7 @@ import model.Formation;
 import model.Session;
 import java.util.List;
 import model.Formateur;
+import model.Inscription;
 import model.Local;
 
 /**
@@ -23,8 +24,6 @@ public class VueSession {
         System.out.println("Entrez le code session");
     }
 
-  
-
     public VueSession() {
     }
 
@@ -32,11 +31,12 @@ public class VueSession {
         for (Session s : listSession) {
             System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");
-            System.out.println("Formation: " + s.getFormation().getNomFormation() 
-                    + " \n" + " \n" + "idFormateur: " + s.getIdformateur().getNom()
-                    + " \n" + " \n" + "idLocal: " + s.getIdLocal().getNomLocal() 
-                    + " \n" + " \n" + "dateDébut: " + s.getDateDebut() 
-                    + " \n" + " \n" + "dateFin: " + s.getDateFin());
+            System.out.println("Code Session: " + s.getIdSession()
+                    + " \n" + " \n" + "Formation: " + s.getFormation().getNomFormation()
+                    + " \n" + " \n" + "Formateur: " + s.getIdformateur().getNom()
+                    + " \n" + " \n" + "Local: " + s.getIdLocal().getNomLocal()
+                    + " \n" + " \n" + "date de début: " + s.getDateDebut()
+                    + " \n" + " \n" + "date de fin: " + s.getDateFin());
         }
     }
 
@@ -95,20 +95,50 @@ public class VueSession {
     }
 
     public void newDateDebut() {
-            System.out.println("------------------------------------------------------------------------------------------------------");
-            System.out.println("");
-            System.out.println("Encodez une date de début valide dd-MM-yyyy: ");
-        }
-        public void newDateFin() {
-            System.out.println("------------------------------------------------------------------------------------------------------");
-            System.out.println("");
-            System.out.println("Encodez une date de fin valide dd-MM-yyyy: ");
-        }
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Encodez une date de début valide dd-MM-yyyy: ");
+    }
+
+    public void newDateFin() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Encodez une date de fin valide dd-MM-yyyy: ");
+    }
 
     public void formateurNotAvailable() {
-             System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Ce prof n'est pas disponible pour ces dates");
+    }
+
+    public void menuListStagiaireBySession() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Tapez 1 pour encoder directement le code de la  session");
+        System.out.println("");
+        System.out.println("Tapez 2 pour rechercher la session d'une formation");
+        System.out.println("");
+        System.out.println("Tapez 3 pour revenir au menu précédent");
+    }
+
+    public void resulListStagiaireBySession(List<Inscription> resultListStagiaireBySession) {
+        for (Inscription i : resultListStagiaireBySession) {
+            System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");
-            System.out.println("Ce prof n'est pas disponible pour ces dates");
+            if (resultListStagiaireBySession.size() == 0) {
+                System.out.println("Il n'y a pas de stagiaire inscrit pour cette session");
+            } else {
+                System.out.println("Nom Stagiaire: " + i.getIdUser().getNom() + " \n" + " \n" + "Prenom Stagiaire: " + i.getIdUser().getPrenom() + " \n" + " \n" + "Statut: " + i.getIdUser().getStatut().getNomStatut());
+            }
+        }
+    }
+
+    public void formateurBysession(Formateur formateurBySession) {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Formateur : " + formateurBySession.getNom() +"  " +formateurBySession.getPrenom() );
+
     }
 
 }

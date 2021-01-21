@@ -17,13 +17,13 @@ import model.Session;
  */
 public class VueAdmin {
 
-    public void choices(User user,  List<Inscription> inscritpionPaiementNotification) {
+    public void choices(User user, List<Inscription> inscritpionPaiementNotification) {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Bonjour " + user.getNom() + " , vous êtes connecté en tant que administrateur");
         System.out.println("");
         System.out.println("");
-        System.out.println("Tapez 1 pour valider les paiements d'inscription en attente ("+ inscritpionPaiementNotification.size()+")");
+        System.out.println("Tapez 1 pour valider les paiements d'inscription en attente (" + inscritpionPaiementNotification.size() + ")");
         System.out.println("");
         System.out.println("Tapez 2 pour sortir la liste des stagiaires inscrit à une session avec le prix et son statut");
         System.out.println("");
@@ -161,7 +161,11 @@ public class VueAdmin {
         System.out.println("Tapez le code session a valider");
     }
 
- 
+    public void errorDeleteFormateur() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Il n'est pas possib le de supprimer ce formateur car il donne encore des cours");
+    }
 
 
 

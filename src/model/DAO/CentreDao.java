@@ -61,7 +61,13 @@ public interface CentreDao {
 
     public void validationStatutPaiment(int sessionId);
 
-    public List<Inscription> resultListStagiaireBySession();
+    public List<Inscription> resultListStagiaireBySession(int sessionId);
+
+    public void cleanDb();
+
+    public User getUserByEmail(String email);
+
+    public Formateur getFormateurBySession(int idSession);
 
 
 

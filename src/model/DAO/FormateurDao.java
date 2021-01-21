@@ -17,7 +17,7 @@ public interface FormateurDao {
 
      void updateFormateur(Formateur formateur);
 
-     void deleteFormateur(Formateur aThis);
+     boolean deleteFormateur(Formateur aThis);
 
  
     

@@ -35,7 +35,7 @@ public class VueFormation {
         for (Formation f : formationsList) {
             System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");
-            System.out.println("Code formation: " + f.getIdFormation() + " \n"+ " \n" + "Formation: " + f.getNomFormation() + "\n" + " \n"+ "Prix: " + f.getPrix() + " €" +  " \n"+" \n" + "Duree: " + f.getDuree() + " jours" + " \n" + " \n"+ "Participants max: " + f.getParticipantMax() + " \n"+ " \n" + "Participant min: " + f.getParticipantMin());
+            System.out.println("Code formation: " + f.getIdFormation() + " \n" + " \n" + "Formation: " + f.getNomFormation() + "\n" + " \n" + "Prix: " + f.getPrix() + " €" + " \n" + " \n" + "Duree: " + f.getDuree() + " jours" + " \n" + " \n" + "Participants max: " + f.getParticipantMax() + " \n" + " \n" + "Participant min: " + f.getParticipantMin());
         }
     }
 
@@ -57,7 +57,7 @@ public class VueFormation {
         System.out.println("Erreur! ce choix n'éxiste pas");
         System.out.println("");
         System.out.println("Réessayer avec une selection correcte");
-        
+
     }
 
     public void inputFormationNom() {
@@ -115,7 +115,7 @@ public class VueFormation {
     }
 
     public void inputError() {
-             System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("il n'est pas possible d'enregistrer cette formation");
     }
