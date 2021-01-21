@@ -69,6 +69,8 @@ public interface CentreDao {
 
     public Formateur getFormateurBySession(int idSession);
 
+    public List<Session> listeSessionByIdFormateur(int idFormateur);
+
 
 
 }

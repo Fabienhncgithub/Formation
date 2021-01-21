@@ -15,6 +15,7 @@ import view.VueFormation;
 import java.util.List;
 import model.DAO.AbstractDaoFactory;
 import model.DAO.Mysql.MySqlDaoFactory;
+import model.Formateur;
 import org.mindrot.jbcrypt.BCrypt;
 import view.VueStagiaire;
 
@@ -106,6 +107,9 @@ public class ControllerAcceuil implements ControllerInterface {
             controllerStagiaire.loginStagiaire((Stagiaire) controllerAcceuil.getUsr());
         } else if (controllerAcceuil.getUsr() instanceof Admin) {
             controllerAdmin.adminChoices(controllerAcceuil.getUsr());
+          } else if (controllerAcceuil.getUsr() instanceof Formateur) {
+            controllerFormateur.formateurChoices(controllerAcceuil.getUsr());
+            
         } else {
             vueAcceuil.errorlogin();
             loginUser();

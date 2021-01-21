@@ -68,7 +68,7 @@ public class MySqlUserDao implements UserDao {
         User u = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT u.idUser, u.nom, u.prenom, u.adresse, u.email, u.password, u.statut, u.role, u.supprime,r.idRole, r.nomRole, s.idStatut, s.nomStatut from user u, role r, statut s WHERE u.role =  r.idRole AND u.email = ? limit 1";
+        String sql = "SELECT u.idUser, u.nom, u.prenom, u.adresse, u.email, u.password, u.statut, u.role, u.supprime,r.idRole, r.nomRole, s.idStatut, s.nomStatut, s.discount from user u, role r, statut s WHERE u.role =  r.idRole AND u.email = ? limit 1";
 
         try {
             ps = c.prepareStatement(sql);
@@ -80,7 +80,7 @@ public class MySqlUserDao implements UserDao {
                 if (role == 1) {
                     u = new Stagiaire(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
                             new Role(rs.getInt("role"), rs.getString("role")),
-                            new Statut(rs.getInt("statut"), rs.getString("statut")));
+                            new Statut(rs.getInt("statut"), rs.getString("statut"),rs.getDouble("discount")));
 
                 } else if (role == 2) {
                     u = new Admin(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),

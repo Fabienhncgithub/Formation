@@ -75,7 +75,7 @@ class ControllerStagiaire implements ControllerInterface {
             idStatut = sc.nextInt();
             vueAcceuil.newUserStatut();
         } while (facade.getCentre().getStatutById(idStatut) == null);
-        user.setStatut(new Statut(idStatut, listStatut.get(idStatut).getNomStatut()));
+        user.setStatut(new Statut(idStatut, listStatut.get(idStatut).getNomStatut(), listStatut.get(idStatut).getDiscount()));
         user.registerUser();
         controllerAcceuil.firstMenu();
     }

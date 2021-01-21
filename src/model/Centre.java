@@ -173,4 +173,11 @@ public class Centre {
         return centreDao.getFormateurBySession(idSession);
     }
 
+
+    public List<Session> listeSessionByIdFormateur(int idFormateur) {
+              AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.listeSessionByIdFormateur(idFormateur);
+    }
+
 }

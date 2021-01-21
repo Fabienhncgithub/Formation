@@ -9,6 +9,7 @@ import model.Facade;
 import java.util.Scanner;
 import view.VueAcceuil;
 import view.VueAdmin;
+import view.VueFormateur;
 import view.VueFormation;
 import view.VueSession;
 
@@ -21,9 +22,11 @@ public interface ControllerInterface {
     public ControllerAcceuil controllerAcceuil = new ControllerAcceuil();
     public ControllerStagiaire controllerStagiaire = new ControllerStagiaire();
     public ControllerAdmin controllerAdmin = new ControllerAdmin();
+    public controllerFormateur controllerFormateur  = new controllerFormateur();
     public VueSession vueSession = new VueSession();
     public  VueAcceuil vueAcceuil = new VueAcceuil();
     public VueAdmin vueAdmin = new VueAdmin();
     public VueFormation vueFormation = new VueFormation();
+    public VueFormateur vueFormateur = new VueFormateur();
 
 }

@@ -46,7 +46,7 @@ public class MySqlStagiaireDao implements StagiaireDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Inscription> listInscription = new ArrayList<>();
-        String sql = "SELECT inscription.annule, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin,  session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal, inscription.statutPaiement, inscription.notificationPaiement, inscription.annule FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN inscription ON session.idSession  = inscription.idSession JOIN user ON user.idUser = inscription.idUser JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE inscription.idUser = ? AND inscription.annule = 0";
+        String sql = "SELECT inscription.annule, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin,  session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, statut.discount,local.idLocal, local.nomLocal, inscription.statutPaiement, inscription.notificationPaiement, inscription.annule FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN inscription ON session.idSession  = inscription.idSession JOIN user ON user.idUser = inscription.idUser JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE inscription.idUser = ? AND inscription.annule = 0";
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, stagiaire.getIdUser());
@@ -63,7 +63,7 @@ public class MySqlStagiaireDao implements StagiaireDao {
                                 rs.getBoolean("supprime")),
                         new Stagiaire(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
                                 new Role(rs.getInt("idRole"), rs.getString("nomRole")),
-                                new Statut(rs.getInt("idStatut"), rs.getString("nomStatut"))),
+                                new Statut(rs.getInt("idStatut"), rs.getString("nomStatut"), rs.getDouble("discount"))),
                         rs.getInt("statutPaiement"),
                         rs.getInt("notificationPaiement"),
                         rs.getBoolean("annule"));

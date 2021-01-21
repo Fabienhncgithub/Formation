@@ -13,12 +13,14 @@ public class Statut {
     
     private int idStatut;
     private String nomStatut;
+    private double discount;
     
     
 
-    public Statut(int idStatut, String nomStatut) {
+    public Statut(int idStatut, String nomStatut, double discount) {
         this.idStatut = idStatut;
         this.nomStatut = nomStatut;
+        this.discount = discount;
     }
 
     public Statut() {
@@ -39,5 +41,15 @@ public class Statut {
     public void setNomStatut(String nomStatut) {
         this.nomStatut = nomStatut;
     }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+    
+    
     
 }
