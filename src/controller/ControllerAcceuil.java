@@ -95,9 +95,7 @@ public class ControllerAcceuil implements ControllerInterface {
             vueAcceuil.newUserPassword();
             password = sc.next();
             sc.nextLine();
-            if (Integer.parseInt(password) == 0) {
-                firstMenu();
-            }
+    
         } while (password.isEmpty() || password == null || !BCrypt.checkpw(password, facade.getCentre().getUserByEmail(email).getPassword()));
 
         

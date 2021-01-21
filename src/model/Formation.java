@@ -24,6 +24,8 @@ public class Formation {
     private boolean supprime;
     private List<Session> listeSession;
 
+    
+    /*TOTO SUPPRIME BOOLEAN SUPPRIME*/
     public Formation(int idFormation, String nomFormation, double prix, int duree, int participantMax, int participantMin, boolean supprime) {
         this.idFormation = idFormation;
         this.nomFormation = nomFormation;
@@ -93,6 +95,9 @@ public class Formation {
     }
 
     public List<Session> getListeSession() {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        listeSession = centreDao.listeSessionbyFormation(this);
         return listeSession;
     }
 
@@ -107,8 +112,6 @@ public class Formation {
     public void setSupprime(boolean supprime) {
         this.supprime = supprime;
     }
-    
-    
 
     public List<Session> listeSessionbyFormation() {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
@@ -116,8 +119,5 @@ public class Formation {
         listeSession = centreDao.listeSessionbyFormation(this);
         return listeSession;
     }
-    
-
-
 
 }

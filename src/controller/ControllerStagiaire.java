@@ -157,15 +157,13 @@ class ControllerStagiaire implements ControllerInterface {
             int selSession = 0;
             do {
                 vueSession.inputSessionId();
-
                 while (!sc.hasNextInt()) {
                     vueAcceuil.errorInput();
                     sc.nextLine();
                 }
                 selSession = sc.nextInt();
             } while (facade.getCentre().getSessionbyId(selSession) == null);
-            //if(formation.getParticpantMax>session.getListInscription.size()){}
-            // formation.getParticipantMax()>
+    
             if (!user.registerUserToSession(selSession)) {
                 vueStagiaire.erreurDoubleInscription();
             } else {
@@ -189,9 +187,7 @@ class ControllerStagiaire implements ControllerInterface {
     public void inscriptionsByUser(Stagiaire stagiaire) {
         inscriptions(stagiaire);
         vueStagiaire.validationPaiement();
-
         controller.checkInt();
-
         int choice = sc.nextInt();
         while (choice < 1 || choice > 2) {
             vueAcceuil.error();

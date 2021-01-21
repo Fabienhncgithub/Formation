@@ -18,7 +18,7 @@ import model.DAO.SessionDao;
 public class Session {
 
     private int idSession;
-    private Formation formation;
+
     private Formateur idformateur;
     private Local idLocal;
     private Date dateDebut;
@@ -26,9 +26,8 @@ public class Session {
     private boolean supprime;
     private List<Inscription> listeInscriptionbySession;
 
-    public Session(int idSession,Formation formation,Formateur idformateur, Local idLocal, Date dateDebut, Date dateFin, boolean supprime) {
+    public Session(int idSession,Formateur idformateur, Local idLocal, Date dateDebut, Date dateFin, boolean supprime) {
         this.idSession = idSession;
-        this.formation = formation;
         this.idformateur = idformateur;
         this.idLocal = idLocal;
         this.dateDebut = dateDebut;
@@ -54,14 +53,7 @@ public class Session {
         this.idSession = idSession;
     }
 
-    public Formation getFormation() {
-        return formation;
-    }
 
-    public void setFormation(Formation formation) {
-        this.formation = formation;
-    }
-    
 
     public Formateur getIdformateur() {
         return idformateur;

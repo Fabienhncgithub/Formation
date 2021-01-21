@@ -151,7 +151,7 @@ public class VueAdmin {
         for (Session s : informationsFormateurList) {
             System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");
-            System.out.println("Formation: " + s.getFormation().getNomFormation() + " \n" + " \n" + "Formateur: " + s.getIdformateur().getNom() + " \n" + " \n" + "Date de début: " + s.getDateDebut() + " \n" + " \n" + "Date de fin: " + s.getDateFin() + " \n" + " \n" + "Local: " + s.getIdLocal().getNomLocal());
+            System.out.println("Code session: " + s.getIdSession() + " \n" + " \n" + "Formateur: " + s.getIdformateur().getNom() + " \n" + " \n" + "Date de début: " + s.getDateDebut() + " \n" + " \n" + "Date de fin: " + s.getDateFin() + " \n" + " \n" + "Local: " + s.getIdLocal().getNomLocal());
         }
     }
 
@@ -164,9 +164,13 @@ public class VueAdmin {
     public void errorDeleteFormateur() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-        System.out.println("Il n'est pas possib le de supprimer ce formateur car il donne encore des cours");
+        System.out.println("Il n'est pas possible le de supprimer ce formateur car il donne encore des cours");
     }
 
-
+    public void FormateurNotAvailable() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Il n'y a pas de formateur disponible pour cette date");
+    }
 
 }

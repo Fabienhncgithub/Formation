@@ -17,6 +17,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import model.Inscription;
@@ -339,6 +340,7 @@ class ControllerAdmin implements ControllerInterface {
         switch (menuchoice) {
             case 1:
                 controller.getAllSessionByFormation(user, formation);
+                crudSelectedSession(user,formation);
                 break;
             case 2:
                 createSession(user, formation);
@@ -358,7 +360,6 @@ class ControllerAdmin implements ControllerInterface {
     }
 
     private void showInformationToFormateur(User user) {
-        /*TODO verifier la requete*/
         List<Session> informationsFormateurList = facade.getCentre().listeInformationsByFormateurs();
         vueAdmin.resultsListInformationsFormateur(informationsFormateurList);
         adminChoices(user);
@@ -367,25 +368,6 @@ class ControllerAdmin implements ControllerInterface {
 
     private void createSession(User user, Formation formation) {
         Session session = new Session();
-        session.setFormation(formation);
-
-        int idFormateur;
-        do {
-            vueSession.newFormateur();
-            List<Formateur> listFormateur = facade.getCentre().getAllFormateur();
-            vueSession.resultListformateur(listFormateur);
-            idFormateur = sc.nextInt();
-        } while (facade.getCentre().getFormateurbyId(idFormateur) == null);
-        session.setIdformateur(facade.getCentre().getFormateurbyId(idFormateur));
-
-        int idLocal;
-        do {
-            vueSession.newLocal();
-            List<Local> lisLocal = facade.getCentre().getAllLocal();
-            vueSession.resultListLocal(lisLocal);
-            idLocal = sc.nextInt();
-        } while (facade.getCentre().getLocalById(idLocal) == null);
-        session.setIdLocal(facade.getCentre().getLocalById(idLocal));
 
         String dateDebut;
         boolean result = false;
@@ -393,6 +375,7 @@ class ControllerAdmin implements ControllerInterface {
             vueSession.newDateDebut();
             dateDebut = sc.next();
             sc.nextLine();
+            /*TODO VERIFIER REGEX*/
             //Regular expression to accept date in MM-DD-YYY format
             String regex = "^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$";
             result = dateDebut.matches(regex);
@@ -408,32 +391,39 @@ class ControllerAdmin implements ControllerInterface {
             e.printStackTrace();
         }
 
-        String dateFin;
-        boolean res = false;
-        Date datef = null;
-        int verifDate;
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, formation.getDuree());
+        dt = c.getTime();
+
+        session.setDateFin(dt);
+        
+        if(facade.getCentre().getFormateurAvailable(session, formation).isEmpty()){
+            vueAdmin.FormateurNotAvailable();
+             crudSelectedSession(user,formation); 
+        }
+
+        int idFormateur;
         do {
-            vueSession.newDateFin();
-            dateFin = sc.next();
-            sc.nextLine();
-            //Regular expression to accept date in MM-DD-YYY format
-            String regex = "^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$";
-            result = dateDebut.matches(regex);
-            try {
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                formatter.setLenient(false);
-                datef = formatter.parse(dateFin);
+            vueSession.newFormateur();
+            List<Formateur> listFormateur = facade.getCentre().getFormateurAvailable(session, formation);
+            vueSession.resultListformateur(listFormateur);
+            idFormateur = sc.nextInt();
+        } while (facade.getCentre().getFormateurbyId(idFormateur) == null);
+        session.setIdformateur(facade.getCentre().getFormateurbyId(idFormateur));
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            verifDate = datef.compareTo(date);
+        int idLocal;
+        do {
+            vueSession.newLocal();
+            List<Local> lisLocal = facade.getCentre().getAllLocal();
+            vueSession.resultListLocal(lisLocal);
+            idLocal = sc.nextInt();
+        } while (facade.getCentre().getLocalById(idLocal) == null);
+        session.setIdLocal(facade.getCentre().getLocalById(idLocal));
 
-        } while (!result || verifDate < 0);
-
-        session.setDateFin(datef);
-
-        if (facade.getCentre().CreateNewSession(session)) {
+        
+        if (facade.getCentre().CreateNewSession(session, formation)) {
             vueAcceuil.success();
             crudSelectedSession(user, formation);
 
@@ -457,16 +447,16 @@ class ControllerAdmin implements ControllerInterface {
     private void validationPaiment(User user) {
         List<Inscription> listeInscriptionNotificationPaiment = facade.getCentre().getInscritpionPaiementNotification();
         vueStagiaire.resultsListInscription(listeInscriptionNotificationPaiment);
-        int sessionId;
+        int inscriptionId;
         do {
 
             vueAdmin.inputPaiement();
             sc.nextLine();
             controller.checkInt();
-            sessionId = sc.nextInt();
-            controller.retourMenuAdmin(sessionId, user);
-        } while (facade.getCentre().getSessionbyId(sessionId) == null);
-        facade.getCentre().validationStatutPaiment(sessionId);
+            inscriptionId = sc.nextInt();
+            controller.retourMenuAdmin(inscriptionId, user);
+        } while (facade.getCentre().getInscriptionbyId(inscriptionId) == null);
+        facade.getCentre().validationStatutPaiment(inscriptionId);
         adminChoices(user);
     }
 

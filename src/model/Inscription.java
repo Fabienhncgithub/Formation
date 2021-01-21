@@ -10,61 +10,63 @@ package model;
  * @author Fabien
  */
 public class Inscription {
-    private Session idSession;
-    private User idUser;
-    private int statutPaiement;
-    private int notificationPaiement;
+    private int idInscription;
+    private boolean statutPaiement;
+    private boolean notificationPaiement;
+    private double prix;
     private boolean annule;
+   
 
-    public Inscription(Session idSession, User idUser, int statutPaiement, int notificationPaiement, boolean annule) {
-        this.idSession = idSession;
-        this.idUser = idUser;
+    public Inscription(int idInscription, boolean statutPaiement, boolean notificationPaiement, double prix) {
+        this.idInscription = idInscription;
         this.statutPaiement = statutPaiement;
         this.notificationPaiement = notificationPaiement;
+        this.prix = prix;
         this.annule = annule;
     }
 
+    /*TODO public inscription(int idInscription, boolean est payé, boolean notification paiement, double prix, boolean annule)*/
+    
+    
 
     public Inscription() {
     }
 
-
-
-    public Session getIdSession() {
-        return idSession;
+    public int getIdInscription() {
+        return idInscription;
     }
 
-    public void setIdSession(Session idSession) {
-        this.idSession = idSession;
+    public void setIdInscription(int idInscription) {
+        this.idInscription = idInscription;
     }
 
-    
-    
-
-    public User getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(User idUser) {
-        this.idUser = idUser;
-    }
-
-
-    public int getStatutPaiement() {
+    public boolean getStatutPaiement() {
         return statutPaiement;
     }
 
-    public void setStatutPaiement(int statutPaiement) {
+    public void setStatutPaiement(boolean statutPaiement) {
         this.statutPaiement = statutPaiement;
     }
 
-    public int getNotificationPaiement() {
+    public boolean getNotificationPaiement() {
         return notificationPaiement;
     }
 
-    public void setNotificationPaiement(int notificationPaiement) {
+    public void setNotificationPaiement(boolean notificationPaiement) {
         this.notificationPaiement = notificationPaiement;
     }
+
+
+
+    public double getPrix() {
+        return prix;
+    }
+
+    public void setPrix(double prix) {
+        this.prix = prix;
+    }
+    
+    
 
     public boolean getAnnule() {
         return annule;

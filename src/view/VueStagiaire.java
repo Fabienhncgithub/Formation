@@ -55,20 +55,20 @@ public class VueStagiaire {
             } else {
                 statut = "annulé";
             }
-        
-            if(i.getNotificationPaiement() == 0){
+            if ((i.getNotificationPaiement())) {
                 notificationPaiement = " Aucun paiment de votre part";
-            }else{
+            } else {
                 notificationPaiement = " En attente de confirmation de paiement par le système";
             }
-                if(i.getStatutPaiement() == 0){
+
+            if (i.getStatutPaiement()) {
                 statutPaiement = " impayé";
-            }else{
-                 statutPaiement = " payé";
-                 notificationPaiement = " payé";
+            } else {
+                statutPaiement = " payé";
+                notificationPaiement = " payé";
             }
             System.out.println("------------------------------------------------------------------------------------------------------");
-            System.out.println("Numero de session: " + i.getIdSession().getIdSession() + " \n" + " \n" + "Nom formation: " + i.getIdSession().getFormation().getNomFormation() + " \n" + " \n" + "Local: " + i.getIdSession().getIdLocal().getNomLocal() + " \n" + " \n" + "Date de début: " + i.getIdSession().getDateDebut() + " \n" + " \n" + "Date de fin: " + i.getIdSession().getDateFin() + " \n" + " \n" + "Statut paiement: " + statutPaiement + " \n" + " \n" + "notification de paiement: " + notificationPaiement + " \n" + " \n" + "Statut inscription: " + statut);
+            System.out.println("Numero d'inscription: " + i.getIdInscription() + " \n" + " \n" + "Prix: " + i.getPrix() + " \n" + " \n" + "Statut paiement: " + statutPaiement + " \n" + " \n" + "notification de paiement: " + notificationPaiement + " \n" + " \n" + "Statut inscription: " + statut);
         }
     }
 

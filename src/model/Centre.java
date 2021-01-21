@@ -109,10 +109,10 @@ public class Centre {
         return centreDao.listeInformationsByFormateurs();
     }
 
-    public boolean CreateNewSession(Session session) {
+    public boolean CreateNewSession(Session session, Formation formation) {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         CentreDao centreDao = factory.createCentreDao();
-        return centreDao.CreateNewSession(session);
+        return centreDao.CreateNewSession(session, formation);
 
     }
 
@@ -141,13 +141,13 @@ public class Centre {
         return centreDao.getInscritpionPaiementNotification();
     }
 
-    public void validationStatutPaiment(int sessionId) {
+    public void validationStatutPaiment(int inscriptionId) {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         CentreDao centreDao = factory.createCentreDao();
-        centreDao.validationStatutPaiment(sessionId);
+        centreDao.validationStatutPaiment(inscriptionId);
     }
 
-    public List<Inscription> resultListStagiaireBySession(int sessionId) {
+    public List<Stagiaire> resultListStagiaireBySession(int sessionId) {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         CentreDao centreDao = factory.createCentreDao();
         return centreDao.resultListStagiaireBySession(sessionId);
@@ -173,11 +173,22 @@ public class Centre {
         return centreDao.getFormateurBySession(idSession);
     }
 
-
     public List<Session> listeSessionByIdFormateur(int idFormateur) {
-              AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         CentreDao centreDao = factory.createCentreDao();
         return centreDao.listeSessionByIdFormateur(idFormateur);
+    }
+
+    public List<Formateur> getFormateurAvailable(Session session,Formation formation) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.getFormateurAvailable(session, formation);
+    }
+
+    public Inscription getInscriptionbyId(int inscriptionId) {
+            AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.getInscriptionbyId(inscriptionId);
     }
 
 }

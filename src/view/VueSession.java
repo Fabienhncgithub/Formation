@@ -11,6 +11,7 @@ import java.util.List;
 import model.Formateur;
 import model.Inscription;
 import model.Local;
+import model.Stagiaire;
 
 /**
  *
@@ -28,15 +29,19 @@ public class VueSession {
     }
 
     public void resultsListSession(List<Session> listSession) {
-        for (Session s : listSession) {
-            System.out.println("------------------------------------------------------------------------------------------------------");
-            System.out.println("");
-            System.out.println("Code Session: " + s.getIdSession()
-                    + " \n" + " \n" + "Formation: " + s.getFormation().getNomFormation()
-                    + " \n" + " \n" + "Formateur: " + s.getIdformateur().getNom()
-                    + " \n" + " \n" + "Local: " + s.getIdLocal().getNomLocal()
-                    + " \n" + " \n" + "date de début: " + s.getDateDebut()
-                    + " \n" + " \n" + "date de fin: " + s.getDateFin());
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        if (listSession.size() == 0) {
+            System.out.println("Il n'y a pas encore de session");
+        } else {
+            for (Session s : listSession) {
+
+                System.out.println("Code Session: " + s.getIdSession()
+                        + " \n" + " \n" + "Formateur: " + s.getIdformateur().getNom()
+                        + " \n" + " \n" + "Local: " + s.getIdLocal().getNomLocal()
+                        + " \n" + " \n" + "date de début: " + s.getDateDebut()
+                        + " \n" + " \n" + "date de fin: " + s.getDateFin());
+            }
         }
     }
 
@@ -122,14 +127,15 @@ public class VueSession {
         System.out.println("Tapez 3 pour revenir au menu précédent");
     }
 
-    public void resulListStagiaireBySession(List<Inscription> resultListStagiaireBySession) {
-        for (Inscription i : resultListStagiaireBySession) {
-            System.out.println("------------------------------------------------------------------------------------------------------");
-            System.out.println("");
-            if (resultListStagiaireBySession.size() == 0) {
-                System.out.println("Il n'y a pas de stagiaire inscrit pour cette session");
-            } else {
-                System.out.println("Nom Stagiaire: " + i.getIdUser().getNom() + " \n" + " \n" + "Prenom Stagiaire: " + i.getIdUser().getPrenom() + " \n" + " \n" + "Statut: " + i.getIdUser().getStatut().getNomStatut());
+    public void resulListStagiaireBySession(List<Stagiaire> resultListStagiaireBySession) {
+        if (resultListStagiaireBySession.size() == 0) {
+            System.out.println("Il n'y a pas de stagiaire inscrit pour cette session");
+        } else {
+            for (Stagiaire i : resultListStagiaireBySession) {
+                System.out.println("------------------------------------------------------------------------------------------------------");
+                System.out.println("");
+
+                System.out.println("Nom Stagiaire: " + i.getNom() + " \n" + " \n" + "Prenom Stagiaire: " + i.getPrenom() + " \n" + " \n" + "Statut: " + i.getStatut().getNomStatut());
             }
         }
     }
@@ -137,7 +143,7 @@ public class VueSession {
     public void formateurBysession(Formateur formateurBySession) {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-        System.out.println("Formateur : " + formateurBySession.getNom() +"  " +formateurBySession.getPrenom() );
+        System.out.println("Formateur : " + formateurBySession.getNom() + "  " + formateurBySession.getPrenom());
 
     }
 

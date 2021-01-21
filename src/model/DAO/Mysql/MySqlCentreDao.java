@@ -129,7 +129,7 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         Session session = null;
         c = MySqlDaoFactory.getInstance().getConnection();
-        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime, formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime, user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, local.idLocal, local.nomLocal FROM local join session ON local.idLocal = session.idLocal  JOIN formation ON session.idFormation = formation.idFormation JOIN user ON session.idFormateur = user.idUser JOIN role ON role.idRole = user.role WHERE session.idSession = ? ";
+        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime, user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, local.idLocal, local.nomLocal FROM local join session ON local.idLocal = session.idLocal  JOIN formation ON session.idFormation = formation.idFormation JOIN user ON session.idFormateur = user.idUser JOIN role ON role.idRole = user.role WHERE session.idSession = ? ";
 
         try {
             ps = c.prepareStatement(sql);
@@ -137,7 +137,6 @@ public class MySqlCentreDao implements CentreDao {
             rs = ps.executeQuery();
             if (rs.next()) {
                 session = new Session(rs.getInt("idSession"),
-                        new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
                         new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
                                 new Role(rs.getInt("idRole"), rs.getString("nomRole")), rs.getBoolean("supprime")),
                         new Local(rs.getInt("idLocal"), rs.getString("nomLocal")),
@@ -160,14 +159,13 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Session> listSession = new ArrayList<>();
-        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime, formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime, user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, local.idLocal, local.nomLocal FROM local join session ON local.idLocal = session.idLocal  JOIN formation ON session.idFormation = formation.idFormation JOIN user ON session.idFormateur = user.idUser JOIN role ON role.idRole = user.role WHERE formation.idFormation = ?";
+        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime, user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, local.idLocal, local.nomLocal FROM local join session ON local.idLocal = session.idLocal  JOIN formation ON session.idFormation = formation.idFormation JOIN user ON session.idFormateur = user.idUser JOIN role ON role.idRole = user.role WHERE formation.idFormation = ?";
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, formation.getIdFormation());
             rs = ps.executeQuery();
             while (rs.next()) {
                 Session session = new Session(rs.getInt("idSession"),
-                        new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
                         new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
                                 new Role(rs.getInt("idRole"), rs.getString("nomRole")), rs.getBoolean("supprime")),
                         new Local(rs.getInt("idLocal"), rs.getString("nomLocal")),
@@ -469,7 +467,7 @@ public class MySqlCentreDao implements CentreDao {
         List<Session> listInformationsByFormateur = new ArrayList<>();
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, user.supprime,role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal  FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN user ON user.idUser = session.idFormateur JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal";
+        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, user.supprime,role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal  FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN user ON user.idUser = session.idFormateur JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal";
 
         try {
             ps = c.prepareStatement(sql);
@@ -477,7 +475,6 @@ public class MySqlCentreDao implements CentreDao {
             while (rs.next()) {
 
                 Session session = new Session(rs.getInt("idSession"),
-                        new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
                         new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
                                 new Role(rs.getInt("idRole"), rs.getString("nomRole")), rs.getBoolean("supprime")),
                         new Local(rs.getInt("idLocal"), rs.getString("nomLocal")),
@@ -497,7 +494,7 @@ public class MySqlCentreDao implements CentreDao {
     }
 
     @Override
-    public boolean CreateNewSession(Session session) {
+    public boolean CreateNewSession(Session session, Formation formation) {
         boolean result = false;
         Connection c;
         ResultSet rs = null;
@@ -516,7 +513,7 @@ public class MySqlCentreDao implements CentreDao {
             if (!rs.next()) {
                 result = true;
                 ps = c.prepareStatement(sql2);
-                ps.setInt(1, session.getFormation().getIdFormation());
+                ps.setInt(1, formation.getIdFormation());
                 ps.setInt(2, session.getIdformateur().getIdUser());
                 ps.setInt(3, session.getIdLocal().getIdLocal());
                 ps.setDate(4, new java.sql.Date(session.getDateDebut().getTime()));
@@ -627,30 +624,16 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Inscription> listInscription = new ArrayList<>();
-        String sql = "SELECT inscription.annule, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin,  session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, statut.discount,local.idLocal, local.nomLocal, inscription.statutPaiement, inscription.notificationPaiement, inscription.annule FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN inscription ON session.idSession  = inscription.idSession JOIN user ON user.idUser = inscription.idUser JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE inscription.notificationPaiement = 1 AND inscription.statutPaiement = 0";
+        String sql = "SELECT idInscription,statutPaiement,notificationPaiement,prix FROM inscription WHERE inscription.notificationPaiement = true AND inscription.statutPaiement = false";
         try {
             ps = c.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Inscription inscription = new Inscription(
-                        new Session(rs.getInt("idSession"),
-                                new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
-                                new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                                        new Role(rs.getInt("idRole"), rs.getString("nomRole")), rs.getBoolean("supprime")),
-                                new Local(rs.getInt("idLocal"), rs.getString("nomLocal")),
-                                rs.getDate("dateDebut"),
-                                rs.getDate("dateFin"),
-                                rs.getBoolean("supprime")),
-                        new Stagiaire(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                                new Role(rs.getInt("idRole"), rs.getString("nomRole")),
-                                new Statut(rs.getInt("idStatut"), rs.getString("nomStatut"), rs.getDouble("discount"))),
-                        rs.getInt("statutPaiement"),
-                        rs.getInt("notificationPaiement"),
-                        rs.getBoolean("annule"));
+                Inscription inscription = new Inscription(rs.getInt("idInscription"), rs.getBoolean("statutPaiement"), rs.getBoolean("notificationPaiement"), rs.getDouble("prix"));
                 listInscription.add(inscription);
             }
         } catch (SQLException sqle) {
-            System.err.println("MySqlStagiaireDAO, method getListeInscriptionbyUser(Stagiaire stagiaire): \n" + sqle.getMessage());
+            System.err.println("MySqlStagiaireDAO, method List<Inscription> getInscritpionPaiementNotification(): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
@@ -659,17 +642,17 @@ public class MySqlCentreDao implements CentreDao {
     }
 
     @Override
-    public void validationStatutPaiment(int sessionId) {
+    public void validationStatutPaiment(int idInscription) {
         Connection c;
         ResultSet rs = null;
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "UPDATE inscription SET statutPaiement = 1  WHERE idSession = ?";
+        String sql = "UPDATE inscription SET statutPaiement = 1  WHERE idInscription = ?";
 
         try {
             ps = c.prepareStatement(sql);
-            ps.setInt(1, sessionId);
+            ps.setInt(1, idInscription);
             ps.executeUpdate();
         } catch (SQLException sqle) {
             System.err.println("MySqlCentreDao, method validationPaiement(int sessionId, User user) : \n" + sqle.getMessage());
@@ -679,43 +662,31 @@ public class MySqlCentreDao implements CentreDao {
     }
 
     @Override
-    public List<Inscription> resultListStagiaireBySession(int sessionId) {
+    public List<Stagiaire> resultListStagiaireBySession(int sessionId) {
         Connection c = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
-        List<Inscription> listInscription = new ArrayList<>();
+        List<Stagiaire> listStagiaire = new ArrayList<>();
 
-        String sql = "SELECT inscription.annule, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin,  session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, statut.discount,local.idLocal, local.nomLocal, inscription.statutPaiement, inscription.notificationPaiement, inscription.annule FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN inscription ON session.idSession  = inscription.idSession JOIN user ON user.idUser = inscription.idUser JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE inscription.idSession = ? AND inscription.annule = 0";
+        String sql = "SELECT inscription.annule, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin,  session.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, statut.discount,local.idLocal, local.nomLocal, inscription.statutPaiement, inscription.notificationPaiement, inscription.annule, inscription.prix FROM inscription JOIN session ON session.idSession  = inscription.idSession JOIN user ON user.idUser = inscription.idUser JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE inscription.idSession = ? AND inscription.annule = 0";
 
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, sessionId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Inscription inscription = new Inscription(
-                        new Session(rs.getInt("idSession"),
-                                new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
-                                new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                                        new Role(rs.getInt("idRole"), rs.getString("nomRole")), rs.getBoolean("supprime")),
-                                new Local(rs.getInt("idLocal"), rs.getString("nomLocal")),
-                                rs.getDate("dateDebut"),
-                                rs.getDate("dateFin"),
-                                rs.getBoolean("supprime")),
-                        new Stagiaire(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                                new Role(rs.getInt("idRole"), rs.getString("nomRole")),
-                                new Statut(rs.getInt("idStatut"), rs.getString("nomStatut"), rs.getDouble("discount"))),
-                        rs.getInt("statutPaiement"),
-                        rs.getInt("notificationPaiement"),
-                        rs.getBoolean("annule"));
-                listInscription.add(inscription);
+                Stagiaire stagiaire = new Stagiaire(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
+                            getRoleById(rs.getInt("role")),
+                            getStatutById(rs.getInt("statut")));
+                listStagiaire.add(stagiaire);
             }
         } catch (SQLException sqle) {
-            System.err.println("MySqlStagiaireDAO, method getListeInscriptionbyUser(Stagiaire stagiaire): \n" + sqle.getMessage());
+            System.err.println("MySqlCentreDAO, method List<Stagiaire> resultListStagiaireBySession(int sessionId): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
-        return listInscription;
+        return listStagiaire;
     }
 
     @Override
@@ -809,22 +780,21 @@ public class MySqlCentreDao implements CentreDao {
         List<Session> listSession = new ArrayList<>();
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, user.supprime,role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal  FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN user ON user.idUser = session.idFormateur JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE session.idFormateur = ?";
+        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, user.supprime,role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal  FROM session JOIN user ON user.idUser = session.idFormateur JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE session.idFormateur = ?";
 
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, idFormateur);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Session session = 
-                        new Session(rs.getInt("idSession"),
-                        new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
-                        new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                        new Role(rs.getInt("idRole"), rs.getString("nomRole")), rs.getBoolean("supprime")),
-                        new Local(rs.getInt("idLocal"), rs.getString("nomLocal")),
-                        rs.getDate("dateDebut"),
-                        rs.getDate("dateFin"),
-                        rs.getBoolean("supprime"));
+                Session session
+                        = new Session(rs.getInt("idSession"),
+                                new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
+                                        new Role(rs.getInt("idRole"), rs.getString("nomRole")), rs.getBoolean("supprime")),
+                                new Local(rs.getInt("idLocal"), rs.getString("nomLocal")),
+                                rs.getDate("dateDebut"),
+                                rs.getDate("dateFin"),
+                                rs.getBoolean("supprime"));
 
                 listSession.add(session);
 
@@ -837,4 +807,67 @@ public class MySqlCentreDao implements CentreDao {
         return listSession;
 
     }
+
+    @Override
+    public List<Formateur> getFormateurAvailable(Session session, Formation formation) {
+        Connection c = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        Formateur formateur = null;
+        List<Formateur> listFormateur = new ArrayList<>();
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql = "SELECT user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, user.supprime,role.idRole, role.nomRole, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime, enseigne.idFormation, enseigne.idUser FROM session JOIN user ON user.idUser = session.idFormateur JOIN role ON role.idRole = user.role Join enseigne ON enseigne.idUser = user.idUser WHERE  session.idFormation  = ? "
+                + "AND user.idUser NOT IN (SELECT session.idFormateur from session WHERE session.dateDebut > ? AND session.dateFin < ? OR session.dateDebut < ? AND session.dateFin > ?) AND user.supprime = 0 AND Role  = 3 AND enseigne.idUser = user.idUser ";
+
+        try {
+            ps = c.prepareStatement(sql);
+            ps.setInt(1, formation.getIdFormation());
+            ps.setDate(2, new java.sql.Date(session.getDateFin().getTime()));
+            ps.setDate(3, new java.sql.Date(session.getDateDebut().getTime()));
+            ps.setDate(4, new java.sql.Date(session.getDateFin().getTime()));
+            ps.setDate(5, new java.sql.Date(session.getDateDebut().getTime()));
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int role = rs.getInt("role");
+                if (role == 3) {
+                    formateur = new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
+                            new Role(rs.getInt("idRole"), rs.getString("nomRole")), rs.getBoolean("supprime"));
+                    listFormateur.add(formateur);
+                }
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDAO, method List<Formateur> getFormateurAvailable(Session session): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return listFormateur;
+    }
+
+    @Override
+    public Inscription getInscriptionbyId(int inscriptionId) {
+        Connection c = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        Inscription inscription = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql = "SELECT idInscription,statutPaiement,notificationPaiement,prix  WHERE inscriptionId = ? ";
+
+        try {
+            ps = c.prepareStatement(sql);
+            ps.setInt(1, inscriptionId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                inscription = new Inscription(rs.getInt("idInscription"), rs.getBoolean("statutPaiement"), rs.getBoolean("notificationPaiement"), rs.getDouble("prix"));
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDAO, method getRoleById(int idRole)): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return inscription;
+    }
+
 }

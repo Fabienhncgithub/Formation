@@ -46,27 +46,13 @@ public class MySqlStagiaireDao implements StagiaireDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Inscription> listInscription = new ArrayList<>();
-        String sql = "SELECT inscription.annule, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin,  session.supprime,formation.idFormation, formation.nomFormation, formation.prix, formation.duree, formation.participantMax, formation.participantMin, formation.supprime,user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.supprime,user.statut, role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, statut.discount,local.idLocal, local.nomLocal, inscription.statutPaiement, inscription.notificationPaiement, inscription.annule FROM session JOIN formation ON session.idFormation = formation.idFormation JOIN inscription ON session.idSession  = inscription.idSession JOIN user ON user.idUser = inscription.idUser JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE inscription.idUser = ? AND inscription.annule = 0";
+        String sql = "SELECT idInscription,statutPaiement,notificationPaiement,prix WHERE inscription.idUser = ? AND inscription.annule = false";
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, stagiaire.getIdUser());
             rs = ps.executeQuery();
             while (rs.next()) {
-                Inscription inscription = new Inscription(
-                        new Session(rs.getInt("idSession"),
-                                new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime")),
-                                new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                                        new Role(rs.getInt("idRole"), rs.getString("nomRole")), rs.getBoolean("supprime")),
-                                new Local(rs.getInt("idLocal"), rs.getString("nomLocal")),
-                                rs.getDate("dateDebut"),
-                                rs.getDate("dateFin"),
-                                rs.getBoolean("supprime")),
-                        new Stagiaire(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                                new Role(rs.getInt("idRole"), rs.getString("nomRole")),
-                                new Statut(rs.getInt("idStatut"), rs.getString("nomStatut"), rs.getDouble("discount"))),
-                        rs.getInt("statutPaiement"),
-                        rs.getInt("notificationPaiement"),
-                        rs.getBoolean("annule"));
+                Inscription inscription = new Inscription(rs.getInt("idInscription"),rs.getBoolean("statutPaiement"),rs.getBoolean("notificationPaiement"),rs.getDouble("prix"));
                 listInscription.add(inscription);
             }
         } catch (SQLException sqle) {
@@ -86,24 +72,55 @@ public class MySqlStagiaireDao implements StagiaireDao {
         int statutPaiement = 0;
         int notificationPaiement = 0;
         c = MySqlDaoFactory.getInstance().getConnection();
+        
 
-        String sql = "SELECT idSession FROM inscription WHERE idUser = ?  AND idSession = ? AND annule = 0";
-        String sql2 = "INSERT INTO inscription(idSession, idUser, statutPaiement, notificationPaiement) VALUES (?, ?,?,?)";
+        
+        String sql1 = "SELECT idSession FROM inscription WHERE idUser = ?  AND idSession = ? AND annule = 0";
+        String sql2 = "SELECT DISTINCT  prix FROM formation JOIN session ON formation.IdFormation = session.IdFormation WHERE session.IdSession = ? ";
+        String sql3 = "SELECT discount FROM statut WHERE statut.idStatut = ? ";
+        String sql4 = "INSERT INTO inscription(idSession, idUser, statutPaiement, notificationPaiement,prix) VALUES (?, ?,?,?,?)";
 
         try {
-            ps = c.prepareStatement(sql);
+            ps = c.prepareStatement(sql1);
             ps.setInt(1, stagiaire.getIdUser());
             ps.setInt(2, idSession);
             rs = ps.executeQuery();
 
             if (!rs.next()) {
                 result = true;
+                
+                
                 ps = c.prepareStatement(sql2);
+                ps.setInt(1,idSession);
+                rs = ps.executeQuery();
+                rs.next();
+                Integer prix = rs.getInt(1);
+                
+                ps = c.prepareStatement(sql3);
+                ps.setInt(1,stagiaire.getStatut().getIdStatut());
+                rs = ps.executeQuery();
+                rs.next();
+                Double discount = rs.getDouble(1);
+                
+                      float prixTotal = (float)(prix-((prix/100)*discount)); 
+                
+                ps = c.prepareStatement(sql4);
                 ps.setInt(1, idSession);
                 ps.setInt(2, stagiaire.getIdUser());
                 ps.setInt(3, statutPaiement);
                 ps.setInt(4, notificationPaiement);
+                ps.setDouble(5, prixTotal);
                 ps.executeUpdate();
+                
+                
+                
+                
+                
+    
+  
+                
+                
+                
             }
         } catch (SQLException sqle) {
             System.err.println("MySqlUserDao, method registerUserToSession(Stagiaire stagiaire, int idSession): \n" + sqle.getMessage());
@@ -114,3 +131,39 @@ public class MySqlStagiaireDao implements StagiaireDao {
 
     }
 }
+//        String inscriptionExist = " select IdInscription from inscrire where IdUtilisateur = ? and IdSession = ? ";
+//        String prix = " SELECT distinct  `Prix` FROM `formation` join session on formation.IdFormation = session.IdFormation where session.IdSession = ? ";
+//        String reduction = " select reduction from status where status.idstatus = ? ";
+//        String sql = "INSERT INTO `inscrire` (`idUtilisateur`, `idSession`,`prix`) values(?,?,?)";
+//
+//        try {
+//            c = MySqlDaoFactory.getInstance().getConnection();
+//            ps = c.prepareStatement(inscriptionExist);
+//            ps.setInt(1, stagiaire.getIdUtilisateur());
+//            ps.setInt(2, session.getIdSession());
+//            rs = ps.executeQuery();
+//
+//            if (!rs.next()) {
+//                ps = c.prepareStatement(prix);
+//                ps.setInt(1,session.getIdSession());
+//                rs = ps.executeQuery();
+//                rs.next();
+//                Integer price = rs.getInt(1);
+//                
+//                ps = c.prepareStatement(reduction);
+//                ps.setInt(1,stagiaire.getStatus().getIdStatus());
+//                rs = ps.executeQuery();
+//                rs.next();
+//                Double reduc = rs.getDouble(1);
+//                
+//                float total = (float)(price-((price/100)*reduc)); 
+//                System.out.println(reduc);
+//                System.out.println(price);
+//                System.out.println(total);
+//                ps = c.prepareStatement(sql);
+//                ps.setInt(1, stagiaire.getIdUtilisateur());
+//                ps.setInt(2, session.getIdSession());
+//                ps.setFloat(3, total);
+//                ps.executeUpdate();
+//                ajoutOK = true;
+//            }

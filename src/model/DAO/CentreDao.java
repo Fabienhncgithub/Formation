@@ -14,6 +14,7 @@ import model.Session;
 import model.Statut;
 import model.User;
 import java.util.List;
+import model.Stagiaire;
 
 public interface CentreDao {
 
@@ -49,7 +50,7 @@ public interface CentreDao {
 
     public List<Session> listeInformationsByFormateurs();
 
-    public boolean CreateNewSession(Session session);
+    public boolean CreateNewSession(Session session, Formation formation);
 
     public List<Local> getAllLocal();
 
@@ -59,9 +60,9 @@ public interface CentreDao {
 
     public List<Inscription> getInscritpionPaiementNotification();
 
-    public void validationStatutPaiment(int sessionId);
+    public void validationStatutPaiment(int inscriptionId);
 
-    public List<Inscription> resultListStagiaireBySession(int sessionId);
+    public List<Stagiaire> resultListStagiaireBySession(int sessionId);
 
     public void cleanDb();
 
@@ -70,6 +71,10 @@ public interface CentreDao {
     public Formateur getFormateurBySession(int idSession);
 
     public List<Session> listeSessionByIdFormateur(int idFormateur);
+
+    public List<Formateur> getFormateurAvailable(Session session, Formation formation);
+
+    public Inscription getInscriptionbyId(int inscriptionId);
 
 
 
