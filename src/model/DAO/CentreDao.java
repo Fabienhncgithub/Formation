@@ -22,6 +22,12 @@ public interface CentreDao {
 
     public List<Formation> getAllFormation();
 
+    public List<Formateur> getAllFormateur();
+
+    public List<Local> getAllLocal();
+
+    public List<Formateur> getAllFormateurAvailable(Session session);
+
     public List<Formation> searchFormation(String search);
 
     public Formation getFormationyId(int idFormation);
@@ -38,27 +44,23 @@ public interface CentreDao {
 
     public Role getRoleById(int idRole);
 
-    public void createNewFormation(Formation formation);
+    public Inscription getInscriptionbyId(int inscriptionId);
 
-    public void updateFormation(Formation formation);
-
-    public List<Formateur> getAllFormateur();
+    public List<Inscription> getInscritpionPaiementNotification();
 
     public List<Inscription> listeInscriptionbySession(Session session);
+
+    public boolean CreateNewSession(Session session, Formation formation);
+
+    public void UpdateSession(Session session, Formation formation);
 
     public List<Session> listeSessionbyFormation(Formation formation);
 
     public List<Session> listeInformationsByFormateurs();
 
-    public boolean CreateNewSession(Session session, Formation formation);
-
-    public List<Local> getAllLocal();
-
-    public List<Formateur> getAllFormateurAvailable(Session session);
+    public List<Session> listeSessionByIdFormateur(int idFormateur);
 
     public boolean validationPaiement(int sessionId, User user);
-
-    public List<Inscription> getInscritpionPaiementNotification();
 
     public void validationStatutPaiment(int inscriptionId);
 
@@ -70,12 +72,22 @@ public interface CentreDao {
 
     public Formateur getFormateurBySession(int idSession);
 
-    public List<Session> listeSessionByIdFormateur(int idFormateur);
-
     public List<Formateur> getFormateurAvailable(Session session, Formation formation);
 
-    public Inscription getInscriptionbyId(int inscriptionId);
+    public List<Local> getLocalAvailable(Session session, Formation formation);
 
+    public void createNewFormation(Formation formation);
 
+    public void updateFormation(Formation formation);
+
+    public boolean createLocaux(Local local);
+
+    public boolean updateLocaux(Local local);
+
+    public boolean deleteLocaux(Local local);
+
+    public boolean createStatut(Statut statut);
+
+    public boolean updateStatut(Statut statut);
 
 }

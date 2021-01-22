@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import model.DAO.AbstractDaoFactory;
@@ -26,7 +27,7 @@ public class Session {
     private boolean supprime;
     private List<Inscription> listeInscriptionbySession;
 
-    public Session(int idSession,Formateur idformateur, Local idLocal, Date dateDebut, Date dateFin, boolean supprime) {
+    public Session(int idSession, Formateur idformateur, Local idLocal, Date dateDebut, Date dateFin, boolean supprime) {
         this.idSession = idSession;
         this.idformateur = idformateur;
         this.idLocal = idLocal;
@@ -39,12 +40,6 @@ public class Session {
     public Session() {
     }
 
-  
-
-
-
-
-
     public int getIdSession() {
         return idSession;
     }
@@ -52,8 +47,6 @@ public class Session {
     public void setIdSession(int idSession) {
         this.idSession = idSession;
     }
-
-
 
     public Formateur getIdformateur() {
         return idformateur;
@@ -105,10 +98,6 @@ public class Session {
     public void setListeInscriptionbySession(List<Inscription> listeInscriptionbySession) {
         this.listeInscriptionbySession = listeInscriptionbySession;
     }
-    
-    
-    
-    
 
     public void deleteSession() {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
@@ -123,4 +112,17 @@ public class Session {
         return listeInscriptionbySession;
     }
 
+    public void setDateF(Date date, int duree) {
+        this.setDateDebut(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        for (int i = 1; i < duree;) {
+            calendar.add(Calendar.DATE, 1);
+            if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
+                    && calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
+                i++;
+            }
+        }
+        this.setDateFin(calendar.getTime());
+    }
 }

@@ -179,16 +179,58 @@ public class Centre {
         return centreDao.listeSessionByIdFormateur(idFormateur);
     }
 
-    public List<Formateur> getFormateurAvailable(Session session,Formation formation) {
+    public List<Formateur> getFormateurAvailable(Session session, Formation formation) {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         CentreDao centreDao = factory.createCentreDao();
         return centreDao.getFormateurAvailable(session, formation);
     }
 
     public Inscription getInscriptionbyId(int inscriptionId) {
-            AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         CentreDao centreDao = factory.createCentreDao();
         return centreDao.getInscriptionbyId(inscriptionId);
+    }
+
+    public List<Local> getLocalAvailable(Session session, Formation formation) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.getLocalAvailable(session, formation);
+    }
+
+    public void UpdateSession(Session session, Formation formation) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        centreDao.UpdateSession(session, formation);
+    }
+
+    public boolean createLocaux(Local local) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.createLocaux(local);
+    }
+
+    public boolean updateLocaux(Local local) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.updateLocaux(local);
+    }
+
+    public boolean deleteLocaux(Local local) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.deleteLocaux(local);
+    }
+
+    public boolean createStatut(Statut statut) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.createStatut(statut);
+    }
+
+    public boolean updateStatut(Statut statut) {
+         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.updateStatut(statut);
     }
 
 }

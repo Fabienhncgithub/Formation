@@ -32,6 +32,7 @@ public class VueFormation {
     }
 
     public void resultsListFormation(List<Formation> formationsList) {
+       
         for (Formation f : formationsList) {
             System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");

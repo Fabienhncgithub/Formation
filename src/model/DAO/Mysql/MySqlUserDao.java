@@ -98,6 +98,7 @@ public class MySqlUserDao implements UserDao {
         return u;
     }
 
+    @Override
     public void modificationUser(int id, String nom, String prenom, String adresse, String email, String password) {
         Connection c;
         Statement st = null;
@@ -135,6 +136,7 @@ public class MySqlUserDao implements UserDao {
 
         String sql = "SELECT inscription.annule, inscription.idSession, inscription.idUser FROM session JOIN inscription ON session.idSession = inscription.idSession WHERE inscription.idSession = ? AND inscription.idUser = ?";
         String sql2 = "UPDATE inscription SET annule = 1 where inscription.idSession = ? and inscription.idUser = ? ";
+      
 
         try {
             ps = c.prepareStatement(sql);
@@ -147,8 +149,14 @@ public class MySqlUserDao implements UserDao {
                 ps = c.prepareStatement(sql2);
                 ps.setInt(1, idSession);
                 ps.setInt(2, user.getIdUser());
-                 
                 ps.executeUpdate();
+                
+                
+                 ps = c.prepareStatement(sql2);
+                ps.setInt(1, idSession);
+                ps.executeUpdate();
+                
+                
             }
         } catch (SQLException sqle) {
             System.err.println("MySqlUserDao, method deletelInscription(User user, int idSession): \n" + sqle.getMessage());

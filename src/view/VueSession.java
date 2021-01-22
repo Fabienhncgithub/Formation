@@ -35,7 +35,7 @@ public class VueSession {
             System.out.println("Il n'y a pas encore de session");
         } else {
             for (Session s : listSession) {
-
+                System.out.println("------------------------------------------------------------------------------------------------------");
                 System.out.println("Code Session: " + s.getIdSession()
                         + " \n" + " \n" + "Formateur: " + s.getIdformateur().getNom()
                         + " \n" + " \n" + "Local: " + s.getIdLocal().getNomLocal()
@@ -54,15 +54,11 @@ public class VueSession {
     public void crudSelectedSession() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-        System.out.println("Tapez 1 pour voir les sessions de cette formation");
+        System.out.println("Tapez 1 pour voir ou modifier ou supprimer les sessions de cette formation");
         System.out.println("");
         System.out.println("Tapez 2 créer la session");
         System.out.println("");
-        System.out.println("Tapez 3 modifier la session");
-        System.out.println("");
-        System.out.println("Tapez 4 pour supprimer la session");
-        System.out.println("");
-        System.out.println("Tapez 5 pour revenir au menu précédent");
+        System.out.println("Tapez 3 pour revenir au menu précédent");
     }
 
     public void error() {
@@ -134,7 +130,6 @@ public class VueSession {
             for (Stagiaire i : resultListStagiaireBySession) {
                 System.out.println("------------------------------------------------------------------------------------------------------");
                 System.out.println("");
-
                 System.out.println("Nom Stagiaire: " + i.getNom() + " \n" + " \n" + "Prenom Stagiaire: " + i.getPrenom() + " \n" + " \n" + "Statut: " + i.getStatut().getNomStatut());
             }
         }
@@ -145,6 +140,22 @@ public class VueSession {
         System.out.println("");
         System.out.println("Formateur : " + formateurBySession.getNom() + "  " + formateurBySession.getPrenom());
 
+    }
+
+    public void rudSelectedSession() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Tapez 1 pour mettre à jour cette session");
+        System.out.println("");
+        System.out.println("Tapez 2 pour supprimer cette session");
+        System.out.println("");
+        System.out.println("Tapez 3 pour revenir au menu précédent");
+    }
+
+    public void nbrPlaceLibre(int libre, int idsession) {
+         System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Il reste "  + libre+ " place(s) de libre pour le code de session " + idsession);
     }
 
 }

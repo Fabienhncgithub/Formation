@@ -43,13 +43,12 @@ public class Controller implements ControllerInterface {
             controllerAdmin.adminChoices(user);
         }
     }
-    
-        public void retourMenuAcceuil(String input, User user) {
+
+    public void retourMenuAcceuil(String input, User user) {
         if (input.equals('0')) {
             controllerAcceuil.firstMenu();
         }
     }
-    
 
     public void getAllSessionByFormation(User user, Formation formation) {
         List<Session> ListeSession = facade.getCentre().listeSessionbyFormation(formation);
@@ -59,4 +58,20 @@ public class Controller implements ControllerInterface {
     public void getAllFormation(User user) {
         vueFormation.resultsListFormation(facade.getCentre().getAllFormation());
     }
+
+    public void getChoiceSession(User user) {
+        List<Formation> formationsList = facade.getCentre().getAllFormation();
+        vueFormation.resultsListFormation(formationsList);
+
+        int sessionId;
+        do {
+            vueFormation.inputFormationId();
+            sc.nextLine();
+            controller.checkInt();
+            sessionId = sc.nextInt();
+            controller.retourMenuAdmin(sessionId, user);
+        } while (facade.getCentre().getSessionbyId(sessionId) == null);
+        controller.getAllSessionByFormation(user, facade.getCentre().getFormationbyId(sessionId));
+    }
+
 }

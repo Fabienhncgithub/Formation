@@ -9,6 +9,7 @@ import model.Formateur;
 import model.User;
 import java.util.List;
 import model.Inscription;
+import model.Local;
 import model.Session;
 
 /**
@@ -29,29 +30,23 @@ public class VueAdmin {
         System.out.println("");
         System.out.println("Tapez 3 pour communiquer à chaque formateur les prestations qu'il doit assurer(jour, local, formation)");
         System.out.println("");
-        System.out.println("Tapez 4 pour obtenir les dates des jours prévus pour une session");
-        System.out.println("");
         System.out.println("Tapez 5 pour sortir pour chaque formation la liste des sessions planifiées et le nombre de places encore dispo");
         System.out.println("");
         System.out.println("Tapez 6 pour gérer les formations et les sessions");
         System.out.println("");
-        System.out.println("Tapez 8 pour gérer les formateurs");
+        System.out.println("Tapez 7 pour gérer les formateurs");
         System.out.println("");
-        System.out.println("Tapez 9 pour afficher les personnes inscrites à une session donnée");
+        System.out.println("Tapez 8 pour afficher les personnes inscrites à une session donnée");
         System.out.println("");
-        System.out.println("Tapez 10 pour vérifier s'il reste encore des places libre pour une session. ");
+        System.out.println("Tapez 9 pour vérifier s'il reste encore des places libre pour une session. ");
         System.out.println("");
-        System.out.println("Tapez 11 pour vérifier dans quel local une session se donne");
+        System.out.println("Tapez 10 pour rechercher le formateur d'une session");
         System.out.println("");
-        System.out.println("Tapez 12 pour rechercher le formateur d'une session");
+        System.out.println("Tapez 11 pour gèrer les locaux");
         System.out.println("");
-        System.out.println("Tapez 13 pour gèrer les locaux");
+        System.out.println("Tapez 12 pour gèrer les statuts professionels des étudiants");
         System.out.println("");
-        System.out.println("Tapez 14 pour gèrer les statuts professionels des étudiants");
-        System.out.println("");
-        System.out.println("Tapez 15 pour nettoyer la base de donées (sessions de il y a 1 année)");
-        System.out.println("");
-        System.out.println("Tapez 16 Quitter");
+        System.out.println("Tapez 13 Quitter");
 
     }
 
@@ -171,6 +166,85 @@ public class VueAdmin {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Il n'y a pas de formateur disponible pour cette date");
+    }
+
+    public void menuListCrudLocaux() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Tapez 1 pour créer un nouveau local");
+        System.out.println("");
+        System.out.println("Tapez 2 pour modifier le nom d'un local");
+        System.out.println("");
+        System.out.println("Tapez 3 pour supprimer un local");
+        System.out.println("");
+        System.out.println("Tapez 4 our revenir au meu précédent");
+    }
+
+    public void inputNomLocal() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Entrez le nom du nouveau local");
+    }
+
+    public void errorDoubleLocal() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Ce local existe déjà!");
+    }
+
+    public void resulListAllLocal(List<Local> allLocal) {
+        for (Local l : allLocal) {
+            System.out.println("------------------------------------------------------------------------------------------------------");
+            System.out.println("");
+            System.out.println("Code local: " + l.getIdLocal() + " \n" + " \n" + "Nom local: " + l.getNomLocal());
+        }
+    }
+
+    public void inputIdLocal() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Entrez le code du local");
+    }
+
+    public void errorSupprime() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Il n'est pas possible de supprimer ce local");
+    }
+
+    public void menuListCrudStatut() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Tapez 1 pour créer un nouveau statut");
+        System.out.println("");
+        System.out.println("Tapez 2 pour modifier le nom d'un statut et son discount");
+        System.out.println("");
+        System.out.println("Tapez 3 pour revenir au meu précédent");
+    }
+
+    public void inputNomStatut() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Entrez le nom du statut");
+    }
+
+    public void inputdiscountStatut() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Entrez le discount accordé pour ce statut");
+
+    }
+
+    public void errorDoubleStatut() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Ce statut existe déjà!");
+    }
+
+    public void inputIdStatut() {
+       System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Tapez le code du statut");
     }
 
 }

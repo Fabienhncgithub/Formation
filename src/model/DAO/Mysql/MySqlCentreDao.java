@@ -23,7 +23,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.DAO.Mysql.MySqlDaoFactory;
 
 /**
  * s
@@ -83,7 +82,7 @@ public class MySqlCentreDao implements CentreDao {
             ps = c.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Formation formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMin"), rs.getInt("participantMax"), rs.getBoolean("supprime"));
+                Formation formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime"));
                 listFormation.add(formation);
             }
         } catch (SQLException sqle) {
@@ -368,7 +367,7 @@ public class MySqlCentreDao implements CentreDao {
             ps.setInt(5, formation.getParticipantMin());
             ps.executeUpdate();
         } catch (SQLException sqle) {
-            System.err.println("MySqlUserDao, method createNewFormation(): \n" + sqle.getMessage());
+            System.err.println("MySqlCentreDao, method createNewFormation(): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
@@ -423,7 +422,7 @@ public class MySqlCentreDao implements CentreDao {
                 }
             }
         } catch (SQLException sqle) {
-            System.err.println("MySqlCentreDAO, method getRoleById(int idRole)): \n" + sqle.getMessage());
+            System.err.println("MySqlCentreDAO, method List<Formateur> getAllFormateur(): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
@@ -443,6 +442,7 @@ public class MySqlCentreDao implements CentreDao {
 
         try {
             ps = c.prepareStatement(sql);
+            ps.setInt(1, session.getIdSession());
             rs = ps.executeQuery();
             while (rs.next()) {
 
@@ -451,7 +451,7 @@ public class MySqlCentreDao implements CentreDao {
 
             }
         } catch (SQLException sqle) {
-            System.err.println("MySqlCentreDAO, method getRoleById(int idRole)): \n" + sqle.getMessage());
+            System.err.println("MySqlCentreDAO, method List<Inscription> listeInscriptionbySession(Session session): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
@@ -485,7 +485,7 @@ public class MySqlCentreDao implements CentreDao {
 
             }
         } catch (SQLException sqle) {
-            System.err.println("MySqlCentreDAO, method getRoleById(int idRole)): \n" + sqle.getMessage());
+            System.err.println("MySqlCentreDAO, method List<Session> listeInformationsByFormateurs(): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
@@ -521,7 +521,7 @@ public class MySqlCentreDao implements CentreDao {
                 ps.executeUpdate();
             }
         } catch (SQLException sqle) {
-            System.err.println("MySqlUserDao, method createNewFormation(): \n" + sqle.getMessage());
+            System.err.println("MySqlCentreDao, method createNewFormation(): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
@@ -538,7 +538,7 @@ public class MySqlCentreDao implements CentreDao {
         List<Local> listLocal = new ArrayList<>();
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT idLocal, nomLocal from Local";
+        String sql = "SELECT idLocal, nomLocal from Local WHERE supprime = 0";
 
         try {
             ps = c.prepareStatement(sql);
@@ -579,7 +579,7 @@ public class MySqlCentreDao implements CentreDao {
                 listFormateur.add(formateur);
             }
         } catch (SQLException sqle) {
-            System.err.println("MySqlCentreDAO, method getRoleById(int idRole)): \n" + sqle.getMessage());
+            System.err.println("MySqlCentreDAO, List<Formateur> getAllFormateurAvailable(Session session): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
@@ -633,7 +633,7 @@ public class MySqlCentreDao implements CentreDao {
                 listInscription.add(inscription);
             }
         } catch (SQLException sqle) {
-            System.err.println("MySqlStagiaireDAO, method List<Inscription> getInscritpionPaiementNotification(): \n" + sqle.getMessage());
+            System.err.println("MySqlCentreDao, method List<Inscription> getInscritpionPaiementNotification(): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
@@ -677,8 +677,8 @@ public class MySqlCentreDao implements CentreDao {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Stagiaire stagiaire = new Stagiaire(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                            getRoleById(rs.getInt("role")),
-                            getStatutById(rs.getInt("statut")));
+                        getRoleById(rs.getInt("role")),
+                        getStatutById(rs.getInt("statut")));
                 listStagiaire.add(stagiaire);
             }
         } catch (SQLException sqle) {
@@ -780,7 +780,7 @@ public class MySqlCentreDao implements CentreDao {
         List<Session> listSession = new ArrayList<>();
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, user.supprime,role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal  FROM session JOIN user ON user.idUser = session.idFormateur JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE session.idFormateur = ?";
+        String sql = "SELECT session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime, user.idUser,user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, user.supprime,role.idRole, role.nomRole, statut.idStatut, statut.nomStatut, local.idLocal, local.nomLocal  FROM session JOIN user ON user.idUser = session.idFormateur JOIN role ON role.idRole = user.role JOIN statut on statut.idStatut = user.statut JOIN local ON local.idLocal = session.idLocal WHERE session.idFormateur = ?";
 
         try {
             ps = c.prepareStatement(sql);
@@ -817,8 +817,7 @@ public class MySqlCentreDao implements CentreDao {
         List<Formateur> listFormateur = new ArrayList<>();
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, user.supprime,role.idRole, role.nomRole, session.idSession, session.idFormation, session.idFormateur, session.idLocal, session.dateDebut, session.dateFin, session.supprime, enseigne.idFormation, enseigne.idUser FROM session JOIN user ON user.idUser = session.idFormateur JOIN role ON role.idRole = user.role Join enseigne ON enseigne.idUser = user.idUser WHERE  session.idFormation  = ? "
-                + "AND user.idUser NOT IN (SELECT session.idFormateur from session WHERE session.dateDebut > ? AND session.dateFin < ? OR session.dateDebut < ? AND session.dateFin > ?) AND user.supprime = 0 AND Role  = 3 AND enseigne.idUser = user.idUser ";
+        String sql = "SELECT user.idUser, user.nom, user.prenom, user.adresse, user.email, user.`password`, user.role, user.statut, user.supprime,role.idRole, role.nomRole, enseigne.idFormation, enseigne.idUser FROM user JOIN role ON role.idRole = user.role JOIN statut ON statut.idStatut = user.statut JOIN enseigne ON user.idUser = enseigne.idUser WHERE enseigne.idFormation  = ? AND user.idUser NOT IN (SELECT session.idFormateur from session WHERE session.dateDebut > ? AND session.dateFin < ? OR session.dateDebut < ? AND session.dateFin > ?) AND user.supprime = 0 AND Role  = 3 AND enseigne.idUser = user.idUser ";
 
         try {
             ps = c.prepareStatement(sql);
@@ -827,7 +826,6 @@ public class MySqlCentreDao implements CentreDao {
             ps.setDate(3, new java.sql.Date(session.getDateDebut().getTime()));
             ps.setDate(4, new java.sql.Date(session.getDateFin().getTime()));
             ps.setDate(5, new java.sql.Date(session.getDateDebut().getTime()));
-
             rs = ps.executeQuery();
             while (rs.next()) {
                 int role = rs.getInt("role");
@@ -863,11 +861,213 @@ public class MySqlCentreDao implements CentreDao {
                 inscription = new Inscription(rs.getInt("idInscription"), rs.getBoolean("statutPaiement"), rs.getBoolean("notificationPaiement"), rs.getDouble("prix"));
             }
         } catch (SQLException sqle) {
-            System.err.println("MySqlCentreDAO, method getRoleById(int idRole)): \n" + sqle.getMessage());
+            System.err.println("MySqlCentreDAO, method Inscription getInscriptionbyId(int inscriptionId): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
         return inscription;
     }
 
+    @Override
+    public List<Local> getLocalAvailable(Session session, Formation formation) {
+        Connection c = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        Formateur formateur = null;
+        List<Local> listLocal = new ArrayList<>();
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql = "SELECT local.idLocal , local.nomLocal FROM local WHERE local.idLocal NOT IN(select session.idLocal from session,local where local.idLocal = session.idLocal AND session.dateDebut < ? AND session.dateFin > ? OR session.dateDebut > ? AND session.dateFin < ?)";
+        try {
+            ps = c.prepareStatement(sql);
+
+            ps.setDate(1, new java.sql.Date(session.getDateFin().getTime()));
+            ps.setDate(2, new java.sql.Date(session.getDateDebut().getTime()));
+            ps.setDate(3, new java.sql.Date(session.getDateFin().getTime()));
+            ps.setDate(4, new java.sql.Date(session.getDateDebut().getTime()));
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                Local local = new Local(rs.getInt("idLocal"), rs.getString("nomLocal"));
+                listLocal.add(local);
+
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDAO, method List<Formateur> getFormateurAvailable(Session session): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return listLocal;
+
+    }
+
+    @Override
+    public void UpdateSession(Session session, Formation formation) {
+        Connection c;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql = "UPDATE session SET idFormateur=? ,idLocal=? ,dateDebut=?, dateFin =? WHERE idSession = ?";
+
+        try {
+            ps = c.prepareStatement(sql);
+
+            ps.setInt(1, session.getIdformateur().getIdUser());
+            ps.setInt(2, session.getIdLocal().getIdLocal());
+            ps.setDate(3, new java.sql.Date(session.getDateDebut().getTime()));
+            ps.setDate(4, new java.sql.Date(session.getDateFin().getTime()));
+            ps.setInt(5, session.getIdSession());
+            ps.executeUpdate();
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDao, method createNewFormation(): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+
+    }
+
+    @Override
+    public boolean createLocaux(Local local) {
+        boolean result = false;
+        Connection c;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql1 = "SELECT nomLocal FROM local WHERE nomLocal = ?";
+        String sql2 = "INSERT INTO local(nomLocal) VALUES (?)";
+
+        try {
+            ps = c.prepareStatement(sql1);
+            ps.setString(1, local.getNomLocal());
+            rs = ps.executeQuery();
+            if (!rs.next()) {
+                result = true;
+                ps = c.prepareStatement(sql2);
+                ps.setString(1, local.getNomLocal());
+                ps.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDao, method boolean createLocaux(Local local): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean updateLocaux(Local local) {
+        boolean result = false;
+        Connection c;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql1 = "SELECT nomLocal FROM local WHERE nomLocal = ?";
+        String sql2 = "UPDATE local SET nomLocal=? WHERE idLocal = ?";
+
+        try {
+            ps = c.prepareStatement(sql1);
+            ps.setString(1, local.getNomLocal());
+            rs = ps.executeQuery();
+            if (!rs.next()) {
+                result = true;
+                ps = c.prepareStatement(sql2);
+                ps.setString(1, local.getNomLocal());
+                ps.setInt(2, local.getIdLocal());
+                ps.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDao, method boolean boolean updateLocaux(Local local): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean deleteLocaux(Local local) {
+        boolean result = false;
+        Connection c;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql = "UPDATE local SET supprime = 1 WHERE idLocal = ?";
+
+        try {
+            ps = c.prepareStatement(sql);
+            ps.setInt(1, local.getIdLocal());
+            ps.executeUpdate();
+            result = true;
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDao, method boolean deleteLocaux(Local local): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean createStatut(Statut statut) {
+        boolean result = false;
+        Connection c;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql1 = "SELECT nomStatut FROM statut WHERE nomStatut = ?";
+        String sql2 = "INSERT INTO statut(nomStatut, discount) VALUES (?,?)";
+
+        try {
+            ps = c.prepareStatement(sql1);
+            ps.setString(1, statut.getNomStatut());
+            rs = ps.executeQuery();
+            if (!rs.next()) {
+                result = true;
+                ps = c.prepareStatement(sql2);
+                 ps.setString(1, statut.getNomStatut());
+                 ps.setDouble(2, statut.getDiscount());
+                ps.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDao, method boolean createLocaux(Local local): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean updateStatut(Statut statut) {
+        boolean result = false;
+        Connection c;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql1 = "SELECT nomStatut FROM statut WHERE nomStatut = ? AND idStatut != ?";
+        String sql2 = "UPDATE statut SET nomStatut=?, discount=? WHERE idStatut = ?";
+
+        try {
+            ps = c.prepareStatement(sql1);
+            ps.setString(1, statut.getNomStatut());
+            ps.setInt(2, statut.getIdStatut());
+            rs = ps.executeQuery();
+            if (!rs.next()) {
+                result = true;
+                ps = c.prepareStatement(sql2);
+                ps.setString(1, statut.getNomStatut());
+                ps.setDouble(2,statut.getDiscount());
+                ps.setInt(3, statut.getIdStatut());
+                ps.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDao, method updateStatut(Statut statut): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return result;
+    }
 }
