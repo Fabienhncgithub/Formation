@@ -9,15 +9,9 @@ import model.Formateur;
 import model.Formation;
 import model.Role;
 import model.User;
-import view.VueAcceuil;
-import view.VueAdmin;
-import view.VueFormation;
-import com.sun.deploy.uitoolkit.impl.fx.ui.resources.ResourceManager;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import model.Inscription;
@@ -25,27 +19,9 @@ import model.Local;
 import model.Session;
 import model.Statut;
 import org.mindrot.jbcrypt.BCrypt;
-import view.VueSession;
-import view.VueStagiaire;
+import static controller.ControllerInterface.*;
 
-/**
- *
- * @author Fabien
- */
-class ControllerAdmin implements ControllerInterface {
-
-    private VueAdmin vueAdmin = new VueAdmin();
-    private VueAcceuil vueAcceuil = new VueAcceuil();
-    private VueFormation vueFormation = new VueFormation();
-    private VueSession vueSession = new VueSession();
-    private VueStagiaire vueStagiaire = new VueStagiaire();
-
-    public ControllerAdmin(VueAdmin vueAdmin, VueAcceuil vueAcceuil, VueFormation vueFormation, VueSession vueSession) {
-        this.vueAdmin = vueAdmin;
-        this.vueAcceuil = vueAcceuil;
-        this.vueFormation = vueFormation;
-        this.vueSession = this.vueSession;
-    }
+class ControllerAdmin {
 
     ControllerAdmin() {
     }
@@ -53,7 +29,7 @@ class ControllerAdmin implements ControllerInterface {
     public void adminChoices(User user) {
         vueAdmin.choices(user, facade.getCentre().getInscritpionPaiementNotification());
         int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 15) {
+        while (menuchoice < 1 || menuchoice > 13) {
             vueAdmin.error(user);
             menuchoice = sc.nextInt();
         }
@@ -62,7 +38,7 @@ class ControllerAdmin implements ControllerInterface {
                 validationPaiment(user);
                 break;
             case 2:
-                ListeStagiaireNySession(user);
+                ListeStagiaireBySession(user);
                 break;
             case 3:
                 showInformationToFormateur(user);
@@ -71,19 +47,19 @@ class ControllerAdmin implements ControllerInterface {
                 showSessionbyFormateur(user);
                 break;
             case 6:
-                crudFormation(user);
+                verificationNbrInscriptions(user);
                 break;
             case 7:
-                crudFormateur(user);
+                searchFormateur(user);
                 break;
             case 8:
                 showUserBySession(user);
                 break;
             case 9:
-                verificationNbrInscriptions(user);
+                crudFormation(user);
                 break;
             case 10:
-                searchFormateur(user);
+                crudFormateur(user);
                 break;
             case 11:
                 crudLocaux(user);
@@ -95,10 +71,10 @@ class ControllerAdmin implements ControllerInterface {
                 controllerAcceuil.firstMenu();
                 break;
         }
+
     }
 
     public void crudFormation(User user) {
-        VueAdmin menuAdmin = new VueAdmin();
         vueFormation.choicesCrud();
         int menuchoice = sc.nextInt();
         while (menuchoice < 1 || menuchoice > 4) {
@@ -123,7 +99,6 @@ class ControllerAdmin implements ControllerInterface {
     }
 
     public void crudSelectedFormation(User user, Formation formation) {
-        VueAdmin menuAdmin = new VueAdmin();
         vueFormation.crudSelectedFormation();
         int menuchoice = sc.nextInt();
         while (menuchoice < 1 || menuchoice > 5) {
@@ -170,17 +145,11 @@ class ControllerAdmin implements ControllerInterface {
         vueFormation.inputFormationDuree();
         int duree = sc.nextInt();
         formation.setDuree(duree);
-        int participantMin = 0;
-        do {
-            vueFormation.inputFormationParticipantMin();
-            participantMin = sc.nextInt();
-        } while (participantMin < 0);
-        formation.setParticipantMin(participantMin);
         int participantMax = 0;
         do {
             vueFormation.inputFormationParticipantMax();
             participantMax = sc.nextInt();
-        } while (participantMin > participantMax);
+        } while (0 > participantMax);
         formation.setParticipantMax(participantMax);
         return formation;
     }
@@ -222,9 +191,12 @@ class ControllerAdmin implements ControllerInterface {
                 crudFormateur(user);
                 break;
             case 2:
-                createFormateur(user);
+                menuEnseigneFormation(user);
                 break;
             case 3:
+                createFormateur(user);
+                break;
+            case 4:
                 getAllFormateur(user);
                 int formateurId;
                 do {
@@ -234,7 +206,7 @@ class ControllerAdmin implements ControllerInterface {
                 } while (facade.getCentre().getFormateurbyId(formateurId) == null);
                 selectFormateur(user, formateurId);
                 break;
-            case 4:
+            case 5:
                 adminChoices(user);
                 break;
         }
@@ -352,17 +324,6 @@ class ControllerAdmin implements ControllerInterface {
     private void createSession(User user, Formation formation) {
         Session session = new Session();
 
-//        String dateDebut;
-//        boolean result = false;
-//        do {
-//            vueSession.newDateDebut();
-//            dateDebut = sc.next();
-//            sc.nextLine();
-//            /*TODO VERIFIER REGEX*/
-//            //Regular expression to accept date in MM-DD-YYY format
-//            String regex = "^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$";
-//            result = dateDebut.matches(regex);
-//        } while (!result);
         Date date = null;
         vueSession.newDateDebut();
         String dateDebut = sc.next();
@@ -420,7 +381,6 @@ class ControllerAdmin implements ControllerInterface {
             formationId = sc.nextInt();
             controller.retourMenuAdmin(formationId, user);
         } while (facade.getCentre().getFormationbyId(formationId) == null);
-        //facade.getCentre().get
     }
 
     private void validationPaiment(User user) {
@@ -439,7 +399,7 @@ class ControllerAdmin implements ControllerInterface {
         adminChoices(user);
     }
 
-    private void ListeStagiaireNySession(User user) {
+    private void ListeStagiaireBySession(User user) {
         vueSession.menuListStagiaireBySession();
         int menuchoice = sc.nextInt();
         while (menuchoice < 1 || menuchoice > 3) {
@@ -469,7 +429,7 @@ class ControllerAdmin implements ControllerInterface {
             controller.retourMenuAdmin(sessionId, user);
         } while (facade.getCentre().getSessionbyId(sessionId) == null);
         vueSession.resulListStagiaireBySession(facade.getCentre().resultListStagiaireBySession(sessionId));
-        ListeStagiaireNySession(user);
+        ListeStagiaireBySession(user);
     }
 
     private void SearchByFormationSession(User user) {
@@ -716,9 +676,9 @@ class ControllerAdmin implements ControllerInterface {
         String nomStatut = sc.nextLine();
         statut.setNomStatut(nomStatut);
         vueAdmin.inputdiscountStatut();
-        Double discount  = sc.nextDouble();
+        Double discount = sc.nextDouble();
         statut.setDiscount(discount);
-        if(facade.getCentre().createStatut(statut)){
+        if (facade.getCentre().createStatut(statut)) {
             vueAcceuil.success();
             crudStatut(user);
         } else {
@@ -727,7 +687,7 @@ class ControllerAdmin implements ControllerInterface {
     }
 
     private void updateStatut(User user) {
-     Statut statut = new Statut();
+        Statut statut = new Statut();
         int idStatut;
         do {
             vueAdmin.inputIdStatut();
@@ -739,16 +699,78 @@ class ControllerAdmin implements ControllerInterface {
         String nomStatut = sc.nextLine();
         statut.setNomStatut(nomStatut);
         Double discount;
-        do{
-        vueAdmin.inputdiscountStatut();
-        discount = sc.nextDouble();
-        }while(discount<0 || discount>100);
+        do {
+            vueAdmin.inputdiscountStatut();
+            discount = sc.nextDouble();
+        } while (discount < 0 || discount > 100);
         statut.setDiscount(discount);
         if (facade.getCentre().updateStatut(statut)) {
             vueAcceuil.success();
             crudStatut(user);
         } else {
             vueAdmin.errorDoubleStatut();
+        }
+    }
+
+    private void menuEnseigneFormation(User user) {
+        getAllFormateur(user);
+        int idFormateur;
+        do {
+            vueAdmin.inputFormateurId();
+            controller.checkInt();
+            idFormateur = sc.nextInt();
+        } while (facade.getCentre().getFormateurbyId(idFormateur) == null);
+
+        vueAdmin.menuEnseigneFormation();
+        int menuchoice = sc.nextInt();
+        while (menuchoice < 1 || menuchoice > 3) {
+            vueAdmin.error();
+            menuchoice = sc.nextInt();
+        }
+        switch (menuchoice) {
+            case 1:
+                addFormationFormateur(user, idFormateur);
+                break;
+            case 2:
+                deleteFormationFormateur(user, idFormateur);
+                break;
+            case 3:
+                crudFormateur(user);
+                break;
+        }
+
+    }
+
+    private void addFormationFormateur(User user, int idFormateur) {
+        controller.getAllFormation(user);
+        int idFormation;
+        do {
+            vueFormation.inputFormationId();
+            controller.checkInt();
+            idFormation = sc.nextInt();
+        } while (facade.getCentre().getFormationbyId(idFormation) == null);
+        if (facade.getCentre().addFormationToFormateur(idFormation, idFormateur)) {
+            vueAcceuil.success();
+            crudFormateur(user);
+        } else {
+            vueAdmin.ErrorDoubleFormationForFormateur();
+            crudFormateur(user);
+        }
+    }
+
+    private void deleteFormationFormateur(User user, int idFormateur) {
+        vueFormation.resultsListFormation(facade.getCentre().getFormationByFormateur(idFormateur));
+        int idFormation;
+        do {
+            vueFormation.inputFormationIdtoDelete();
+            idFormation = sc.nextInt();
+        } while (facade.getCentre().getFormationbyId(idFormation) == null);
+        if (facade.getCentre().deleteFormationToFormateur(idFormation, idFormateur)) {
+            vueAcceuil.success();
+            crudFormateur(user);
+        } else {
+            vueAdmin.ErrorDoubleFormationForFormateur();
+            crudFormateur(user);
         }
     }
 

@@ -32,11 +32,11 @@ public class VueFormation {
     }
 
     public void resultsListFormation(List<Formation> formationsList) {
-       
+
         for (Formation f : formationsList) {
             System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");
-            System.out.println("Code formation: " + f.getIdFormation() + " \n" + " \n" + "Formation: " + f.getNomFormation() + "\n" + " \n" + "Prix: " + f.getPrix() + " €" + " \n" + " \n" + "Duree: " + f.getDuree() + " jours" + " \n" + " \n" + "Participants max: " + f.getParticipantMax() + " \n" + " \n" + "Participant min: " + f.getParticipantMin());
+            System.out.println("Code formation: " + f.getIdFormation() + " \n" + " \n" + "Formation: " + f.getNomFormation() + "\n" + " \n" + "Prix: " + f.getPrix() + " €" + " \n" + " \n" + "Duree: " + f.getDuree() + " jours" + " \n" + " \n" + "Participants max: " + f.getParticipantMax() + " \n" + " \n");
         }
     }
 
@@ -85,12 +85,6 @@ public class VueFormation {
         System.out.println("encodez le temps en jour de formation de la formation");
     }
 
-    public void inputFormationParticipantMin() {
-        System.out.println("------------------------------------------------------------------------------------------------------");
-        System.out.println("");
-        System.out.println("encodez le nombre minimum de participant");
-    }
-
     public void inputFormationParticipantMax() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
@@ -119,5 +113,11 @@ public class VueFormation {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("il n'est pas possible d'enregistrer cette formation");
+    }
+
+    public void inputFormationIdtoDelete() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Choisir la formation a supprimer");
     }
 }

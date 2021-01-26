@@ -12,6 +12,7 @@ import view.VueAdmin;
 import view.VueFormateur;
 import view.VueFormation;
 import view.VueSession;
+import view.VueStagiaire;
 
 public interface ControllerInterface {
 
@@ -28,5 +29,6 @@ public interface ControllerInterface {
     public VueAdmin vueAdmin = new VueAdmin();
     public VueFormation vueFormation = new VueFormation();
     public VueFormateur vueFormateur = new VueFormateur();
+    public VueStagiaire vueStagiaire = new VueStagiaire();
 
 }

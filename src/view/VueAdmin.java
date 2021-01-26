@@ -26,25 +26,25 @@ public class VueAdmin {
         System.out.println("");
         System.out.println("Tapez 1 pour valider les paiements d'inscription en attente (" + inscritpionPaiementNotification.size() + ")");
         System.out.println("");
-        System.out.println("Tapez 2 pour sortir la liste des stagiaires inscrit à une session avec le prix et son statut");
+        System.out.println("Tapez 2 pour afficher la liste des stagiaires inscrit à une session avec le prix et son statut");
         System.out.println("");
         System.out.println("Tapez 3 pour communiquer à chaque formateur les prestations qu'il doit assurer(jour, local, formation)");
         System.out.println("");
-        System.out.println("Tapez 5 pour sortir pour chaque formation la liste des sessions planifiées et le nombre de places encore dispo");
+        System.out.println("Tapez 5 pour afficher pour chaque formation la liste des sessions planifiées et le nombre de places encore dispo");
         System.out.println("");
-        System.out.println("Tapez 6 pour gérer les formations et les sessions");
+        System.out.println("Tapez 6 pour vérifier s'il reste encore des places libre pour une session. ");
         System.out.println("");
-        System.out.println("Tapez 7 pour gérer les formateurs");
+        System.out.println("Tapez 7 pour rechercher le formateur d'une session");
         System.out.println("");
         System.out.println("Tapez 8 pour afficher les personnes inscrites à une session donnée");
         System.out.println("");
-        System.out.println("Tapez 9 pour vérifier s'il reste encore des places libre pour une session. ");
+        System.out.println("Tapez 9 pour la gestion des formations & des sessions");
         System.out.println("");
-        System.out.println("Tapez 10 pour rechercher le formateur d'une session");
+        System.out.println("Tapez 10 pour la gestion des formateurs");
         System.out.println("");
-        System.out.println("Tapez 11 pour gèrer les locaux");
+        System.out.println("Tapez 11 pour la gestion des locaux");
         System.out.println("");
-        System.out.println("Tapez 12 pour gèrer les statuts professionels des étudiants");
+        System.out.println("Tapez 12 pour la gestion des statuts professionels & des étudiants");
         System.out.println("");
         System.out.println("Tapez 13 Quitter");
 
@@ -105,11 +105,13 @@ public class VueAdmin {
         System.out.println("");
         System.out.println("Tapez 1 pour l'affichage des formateurs");
         System.out.println("");
-        System.out.println("Tapez 2 pour la création d'un formateur");
+        System.out.println("Tapez 2 pour ajouter ou supprimer une formation à un formateur");
         System.out.println("");
-        System.out.println("Tapez 3 pour modifier ou supprimer un formateur");
+        System.out.println("Tapez 3 pour la création d'un formateur");
         System.out.println("");
-        System.out.println("Tapez 4 pour revenir au menu précédent");
+        System.out.println("Tapez 4 pour modifier ou supprimer un formateur");
+        System.out.println("");
+        System.out.println("Tapez 5 pour revenir au menu précédent");
     }
 
     public void error() {
@@ -242,9 +244,25 @@ public class VueAdmin {
     }
 
     public void inputIdStatut() {
-       System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("Tapez le code du statut");
+    }
+
+    public void ErrorDoubleFormationForFormateur() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Il y a déjà un formateur pour cette formation");
+    }
+
+    public void menuEnseigneFormation() {
+          System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Tapez 1 pour ajouter une formation à un formateur");
+        System.out.println("");
+        System.out.println("Tapez 2 pour supprimer une formation à une formateur");
+        System.out.println("");
+        System.out.println("Tapez 3 pour revenir au meu précédent");
     }
 
 }

@@ -23,27 +23,17 @@ import view.VueStagiaire;
 import java.util.ArrayList;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
+import static controller.ControllerInterface.*;
 
-/**
- *
- * @author Fabien
- */
-class ControllerStagiaire implements ControllerInterface {
 
-    private VueStagiaire vueStagiaire = new VueStagiaire();
-    private VueAcceuil vueAcceuil = new VueAcceuil();
+class ControllerStagiaire {
 
-    public ControllerStagiaire(VueStagiaire vueStagiaire, VueAcceuil vueAcceuil) {
-        this.vueStagiaire = vueStagiaire;
-        this.vueAcceuil = vueAcceuil;
-    }
 
     public ControllerStagiaire() {
     }
 
     public void registerUser(VueAcceuil vueAcceuil) {
         User user = new Stagiaire();
-
         vueAcceuil.newUserNom();
         sc.nextLine();
         String nom = sc.nextLine();

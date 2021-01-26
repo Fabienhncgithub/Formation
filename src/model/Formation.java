@@ -20,27 +20,25 @@ public class Formation {
     private double prix;
     private int duree;
     private int participantMax;
-    private int participantMin = 0;
+
     private boolean supprime;
     private List<Session> listeSession;
 
     
     /*TOTO SUPPRIME BOOLEAN SUPPRIME*/
-    public Formation(int idFormation, String nomFormation, double prix, int duree, int participantMax, int participantMin, boolean supprime) {
+    public Formation(int idFormation, String nomFormation, double prix, int duree, int participantMax, boolean supprime) {
         this.idFormation = idFormation;
         this.nomFormation = nomFormation;
         this.prix = prix;
         this.duree = duree;
         this.participantMax = participantMax;
-        this.participantMin = participantMin;
     }
 
-    public Formation(String nomFormation, double prix, int duree, int participantMax, int participantMin) {
+    public Formation(String nomFormation, double prix, int duree, int participantMax) {
         this.nomFormation = nomFormation;
         this.prix = prix;
         this.duree = duree;
         this.participantMax = participantMax;
-        this.participantMin = participantMin;
     }
 
     public Formation() {
@@ -86,13 +84,7 @@ public class Formation {
         this.participantMax = participantMax;
     }
 
-    public int getParticipantMin() {
-        return participantMin;
-    }
 
-    public void setParticipantMin(int participantMin) {
-        this.participantMin = participantMin;
-    }
 
     public List<Session> getListeSession() {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();

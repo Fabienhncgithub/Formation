@@ -228,9 +228,27 @@ public class Centre {
     }
 
     public boolean updateStatut(Statut statut) {
-         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         CentreDao centreDao = factory.createCentreDao();
         return centreDao.updateStatut(statut);
+    }
+
+    public boolean addFormationToFormateur(int idFormation, int idFormateur) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.addFormationToFormateur(idFormation, idFormateur);
+    }
+
+    public List<Formation> getFormationByFormateur(int idFormateur) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.getFormationByFormateur(idFormateur);
+    }
+
+    public boolean deleteFormationToFormateur(int idFormation, int idFormateur) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.deleteFormationToFormateur(idFormation, idFormateur);
     }
 
 }

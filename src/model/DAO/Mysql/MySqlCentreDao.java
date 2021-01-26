@@ -76,13 +76,13 @@ public class MySqlCentreDao implements CentreDao {
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Formation> listFormation = new ArrayList<>();
 
-        String sql = "SELECT idFormation, nomFormation, prix, duree, participantMax, participantMin, supprime FROM formation where supprime = 0";
+        String sql = "SELECT idFormation, nomFormation, prix, duree, participantMax, supprime FROM formation where supprime = 0";
 
         try {
             ps = c.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Formation formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime"));
+                Formation formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getBoolean("supprime"));
                 listFormation.add(formation);
             }
         } catch (SQLException sqle) {
@@ -110,7 +110,7 @@ public class MySqlCentreDao implements CentreDao {
 
             while (rs.next()) {
 
-                Formation formation = new Formation(rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMin"), rs.getInt("participantMax"));
+                Formation formation = new Formation(rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMax"));
                 listFormation.add(formation);
             }
         } catch (SQLException sqle) {
@@ -189,14 +189,14 @@ public class MySqlCentreDao implements CentreDao {
         Formation formation = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT idFormation, nomFormation, prix, duree, participantMax, participantMin, supprime  FROM formation where idFormation = ? AND supprime = 0";
+        String sql = "SELECT idFormation, nomFormation, prix, duree, participantMax, supprime  FROM formation where idFormation = ? AND supprime = 0";
 
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, idFormation);
             rs = ps.executeQuery();
             if (rs.next()) {
-                formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getInt("participantMin"), rs.getBoolean("supprime"));
+                formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getBoolean("supprime"));
             }
         } catch (SQLException sqle) {
             System.err.println("MySqlCentreDAO, method getFormationyId(int idFormation): \n" + sqle.getMessage());
@@ -356,7 +356,7 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "INSERT INTO formation(nomFormation, prix, duree, participantMax, participantMin) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO formation(nomFormation, prix, duree, participantMax) VALUES (?, ?, ?, ?)";
 
         try {
             ps = c.prepareStatement(sql);
@@ -364,7 +364,6 @@ public class MySqlCentreDao implements CentreDao {
             ps.setDouble(2, formation.getPrix());
             ps.setInt(3, formation.getDuree());
             ps.setInt(4, formation.getParticipantMax());
-            ps.setInt(5, formation.getParticipantMin());
             ps.executeUpdate();
         } catch (SQLException sqle) {
             System.err.println("MySqlCentreDao, method createNewFormation(): \n" + sqle.getMessage());
@@ -380,7 +379,7 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "UPDATE formation SET nomFormation = ? ,prix=? ,duree=? ,participantMax=?, participantMin=? where idFormation = ?";
+        String sql = "UPDATE formation SET nomFormation = ? ,prix=? ,duree=? ,participantMax=? where idFormation = ?";
 
         try {
             ps = c.prepareStatement(sql);
@@ -388,7 +387,6 @@ public class MySqlCentreDao implements CentreDao {
             ps.setDouble(2, formation.getPrix());
             ps.setInt(3, formation.getDuree());
             ps.setInt(4, formation.getParticipantMax());
-            ps.setInt(5, formation.getParticipantMin());
             ps.setInt(6, formation.getIdFormation());
             ps.executeUpdate();
         } catch (SQLException sqle) {
@@ -565,7 +563,7 @@ public class MySqlCentreDao implements CentreDao {
         List<Formateur> listFormateur = new ArrayList<>();
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT idUser, nom, prenom, adresse, email, password, role, statut, supprime FROM user JOIN session on user.idUser = session.idFormateur WHERE ? BETWEEN dateDebut AND dateFin AND ?  BETWEEN dateDebut AND dateFin AND role = 3 AND supprime = 0";
+        String sql = "SELECT idUser, nom, prenom, adresse, email, password, role, statut, supprime FROM user JOIN session on user.idUser = session.idFormateur  WHERE ? BETWEEN dateDebut AND dateFin AND ?  BETWEEN dateDebut AND dateFin AND role = 3 AND supprime = 0";
 
         try {
             ps = c.prepareStatement(sql);
@@ -1027,8 +1025,8 @@ public class MySqlCentreDao implements CentreDao {
             if (!rs.next()) {
                 result = true;
                 ps = c.prepareStatement(sql2);
-                 ps.setString(1, statut.getNomStatut());
-                 ps.setDouble(2, statut.getDiscount());
+                ps.setString(1, statut.getNomStatut());
+                ps.setDouble(2, statut.getDiscount());
                 ps.executeUpdate();
             }
         } catch (SQLException sqle) {
@@ -1059,12 +1057,94 @@ public class MySqlCentreDao implements CentreDao {
                 result = true;
                 ps = c.prepareStatement(sql2);
                 ps.setString(1, statut.getNomStatut());
-                ps.setDouble(2,statut.getDiscount());
+                ps.setDouble(2, statut.getDiscount());
                 ps.setInt(3, statut.getIdStatut());
                 ps.executeUpdate();
             }
         } catch (SQLException sqle) {
             System.err.println("MySqlCentreDao, method updateStatut(Statut statut): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean addFormationToFormateur(int idFormation, int idUser) {
+        boolean result = false;
+        Connection c;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql1 = "SELECT idUser FROM enseigne WHERE idUser = ? AND idFormation = ?";
+        String sql2 = "INSERT INTO enseigne(idUser, idFormation) VALUES (?,?)";
+
+        try {
+            ps = c.prepareStatement(sql1);
+            ps.setInt(1, idUser);
+            ps.setInt(2, idFormation);
+            rs = ps.executeQuery();
+            if (!rs.next()) {
+                result = true;
+                ps = c.prepareStatement(sql2);
+                ps.setInt(1, idUser);
+                ps.setInt(2, idFormation);
+                ps.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDao, method boolean addFormationToFormateur(int idUser, int idFormation): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return result;
+
+    }
+
+    @Override
+    public List<Formation> getFormationByFormateur(int idFormateur) {
+        Connection c;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+        List<Formation> listFormation = new ArrayList<>();
+
+        String sql = "SELECT formation.idFormation, nomFormation, prix, duree, participantMax, supprime, idUser FROM formation JOIN enseigne ON formation.idFormation = enseigne.idFormation WHERE supprime = 0 AND enseigne.idUser = ?";
+
+        try {
+            ps = c.prepareStatement(sql);
+            ps.setInt(1, idFormateur);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Formation formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getBoolean("supprime"));
+                listFormation.add(formation);
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDAO, method List<Formation> getFormationByFormateur(int idFormateur) : \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return listFormation;
+    }
+
+    @Override
+    public boolean deleteFormationToFormateur(int idFormation, int idFormateur) {
+        boolean result = false;
+        Connection c;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql = "DELETE FROM enseigne WHERE idFormation = ? AND idUser = ?";
+
+        try {
+            ps = c.prepareStatement(sql);
+            ps.setInt(1, idFormation);
+            ps.setInt(2, idFormateur);
+            ps.executeUpdate();
+            result = true;
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDao, method boolean deleteFormationToFormateur(int idFormation, int idFormateur) : \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }

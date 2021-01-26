@@ -6,12 +6,13 @@
 package controller;
 
 import model.User;
+import static controller.ControllerInterface.*;
 
 /**
  *
  * @author fabien
  */
-class controllerFormateur implements ControllerInterface {
+class controllerFormateur {
 
     public void formateurChoices(User user) {
         vueFormateur.choices(user);

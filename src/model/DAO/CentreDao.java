@@ -90,4 +90,10 @@ public interface CentreDao {
 
     public boolean updateStatut(Statut statut);
 
+    public boolean addFormationToFormateur(int idFormation, int idFormateur);
+
+    public List<Formation> getFormationByFormateur(int idFormateur);
+
+    public boolean deleteFormationToFormateur(int idFormation, int idFormateur);
+
 }
