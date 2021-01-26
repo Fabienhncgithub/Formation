@@ -17,10 +17,10 @@ class controllerFormateur {
     public void formateurChoices(User user) {
         vueFormateur.choices(user);
         int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 2) {
+       do {
             vueAdmin.error(user);
             menuchoice = sc.nextInt();
-        }
+        } while (menuchoice < 1 || menuchoice > 2);
         switch (menuchoice) {
             case 1:
                 vueSession.resultsListSession(facade.getCentre().listeSessionByIdFormateur(user.getIdUser()));

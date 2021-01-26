@@ -28,12 +28,9 @@ class ControllerAdmin {
 
     public void adminChoices(User user) {
         vueAdmin.choices(user, facade.getCentre().getInscritpionPaiementNotification());
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 13) {
-            vueAdmin.error(user);
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 13;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 validationPaiment(user);
                 break;
@@ -76,12 +73,9 @@ class ControllerAdmin {
 
     public void crudFormation(User user) {
         vueFormation.choicesCrud();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 4) {
-            vueFormation.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 4;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 controller.getAllFormation(user);
                 crudFormation(user);
@@ -100,12 +94,9 @@ class ControllerAdmin {
 
     public void crudSelectedFormation(User user, Formation formation) {
         vueFormation.crudSelectedFormation();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 5) {
-            vueFormation.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 5;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 updateFormation(user, formation);
                 break;
@@ -134,11 +125,11 @@ class ControllerAdmin {
         vueFormation.inputFormationNom();
         String nomFormation = sc.next();
         sc.nextLine();
-
         formation.setNomFormation(nomFormation);
         int prix = 0;
         do {
             vueFormation.inputFormationPrix();
+            controller.checkInt();
             prix = sc.nextInt();
         } while (prix < 0);
         formation.setPrix(prix);
@@ -148,6 +139,7 @@ class ControllerAdmin {
         int participantMax = 0;
         do {
             vueFormation.inputFormationParticipantMax();
+            controller.checkInt();
             participantMax = sc.nextInt();
         } while (0 > participantMax);
         formation.setParticipantMax(participantMax);
@@ -180,12 +172,9 @@ class ControllerAdmin {
 
     public void crudFormateur(User user) {
         vueAdmin.choicesFormateurCrud();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 4) {
-            vueAdmin.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 5;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 getAllFormateur(user);
                 crudFormateur(user);
@@ -198,13 +187,14 @@ class ControllerAdmin {
                 break;
             case 4:
                 getAllFormateur(user);
-                int formateurId;
-                do {
-                    vueAdmin.inputFormateurId();
-                    formateurId = sc.nextInt();
-
-                } while (facade.getCentre().getFormateurbyId(formateurId) == null);
-                selectFormateur(user, formateurId);
+                
+                
+//                int formateurId;
+//                do {
+//                    vueAdmin.inputFormateurId();
+//                    formateurId = sc.nextInt();
+//                } while (facade.getCentre().getFormateurbyId(formateurId) == null);
+                selectFormateur(user, controller.checkFormateurById());
                 break;
             case 5:
                 adminChoices(user);
@@ -296,12 +286,9 @@ class ControllerAdmin {
 
     public void crudSelectedSession(User user, Formation formation) {
         vueSession.crudSelectedSession();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 5) {
-            vueSession.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 5;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 rudSelectedSession(user, formation);
                 break;
@@ -318,7 +305,6 @@ class ControllerAdmin {
         List<Session> informationsFormateurList = facade.getCentre().listeInformationsByFormateurs();
         vueAdmin.resultsListInformationsFormateur(informationsFormateurList);
         adminChoices(user);
-
     }
 
     private void createSession(User user, Formation formation) {
@@ -378,6 +364,7 @@ class ControllerAdmin {
         int formationId;
         do {
             vueFormation.inputFormationId();
+            controller.checkInt();
             formationId = sc.nextInt();
             controller.retourMenuAdmin(formationId, user);
         } while (facade.getCentre().getFormationbyId(formationId) == null);
@@ -388,7 +375,6 @@ class ControllerAdmin {
         vueStagiaire.resultsListInscription(listeInscriptionNotificationPaiment);
         int inscriptionId;
         do {
-
             vueAdmin.inputPaiement();
             sc.nextLine();
             controller.checkInt();
@@ -401,12 +387,9 @@ class ControllerAdmin {
 
     private void ListeStagiaireBySession(User user) {
         vueSession.menuListStagiaireBySession();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 3) {
-            vueSession.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 3;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 resultListStagiaireBySession(user);
                 break;
@@ -444,12 +427,14 @@ class ControllerAdmin {
         int idFormation;
         do {
             vueFormation.inputFormationId();
+            controller.checkInt();
             idFormation = sc.nextInt();
         } while (facade.getCentre().getFormationbyId(idFormation) == null);
         controller.getAllSessionByFormation(user, facade.getCentre().getFormationbyId(idFormation));
         int idSession;
         do {
             vueSession.inputSessionId();
+            controller.checkInt();
             idSession = sc.nextInt();
         } while (facade.getCentre().getSessionbyId(idSession) == null);
         vueSession.formateurBysession(facade.getCentre().getFormateurBySession(idSession));
@@ -460,6 +445,7 @@ class ControllerAdmin {
         int idFormateur;
         do {
             vueAdmin.inputFormateurId();
+            controller.checkInt();
             idFormateur = sc.nextInt();
         } while (facade.getCentre().getFormateurbyId(idFormateur) == null);
         vueSession.resultsListSession(facade.getCentre().listeSessionByIdFormateur(idFormateur));
@@ -475,12 +461,9 @@ class ControllerAdmin {
             idSession = sc.nextInt();
         } while (facade.getCentre().getSessionbyId(idSession) == null);
         vueSession.rudSelectedSession();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 5) {
-            vueSession.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 3;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 updateSession(user, idSession, formation);
                 break;
@@ -525,6 +508,7 @@ class ControllerAdmin {
             vueSession.newFormateur();
             List<Formateur> listFormateur = facade.getCentre().getFormateurAvailable(session, formation);
             vueSession.resultListformateur(listFormateur);
+            controller.checkInt();
             idFormateur = sc.nextInt();
         } while (facade.getCentre().getFormateurbyId(idFormateur) == null);
         session.setIdformateur(facade.getCentre().getFormateurbyId(idFormateur));
@@ -534,6 +518,7 @@ class ControllerAdmin {
             vueSession.newLocal();
             List<Local> lisLocal = facade.getCentre().getAllLocal();
             vueSession.resultListLocal(lisLocal);
+            controller.checkInt();
             idLocal = sc.nextInt();
         } while (facade.getCentre().getLocalById(idLocal) == null);
         session.setIdLocal(facade.getCentre().getLocalById(idLocal));
@@ -546,7 +531,6 @@ class ControllerAdmin {
 
     private void deleteSession(User user, int idSession, Formation formation) {
         facade.getCentre().getSessionbyId(idSession).deleteSession();
-
         rudSelectedSession(user, formation);
     }
 
@@ -566,6 +550,7 @@ class ControllerAdmin {
         int idSession;
         do {
             vueSession.inputSessionId();
+            controller.checkInt();
             idSession = sc.nextInt();
         } while (facade.getCentre().getSessionbyId(idSession) == null);
         int inscriptionPlace = facade.getCentre().getSessionbyId(idSession).getListeInscriptionbySession().size();
@@ -578,12 +563,9 @@ class ControllerAdmin {
     private void crudLocaux(User user) {
         vueAdmin.resulListAllLocal(facade.getCentre().getAllLocal());
         vueAdmin.menuListCrudLocaux();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 4) {
-            vueSession.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 4;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 createLocaux(user);
                 break;
@@ -609,7 +591,6 @@ class ControllerAdmin {
         } else {
             vueAdmin.errorDoubleLocal();
         }
-
     }
 
     private void updateLocaux(User user) {
@@ -617,6 +598,7 @@ class ControllerAdmin {
         int idLocal;
         do {
             vueAdmin.inputIdLocal();
+            controller.checkInt();
             idLocal = sc.nextInt();
         } while (facade.getCentre().getLocalById(idLocal) == null);
         local.setIdLocal(idLocal);
@@ -636,6 +618,7 @@ class ControllerAdmin {
         int idLocal;
         do {
             vueAdmin.inputIdLocal();
+            controller.checkInt();
             idLocal = sc.nextInt();
         } while (facade.getCentre().getLocalById(idLocal) == null);
         local.setIdLocal(idLocal);
@@ -651,12 +634,9 @@ class ControllerAdmin {
     private void crudStatut(User user) {
         vueAcceuil.resultListStatut(facade.getCentre().getAllStatut());
         vueAdmin.menuListCrudStatut();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 3) {
-            vueSession.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 3;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 createStatut(user);
                 break;
@@ -691,6 +671,7 @@ class ControllerAdmin {
         int idStatut;
         do {
             vueAdmin.inputIdStatut();
+            controller.checkInt();
             idStatut = sc.nextInt();
         } while (facade.getCentre().getStatutById(idStatut) == null);
         statut.setIdStatut(idStatut);
@@ -720,14 +701,10 @@ class ControllerAdmin {
             controller.checkInt();
             idFormateur = sc.nextInt();
         } while (facade.getCentre().getFormateurbyId(idFormateur) == null);
-
         vueAdmin.menuEnseigneFormation();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 3) {
-            vueAdmin.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 3;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 addFormationFormateur(user, idFormateur);
                 break;
@@ -763,6 +740,7 @@ class ControllerAdmin {
         int idFormation;
         do {
             vueFormation.inputFormationIdtoDelete();
+            controller.checkInt();
             idFormation = sc.nextInt();
         } while (facade.getCentre().getFormationbyId(idFormation) == null);
         if (facade.getCentre().deleteFormationToFormateur(idFormation, idFormateur)) {

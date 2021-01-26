@@ -62,6 +62,7 @@ class ControllerStagiaire {
         int idStatut = 0;
         do {
             vueAcceuil.resultListStatut(listStatut);
+            controller.checkInt();
             idStatut = sc.nextInt();
             vueAcceuil.newUserStatut();
         } while (facade.getCentre().getStatutById(idStatut) == null);
@@ -75,10 +76,11 @@ class ControllerStagiaire {
         vueStagiaire.stagiaireChoices(user);
         controller.checkInt();
         int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 5) {
+        do{
             vueAcceuil.error();
+            controller.checkInt();
             menuchoice = sc.nextInt();
-        }
+        }while (menuchoice < 1 || menuchoice > 5);
         switch (menuchoice) {
             case 1:
                 modificationUser(user);
@@ -179,15 +181,17 @@ class ControllerStagiaire {
         vueStagiaire.validationPaiement();
         controller.checkInt();
         int choice = sc.nextInt();
-        while (choice < 1 || choice > 2) {
+        do {
             vueAcceuil.error();
+            controller.checkInt();
             choice = sc.nextInt();
-        }
+        }while (choice < 1 || choice > 2);
         switch (choice) {
             case 1:
                 int sessionId;
                 do {
                     vueSession.inputSessionId();
+                    controller.checkInt();
                     sessionId = sc.nextInt();
                 } while (facade.getCentre().getSessionbyId(sessionId) == null);
                 if (facade.getCentre().validationPaiement(sessionId, stagiaire)) {

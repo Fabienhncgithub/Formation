@@ -14,6 +14,9 @@ import java.util.List;
  */
 public class VueFormation {
 
+    public void newFormation() {
+    }
+
     public void errorSearchFormation() {
         System.out.println("Cette formation n'éxista pas");
     }
@@ -26,9 +29,6 @@ public class VueFormation {
         System.out.println("Tapez 2 Faire une recherche dans la liste de formation");
         System.out.println("");
         System.out.println("Tapez 3 Quitter");
-    }
-
-    public void newFormation() {
     }
 
     public void resultsListFormation(List<Formation> formationsList) {
@@ -52,14 +52,7 @@ public class VueFormation {
         System.out.println("Tapez 4 pour revenir au menu précédent");
     }
 
-    public void error() {
-        System.out.println("------------------------------------------------------------------------------------------------------");
-        System.out.println("");
-        System.out.println("Erreur! ce choix n'éxiste pas");
-        System.out.println("");
-        System.out.println("Réessayer avec une selection correcte");
-
-    }
+ 
 
     public void inputFormationNom() {
         System.out.println("------------------------------------------------------------------------------------------------------");

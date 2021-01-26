@@ -23,15 +23,10 @@ public class ControllerAcceuil {
     public void firstMenu() {
         AbstractDaoFactory.setFactory(MySqlDaoFactory.getInstance());
         cleanDB();
-        VueAcceuil vueAcceuil = new VueAcceuil();
         vueAcceuil.choices();
-        controller.checkInt();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 4) {
-            vueAcceuil.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+
+        int menuchoice = 4;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 searchCatalogue();
                 break;
@@ -56,12 +51,10 @@ public class ControllerAcceuil {
             email = sc.next();
             sc.nextLine();
         } while (email.isEmpty() || email == null || facade.getCentre().getUserByEmail(email) == null);
-
         do {
             vueAcceuil.newUserPassword();
             password = sc.next();
             sc.nextLine();
-
         } while (password.isEmpty() || password == null || !BCrypt.checkpw(password, facade.getCentre().getUserByEmail(email).getPassword()));
 
         controllerAcceuil.setUsr(User.login(email));
@@ -80,13 +73,9 @@ public class ControllerAcceuil {
 
     public void searchCatalogue() {
         vueFormation.cataloguesChoices();
-        controller.checkInt();
-        int menuchoice = sc.nextInt();
-        while (menuchoice < 1 || menuchoice > 3) {
-            vueFormation.error();
-            menuchoice = sc.nextInt();
-        }
-        switch (menuchoice) {
+        
+        int menuchoice = 3;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 List<Formation> formationsList = facade.getCentre().getAllFormation();
                 vueFormation.resultsListFormation(formationsList);
@@ -97,7 +86,6 @@ public class ControllerAcceuil {
             case 3:
                 firstMenu();
                 break;
-
         }
         firstMenu();
     }
@@ -115,6 +103,7 @@ public class ControllerAcceuil {
         vueFormation.resultsListFormation(formationsList);
         firstMenu();
     }
+    //Nettoyer la base de données (suppression des données relatives aux sessions > 365 jours)
 
     public void cleanDB() {
         facade.getCentre().cleanDb();

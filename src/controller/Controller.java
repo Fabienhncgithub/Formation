@@ -31,7 +31,6 @@ public class Controller implements ControllerInterface {
     }
 
     public void checkInt() {
-
         while (!sc.hasNextInt()) {
             vueAcceuil.errorInput();
             sc.nextLine();
@@ -72,6 +71,27 @@ public class Controller implements ControllerInterface {
             controller.retourMenuAdmin(sessionId, user);
         } while (facade.getCentre().getSessionbyId(sessionId) == null);
         controller.getAllSessionByFormation(user, facade.getCentre().getFormationbyId(sessionId));
+    }
+
+    //vérifie si le choix est bien dans le menu
+    public int checkMenuChoice(int i) {
+        vueAcceuil.choice();
+        int menuchoice = sc.nextInt();
+        while (menuchoice < 1 || menuchoice > i) {
+            vueAcceuil.error();
+            controller.checkInt();
+            menuchoice = sc.nextInt();
+        }
+        return menuchoice;
+    }
+
+    public int checkFormateurById() {
+        int formateurId;
+        do {
+            vueAdmin.inputFormateurId();
+            formateurId = sc.nextInt();
+        } while (facade.getCentre().getFormateurbyId(formateurId) == null);
+        return formateurId;
     }
 
 }

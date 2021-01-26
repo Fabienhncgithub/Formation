@@ -16,6 +16,12 @@ import java.util.List;
  */
 public class VueAcceuil {
 
+    public void choice() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Choississez un menu");
+    }
+
     public void choices() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
@@ -31,7 +37,7 @@ public class VueAcceuil {
     public void error() {
         System.out.println("------------------------------------------------------------------------------------------------------");
         System.out.println("");
-        System.out.println("Erreur! ce choix n'éxiste pas");
+        System.out.println("Erreur! ce choix n'éxiste pas, veuillez choisir un menu disponible");
     }
 
     public void newUserName() {

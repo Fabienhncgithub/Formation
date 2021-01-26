@@ -15,17 +15,34 @@ import view.VueSession;
 import view.VueStagiaire;
 
 public interface ControllerInterface {
+    
+    
+                        //SCANNER
+    
+    
 
     public Scanner sc = new Scanner(System.in);
-    public Scanner stringScanner = new Scanner(System.in);
+    
+    
+                       //FACADE
+    
+    
     public Facade facade = new Facade();
+    
+    
+                        //CONTROLLER
+    
+    
     public Controller controller = new Controller();
     public ControllerAcceuil controllerAcceuil = new ControllerAcceuil();
     public ControllerStagiaire controllerStagiaire = new ControllerStagiaire();
     public ControllerAdmin controllerAdmin = new ControllerAdmin();
-    public controllerFormateur controllerFormateur  = new controllerFormateur();
+    public controllerFormateur controllerFormateur = new controllerFormateur();
+    
+                        //VUE
+    
     public VueSession vueSession = new VueSession();
-    public  VueAcceuil vueAcceuil = new VueAcceuil();
+    public VueAcceuil vueAcceuil = new VueAcceuil();
     public VueAdmin vueAdmin = new VueAdmin();
     public VueFormation vueFormation = new VueFormation();
     public VueFormateur vueFormateur = new VueFormateur();
