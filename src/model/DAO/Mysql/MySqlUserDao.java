@@ -1,13 +1,10 @@
 package model.DAO.Mysql;
 
 import model.Admin;
-import model.DAO.Mysql.MySqlCentreDao;
 import model.DAO.UserDao;
 import model.Formateur;
 import model.Formation;
-import model.Inscription;
 import model.Role;
-import model.Session;
 import model.Stagiaire;
 import model.Statut;
 import model.User;
@@ -16,8 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+
 import model.DAO.Mysql.MySqlDaoFactory;
 
 public class MySqlUserDao implements UserDao {

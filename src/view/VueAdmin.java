@@ -112,7 +112,7 @@ public class VueAdmin {
         for (Formateur f : listFormateur) {
             System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("");
-            System.out.println("idFormateur: " + f.getIdUser() + " \n" + " \n" + "Nom formateur: " + f.getNom() + " \n" + " \n" + "Role: " + f.getRole().getNomRole());
+            System.out.println("Code formateur: " + f.getIdUser() + " \n" + " \n" + "Nom formateur: " + f.getNom() + " " + f.getPrenom());
         }
     }
 

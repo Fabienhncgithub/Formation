@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.DAO.Mysql;
 
 import model.Admin;
@@ -24,11 +19,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * s
- *
- * @author Fabien
- */
 public class MySqlCentreDao implements CentreDao {
 
     private static MySqlCentreDao instance;
@@ -387,10 +377,10 @@ public class MySqlCentreDao implements CentreDao {
             ps.setDouble(2, formation.getPrix());
             ps.setInt(3, formation.getDuree());
             ps.setInt(4, formation.getParticipantMax());
-            ps.setInt(6, formation.getIdFormation());
+            ps.setInt(5, formation.getIdFormation());
             ps.executeUpdate();
         } catch (SQLException sqle) {
-            System.err.println("MySqlUserDao, method createNewFormation(): \n" + sqle.getMessage());
+            System.err.println("MySqlUserDao, method void updateFormation(Formation formation): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
@@ -1150,4 +1140,6 @@ public class MySqlCentreDao implements CentreDao {
         }
         return result;
     }
+
+  
 }

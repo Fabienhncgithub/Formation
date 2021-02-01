@@ -28,8 +28,7 @@ class ControllerAdmin {
 
     public void adminChoices(User user) {
         vueAdmin.choices(user, facade.getCentre().getInscritpionPaiementNotification());
-        
-  
+
         int menuchoice = 6;
         switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
@@ -123,8 +122,8 @@ class ControllerAdmin {
 
     public Formation inputFormation(User user, Formation formation) {
         vueFormation.inputFormationNom();
-        String nomFormation = sc.next();
         sc.nextLine();
+        String nomFormation = sc.nextLine();
         formation.setNomFormation(nomFormation);
         int prix = 0;
         do {
@@ -167,7 +166,8 @@ class ControllerAdmin {
 
     public void deleteFormation(User user, Formation formation) {
         user.deleteFormation(formation);
-        selectFormation(user);
+        vueAcceuil.success();
+        crudSelectedFormation(user, formation);
     }
 
     public void crudFormateur(User user) {
@@ -187,12 +187,6 @@ class ControllerAdmin {
                 break;
             case 4:
                 getAllFormateur(user);
-
-//                int formateurId;
-//                do {
-//                    vueAdmin.inputFormateurId();
-//                    formateurId = sc.nextInt();
-//                } while (facade.getCentre().getFormateurbyId(formateurId) == null);
                 selectFormateur(user, controller.checkFormateurById());
                 break;
             case 5:
@@ -205,19 +199,20 @@ class ControllerAdmin {
     public void createFormateur(User user) {
         Formateur formateur = new Formateur();
         vueAcceuil.newUserNom();
-        String nom = sc.next();
+        sc.nextLine();
+        String nom = sc.nextLine();
         formateur.setNom(nom);
         vueAcceuil.newUserPrenom();
-        String prenom = sc.next();
+        String prenom = sc.nextLine();
         formateur.setPrenom(prenom);
         vueAcceuil.newUseradresse();
-        String adresse = sc.next();
+        String adresse = sc.nextLine();
         formateur.setAdresse(adresse);
         vueAcceuil.newUseremail();
-        String email = sc.next();
+        String email = sc.nextLine();
         formateur.setEmail(email);
         vueAcceuil.newUserPassword();
-        String password = sc.next();
+        String password = sc.nextLine();
         String hashedpassword = BCrypt.hashpw(password, BCrypt.gensalt());
         formateur.setPassword(hashedpassword);
         formateur.setRole(new Role(3, "formateur"));
@@ -228,7 +223,6 @@ class ControllerAdmin {
 
     public void getAllFormateur(User user) {
         vueAdmin.resultsListFormateur(facade.getCentre().getAllFormateur());
-
     }
 
     private void selectFormateur(User user, int formateurId) {
@@ -255,19 +249,20 @@ class ControllerAdmin {
 
     public void updateFormateur(User user, Formateur formateur) {
         vueAcceuil.newUserNom();
-        String nom = sc.next();
+        sc.nextLine();
+        String nom = sc.nextLine();
         formateur.setNom(nom);
         vueAcceuil.newUserPrenom();
-        String prenom = sc.next();
+        String prenom = sc.nextLine();
         formateur.setPrenom(prenom);
         vueAcceuil.newUseradresse();
-        String adresse = sc.next();
+        String adresse = sc.nextLine();
         formateur.setAdresse(adresse);
         vueAcceuil.newUseremail();
-        String email = sc.next();
+        String email = sc.nextLine();
         formateur.setEmail(email);
         vueAcceuil.newUserPassword();
-        String password = sc.next();
+        String password = sc.nextLine();
         String hashedpassword = BCrypt.hashpw(password, BCrypt.gensalt());
         formateur.setPassword(hashedpassword);
         formateur.updateFormateur();
@@ -416,9 +411,7 @@ class ControllerAdmin {
 
     private void SearchByFormationSession(User user) {
         controller.getChoiceSession(user);
-
         resultListStagiaireBySession(user);
-
     }
 
     private void searchFormateur(User user) {
@@ -583,12 +576,15 @@ class ControllerAdmin {
     private void createLocaux(User user) {
         Local local = new Local();
         vueAdmin.inputNomLocal();
-        String nomLocal = sc.next();
+        sc.nextLine();
+        String nomLocal = sc.nextLine();
         local.setNomLocal(nomLocal);
         if (facade.getCentre().createLocaux(local)) {
             vueAcceuil.success();
+            crudLocaux(user);
         } else {
             vueAdmin.errorDoubleLocal();
+            crudLocaux(user);
         }
     }
 
@@ -662,6 +658,7 @@ class ControllerAdmin {
             crudStatut(user);
         } else {
             vueAdmin.errorDoubleStatut();
+            crudStatut(user);
         }
     }
 
@@ -689,11 +686,14 @@ class ControllerAdmin {
             crudStatut(user);
         } else {
             vueAdmin.errorDoubleStatut();
+            crudStatut(user);
+
         }
     }
 
     private void menuEnseigneFormation(User user) {
         getAllFormateur(user);
+
         int idFormateur;
         do {
             vueAdmin.inputFormateurId();
@@ -735,19 +735,25 @@ class ControllerAdmin {
     }
 
     private void deleteFormationFormateur(User user, int idFormateur) {
-        vueFormation.resultsListFormation(facade.getCentre().getFormationByFormateur(idFormateur));
-        int idFormation;
-        do {
-            vueFormation.inputFormationIdtoDelete();
-            controller.checkInt();
-            idFormation = sc.nextInt();
-        } while (facade.getCentre().getFormationbyId(idFormation) == null);
-        if (facade.getCentre().deleteFormationToFormateur(idFormation, idFormateur)) {
-            vueAcceuil.success();
-            crudFormateur(user);
+
+        if (facade.getCentre().getFormationByFormateur(idFormateur).isEmpty()) {
+            vueFormateur.NotFormationForFormateur();
+            menuEnseigneFormation(user);
         } else {
-            vueAdmin.ErrorDoubleFormationForFormateur();
-            crudFormateur(user);
+            vueFormation.resultsListFormation(facade.getCentre().getFormationByFormateur(idFormateur));
+            int idFormation;
+            do {
+                vueFormation.inputFormationIdtoDelete();
+                controller.checkInt();
+                idFormation = sc.nextInt();
+            } while (facade.getCentre().getFormationbyId(idFormation) == null);
+            if (facade.getCentre().deleteFormationToFormateur(idFormation, idFormateur)) {
+                vueAcceuil.success();
+                crudFormateur(user);
+            } else {
+                vueAdmin.ErrorDoubleFormationForFormateur();
+                crudFormateur(user);
+            }
         }
     }
 

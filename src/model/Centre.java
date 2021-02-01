@@ -95,6 +95,8 @@ public class Centre {
         CentreDao centreDao = factory.createCentreDao();
         return centreDao.getAllFormateur();
     }
+    
+    
 
     public List<Session> listeSessionbyFormation(Formation formation) {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
