@@ -236,7 +236,7 @@ public class MySqlCentreDao implements CentreDao {
                             getRoleById(rs.getInt("role")), rs.getBoolean("supprime"));
 
                 } else {
-                    System.out.println("no role");
+                    u = null;
                 }
             }
         } catch (SQLException sqle) {
@@ -737,7 +737,7 @@ public class MySqlCentreDao implements CentreDao {
                             getRoleById(rs.getInt("role")), rs.getBoolean("supprime"));
 
                 } else {
-                    System.out.println("no role");
+                    u = null;
                 }
             }
         } catch (SQLException sqle) {

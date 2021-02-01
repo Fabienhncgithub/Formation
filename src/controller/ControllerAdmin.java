@@ -23,48 +23,31 @@ import static controller.ControllerInterface.*;
 
 class ControllerAdmin {
 
-    ControllerAdmin() {
+    public ControllerAdmin() {
     }
 
     public void adminChoices(User user) {
         vueAdmin.choices(user, facade.getCentre().getInscritpionPaiementNotification());
-
-        int menuchoice = 13;
+        
+  
+        int menuchoice = 6;
         switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 validationPaiment(user);
                 break;
             case 2:
-                ListeStagiaireBySession(user);
-                break;
-            case 3:
-                showInformationToFormateur(user);
-                break;
-            case 5:
-                showSessionbyFormateur(user);
-                break;
-            case 6:
-                verificationNbrInscriptions(user);
-                break;
-            case 7:
-                searchFormateur(user);
-                break;
-            case 8:
-                showUserBySession(user);
-                break;
-            case 9:
                 crudFormation(user);
                 break;
-            case 10:
+            case 3:
                 crudFormateur(user);
                 break;
-            case 11:
+            case 4:
                 crudLocaux(user);
                 break;
-            case 12:
+            case 5:
                 crudStatut(user);
                 break;
-            case 13:
+            case 6:
                 controllerAcceuil.firstMenu();
                 break;
         }
@@ -73,8 +56,7 @@ class ControllerAdmin {
 
     public void crudFormation(User user) {
         vueFormation.choicesCrud();
-
-        int menuchoice = 4;
+        int menuchoice = 10;
         switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 controller.getAllFormation(user);
@@ -87,6 +69,24 @@ class ControllerAdmin {
                 selectFormation(user);
                 break;
             case 4:
+                ListeStagiaireBySession(user);
+                break;
+            case 5:
+                showInformationToFormateur(user);
+                break;
+            case 6:
+                showSessionbyFormateur(user);
+                break;
+            case 7:
+                verificationNbrInscriptions(user);
+                break;
+            case 8:
+                searchFormateur(user);
+                break;
+            case 9:
+                showUserBySession(user);
+                break;
+            case 10:
                 adminChoices(user);
                 break;
         }
@@ -187,8 +187,7 @@ class ControllerAdmin {
                 break;
             case 4:
                 getAllFormateur(user);
-                
-                
+
 //                int formateurId;
 //                do {
 //                    vueAdmin.inputFormateurId();

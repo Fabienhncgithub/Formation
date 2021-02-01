@@ -26,27 +26,15 @@ public class VueAdmin {
         System.out.println("");
         System.out.println("Tapez 1 pour valider les paiements d'inscription en attente (" + inscritpionPaiementNotification.size() + ")");
         System.out.println("");
-        System.out.println("Tapez 2 pour afficher la liste des stagiaires inscrit à une session avec le prix et son statut");
+        System.out.println("Tapez 2 pour la gestion des formations & des sessions");
         System.out.println("");
-        System.out.println("Tapez 3 pour communiquer à chaque formateur les prestations qu'il doit assurer(jour, local, formation)");
+        System.out.println("Tapez 3 pour la gestion des formateurs");
         System.out.println("");
-        System.out.println("Tapez 5 pour afficher pour chaque formation la liste des sessions planifiées et le nombre de places encore dispo");
+        System.out.println("Tapez 4 pour la gestion des locaux");
         System.out.println("");
-        System.out.println("Tapez 6 pour vérifier s'il reste encore des places libre pour une session. ");
+        System.out.println("Tapez 5 pour la gestion des statuts professionels & des étudiants");
         System.out.println("");
-        System.out.println("Tapez 7 pour rechercher le formateur d'une session");
-        System.out.println("");
-        System.out.println("Tapez 8 pour afficher les personnes inscrites à une session donnée");
-        System.out.println("");
-        System.out.println("Tapez 9 pour la gestion des formations & des sessions");
-        System.out.println("");
-        System.out.println("Tapez 10 pour la gestion des formateurs");
-        System.out.println("");
-        System.out.println("Tapez 11 pour la gestion des locaux");
-        System.out.println("");
-        System.out.println("Tapez 12 pour la gestion des statuts professionels & des étudiants");
-        System.out.println("");
-        System.out.println("Tapez 13 Quitter");
+        System.out.println("Tapez 6 Quitter");
 
     }
 

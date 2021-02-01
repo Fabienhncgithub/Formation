@@ -76,6 +76,7 @@ public class Controller implements ControllerInterface {
     //vérifie si le choix est bien dans le menu
     public int checkMenuChoice(int i) {
         vueAcceuil.choice();
+        controller.checkInt();
         int menuchoice = sc.nextInt();
         while (menuchoice < 1 || menuchoice > i) {
             vueAcceuil.error();

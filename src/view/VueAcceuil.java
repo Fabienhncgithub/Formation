@@ -23,7 +23,7 @@ public class VueAcceuil {
     }
 
     public void choices() {
-        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("-------------------------------------CENTRE DE FORMATION-------------------------------------------");
         System.out.println("");
         System.out.println("Tapez 1 Voir les formations");
         System.out.println("");
