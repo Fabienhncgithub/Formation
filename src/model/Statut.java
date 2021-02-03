@@ -5,6 +5,9 @@
  */
 package model;
 
+import model.DAO.AbstractDaoFactory;
+import model.DAO.CentreDao;
+
 /**
  *
  * @author Fabien
@@ -50,6 +53,16 @@ public class Statut {
         this.discount = discount;
     }
     
-    
+      public boolean createStatut(Statut statut) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.createStatut(statut);
+    }
+
+    public boolean updateStatut(Statut statut) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.updateStatut(statut);
+    }
     
 }

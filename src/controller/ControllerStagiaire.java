@@ -5,57 +5,63 @@
  */
 package controller;
 
-import com.mysql.cj.jdbc.interceptors.SessionAssociationInterceptor;
 import static controller.ControllerInterface.facade;
 import static controller.ControllerInterface.sc;
 import model.Formation;
 import model.Inscription;
 import model.Role;
-import model.Session;
 import model.Stagiaire;
 import model.Statut;
 import model.User;
 import view.VueAcceuil;
-import view.VueAdmin;
 import view.VueFormation;
 import view.VueSession;
 import view.VueStagiaire;
-import java.util.ArrayList;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 import static controller.ControllerInterface.*;
 
-
 class ControllerStagiaire {
-
 
     public ControllerStagiaire() {
     }
 
     public void registerUser(VueAcceuil vueAcceuil) {
         User user = new Stagiaire();
-        vueAcceuil.newUserNom();
         sc.nextLine();
-        String nom = sc.nextLine();
+        String nom = null;
+        do {
+            vueAcceuil.newUserNom();
+            nom = sc.nextLine();
+        } while (nom == null || nom.trim().isEmpty());
         user.setNom(nom.trim());
-        vueAcceuil.newUserPrenom();
-        String prenom = sc.nextLine();
+
+        String prenom = null;
+        do {
+            vueAcceuil.newUserPrenom();
+            prenom = sc.nextLine();
+        } while (prenom == null || prenom.trim().isEmpty());
         user.setPrenom(prenom.trim());
-        vueAcceuil.newUseradresse();
-        String adresse = sc.nextLine();
+
+        String adresse = null;
+        do {
+            vueAcceuil.newUseradresse();
+            adresse = sc.nextLine();
+        } while (adresse == null || adresse.trim().isEmpty());
         user.setAdresse(adresse.trim());
-        
-        String email;
+
+        String email = null;
         do {
             vueAcceuil.newUseremail();
             email = sc.nextLine();
-        } while (facade.getCentre().getUserByEmail(email) != null);
-        
+        } while (!email.matches("^[\\w!#$%&'+/=?`{|}~^-]+(?:\\.[\\w!#$%&'+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$") || email == null || email.trim().isEmpty() || facade.getCentre().getUserByEmail(email) != null);
         user.setEmail(email.trim());
+
         vueAcceuil.newUserPassword();
         String password = sc.next();
         String hasedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         user.setPassword(hasedPassword);
+
         user.setRole(new Role(1, "stagiaire"));
         vueAcceuil.newUserStatut();
         List<Statut> listStatut = facade.getCentre().getAllStatut();
@@ -74,14 +80,10 @@ class ControllerStagiaire {
     void loginStagiaire(Stagiaire user) {
         VueStagiaire vueStagiaire = new VueStagiaire();
         vueStagiaire.stagiaireChoices(user);
-        controller.checkInt();
-        int menuchoice = sc.nextInt();
-        do{
-            vueAcceuil.error();
-            controller.checkInt();
-            menuchoice = sc.nextInt();
-        }while (menuchoice < 1 || menuchoice > 5);
-        switch (menuchoice) {
+
+        int menuchoice = 5;
+        switch (controller.checkMenuChoice(menuchoice)) {
+
             case 1:
                 modificationUser(user);
                 break;
@@ -102,27 +104,56 @@ class ControllerStagiaire {
 
     public void modificationUser(Stagiaire user) {
         VueAcceuil VueAcceuil = new VueAcceuil();
+        User usr = null;
         int id = user.getIdUser();
-        VueAcceuil.newUserNom();
 
-        while (!sc.hasNext("[A-Za-z]*")) {
-            vueAcceuil.errorInputString();
-            sc.nextLine();
-        }
-        String nom = sc.next();
-        VueAcceuil.newUserPrenom();
-        while (!sc.hasNext("[A-Za-z]*")) {
-            vueAcceuil.errorInputString();
-            sc.nextLine();
-        }
-        String prenom = sc.nextLine();
-        VueAcceuil.newUseradresse();
-        String adresse = sc.nextLine();
-        VueAcceuil.newUseremail();
-        String email = sc.nextLine();
-        VueAcceuil.newUserPassword();
-        String password = sc.nextLine();
+        sc.nextLine();
+        String nom = null;
+        do {
+            vueAcceuil.newUserNom();
+            nom = sc.nextLine();
+        } while (nom == null || nom.trim().isEmpty());
+        user.setNom(nom.trim());
+
+        String prenom = null;
+        do {
+            vueAcceuil.newUserPrenom();
+            prenom = sc.nextLine();
+        } while (prenom == null || prenom.trim().isEmpty());
+        user.setPrenom(prenom.trim());
+
+        String adresse = null;
+        do {
+            vueAcceuil.newUseradresse();
+            adresse = sc.nextLine();
+        } while (adresse == null || adresse.trim().isEmpty());
+        user.setAdresse(adresse.trim());
+
+        boolean sameId = false;
+        String email = null;
+        do {
+
+            do {
+                vueAcceuil.newUseremail();
+                email = sc.nextLine();
+
+            } while (email == null || email.trim().isEmpty());
+
+            if (facade.getCentre().getUserByEmail(email) != null) {
+                usr = facade.getCentre().getUserByEmail(email);
+                if (usr.getIdUser() == id) {
+                    sameId = true;
+                }
+            } else {
+                sameId = true;
+            }
+        } while (!email.matches("^[\\w!#$%&'+/=?`{|}~^-]+(?:\\.[\\w!#$%&'+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$") || !sameId);
+        user.setEmail(email.trim());
+
+        vueAcceuil.newUserPassword();
+        String password = sc.next();
         String hasedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        user.setPassword(hasedPassword);
         user.modificationUser(id, nom, prenom, adresse, email, hasedPassword);
         loginStagiaire(user);
     }
@@ -130,7 +161,7 @@ class ControllerStagiaire {
     public void SelectFormation(Stagiaire user) {
         VueFormation vueFormation = new VueFormation();
         VueSession vueSession = new VueSession();
-        vueFormation.resultsListFormation(facade.getCentre().getAllFormation());
+        controller.getAllFormation(user);
         int selFormation;
         Formation formation = null;
         do {
@@ -138,14 +169,14 @@ class ControllerStagiaire {
             sc.nextLine();
             controller.checkInt();
             selFormation = sc.nextInt();
-            formation = facade.getCentre().getFormationbyId(selFormation);
-        } while (formation == null);
+
+        } while (facade.getCentre().getFormationbyId(selFormation) == null);
+        formation = facade.getCentre().getFormationbyId(selFormation);
 
         if (formation.listeSessionbyFormation().isEmpty()) {
             vueSession.zeroSession();
-            SelectFormation(user);
         } else {
-            vueSession.resultsListSession(formation.listeSessionbyFormation());
+            controller.getAllSessionByFormation(user, formation);
             int selSession = 0;
             do {
                 vueSession.inputSessionId();
@@ -155,11 +186,16 @@ class ControllerStagiaire {
                 }
                 selSession = sc.nextInt();
             } while (facade.getCentre().getSessionbyId(selSession) == null);
-    
-            if (!user.registerUserToSession(selSession)) {
-                vueStagiaire.erreurDoubleInscription();
+//vérifie si place disponible pour cette formation
+            if (formation.getParticipantMax() > facade.getCentre().getSessionbyId(selSession).getListeInscriptionbySession().size()) {
+
+                if (!user.registerUserToSession(selSession)) {
+                    vueStagiaire.erreurDoubleInscription();
+                } else {
+                    vueStagiaire.StatutInscription(user, facade.getCentre().getSessionbyId(selSession));
+                }
             } else {
-                vueStagiaire.StatutInscription(user, facade.getCentre().getSessionbyId(selSession));
+                VueStagiaire.nbrPlaceMax();
             }
         }
 
@@ -179,14 +215,9 @@ class ControllerStagiaire {
     public void inscriptionsByUser(Stagiaire stagiaire) {
         inscriptions(stagiaire);
         vueStagiaire.validationPaiement();
-        controller.checkInt();
-        int choice = sc.nextInt();
-        do {
-            vueAcceuil.error();
-            controller.checkInt();
-            choice = sc.nextInt();
-        }while (choice < 1 || choice > 2);
-        switch (choice) {
+
+        int menuchoice = 2;
+        switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
                 int sessionId;
                 do {
@@ -205,9 +236,7 @@ class ControllerStagiaire {
             case 2:
                 loginStagiaire(stagiaire);
                 break;
-
         }
-
     }
 
     public void deleteInscription(Stagiaire stagiaire) {

@@ -121,9 +121,28 @@ class ControllerAdmin {
     }
 
     public Formation inputFormation(User user, Formation formation) {
-        vueFormation.inputFormationNom();
+        int id = formation.getIdFormation();
         sc.nextLine();
-        String nomFormation = sc.nextLine();
+
+        boolean sameId = false;
+        String nomFormation;
+        do {
+
+            do {
+                vueFormation.inputFormationNom();
+                nomFormation = sc.nextLine();
+
+            } while (nomFormation == null || nomFormation.trim().isEmpty());
+
+            if (facade.getCentre().getFormationByNom(nomFormation) != null) {
+                Formation fmt = facade.getCentre().getFormationByNom(nomFormation);
+                if (fmt.getIdFormation() == id) {
+                    sameId = true;
+                }
+            } else {
+                sameId = true;
+            }
+        } while (!sameId);
         formation.setNomFormation(nomFormation);
         int prix = 0;
         do {
@@ -165,9 +184,13 @@ class ControllerAdmin {
     }
 
     public void deleteFormation(User user, Formation formation) {
-        user.deleteFormation(formation);
-        vueAcceuil.success();
-        crudSelectedFormation(user, formation);
+        if (user.deleteFormation(formation)) {
+            vueAdmin.SessionStillAvailable();
+            crudSelectedFormation(user, formation);
+        } else {
+            vueAcceuil.success();
+            crudSelectedFormation(user, formation);
+        }
     }
 
     public void crudFormateur(User user) {
@@ -198,23 +221,40 @@ class ControllerAdmin {
 
     public void createFormateur(User user) {
         Formateur formateur = new Formateur();
-        vueAcceuil.newUserNom();
         sc.nextLine();
-        String nom = sc.nextLine();
-        formateur.setNom(nom);
-        vueAcceuil.newUserPrenom();
-        String prenom = sc.nextLine();
-        formateur.setPrenom(prenom);
-        vueAcceuil.newUseradresse();
-        String adresse = sc.nextLine();
-        formateur.setAdresse(adresse);
-        vueAcceuil.newUseremail();
-        String email = sc.nextLine();
-        formateur.setEmail(email);
+        String nom = null;
+        do {
+            vueAcceuil.newUserNom();
+            nom = sc.nextLine();
+        } while (nom == null || nom.trim().isEmpty());
+        user.setNom(nom.trim());
+
+        String prenom = null;
+        do {
+            vueAcceuil.newUserPrenom();
+            prenom = sc.nextLine();
+        } while (prenom == null || prenom.trim().isEmpty());
+        user.setPrenom(prenom.trim());
+
+        String adresse = null;
+        do {
+            vueAcceuil.newUseradresse();
+            adresse = sc.nextLine();
+        } while (adresse == null || adresse.trim().isEmpty());
+        user.setAdresse(adresse.trim());
+
+        String email = null;
+        do {
+            vueAcceuil.newUseremail();
+            email = sc.nextLine();
+        } while (!email.matches("^[\\w!#$%&'+/=?`{|}~^-]+(?:\\.[\\w!#$%&'+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$") || email == null || email.trim().isEmpty() || facade.getCentre().getUserByEmail(email) != null);
+        user.setEmail(email.trim());
+
         vueAcceuil.newUserPassword();
-        String password = sc.nextLine();
-        String hashedpassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        formateur.setPassword(hashedpassword);
+        String password = sc.next();
+        String hasedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        user.setPassword(hasedPassword);
+
         formateur.setRole(new Role(3, "formateur"));
         formateur.registerFormateur();
 
@@ -249,22 +289,57 @@ class ControllerAdmin {
 
     public void updateFormateur(User user, Formateur formateur) {
         vueAcceuil.newUserNom();
+        int id = formateur.getIdUser();
+        User usr;
         sc.nextLine();
-        String nom = sc.nextLine();
-        formateur.setNom(nom);
-        vueAcceuil.newUserPrenom();
-        String prenom = sc.nextLine();
-        formateur.setPrenom(prenom);
-        vueAcceuil.newUseradresse();
-        String adresse = sc.nextLine();
-        formateur.setAdresse(adresse);
-        vueAcceuil.newUseremail();
-        String email = sc.nextLine();
-        formateur.setEmail(email);
+
+        String nom = null;
+        do {
+            vueAcceuil.newUserNom();
+            nom = sc.nextLine();
+        } while (nom == null || nom.trim().isEmpty());
+        user.setNom(nom.trim());
+
+        String prenom = null;
+        do {
+            vueAcceuil.newUserPrenom();
+            prenom = sc.nextLine();
+        } while (prenom == null || prenom.trim().isEmpty());
+        user.setPrenom(prenom.trim());
+
+        String adresse = null;
+        do {
+            vueAcceuil.newUseradresse();
+            adresse = sc.nextLine();
+        } while (adresse == null || adresse.trim().isEmpty());
+        user.setAdresse(adresse.trim());
+
+        boolean sameId = false;
+        String email = null;
+        do {
+
+            do {
+                vueAcceuil.newUseremail();
+                email = sc.nextLine();
+
+            } while (!email.matches("^[\\w!#$%&'+/=?`{|}~^-]+(?:\\.[\\w!#$%&'+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$") || email == null || email.trim().isEmpty());
+
+            if (facade.getCentre().getUserByEmail(email) != null) {
+                usr = facade.getCentre().getUserByEmail(email);
+                if (usr.getIdUser() == id) {
+                    sameId = true;
+                }
+            } else {
+                sameId = true;
+            }
+        } while (!sameId);
+        user.setEmail(email.trim());
+
         vueAcceuil.newUserPassword();
-        String password = sc.nextLine();
-        String hashedpassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        formateur.setPassword(hashedpassword);
+        String password = sc.next();
+        String hasedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        user.setPassword(hasedPassword);
+
         formateur.updateFormateur();
         crudFormateur(user);
     }
@@ -579,7 +654,7 @@ class ControllerAdmin {
         sc.nextLine();
         String nomLocal = sc.nextLine();
         local.setNomLocal(nomLocal);
-        if (facade.getCentre().createLocaux(local)) {
+        if (facade.getLocal().createLocaux(local)) {
             vueAcceuil.success();
             crudLocaux(user);
         } else {
@@ -594,17 +669,37 @@ class ControllerAdmin {
         do {
             vueAdmin.inputIdLocal();
             controller.checkInt();
+            sc.nextLine();
             idLocal = sc.nextInt();
         } while (facade.getCentre().getLocalById(idLocal) == null);
-        local.setIdLocal(idLocal);
-        vueAdmin.inputNomLocal();
-        String nomLocal = sc.next();
+
+        boolean sameId = false;
+        String nomLocal = sc.nextLine();
+        do {
+
+            do {
+                vueAdmin.inputNomLocal();
+                nomLocal = sc.nextLine();
+
+            } while (nomLocal == null || nomLocal.trim().isEmpty());
+
+            if (facade.getCentre().getLocalByNom(nomLocal) != null) {
+                Local lcl = facade.getCentre().getLocalByNom(nomLocal);
+                if (lcl.getIdLocal() == idLocal) {
+                    sameId = true;
+                }
+            } else {
+                sameId = true;
+            }
+        } while (!sameId);
+
         local.setNomLocal(nomLocal);
-        if (facade.getCentre().updateLocaux(local)) {
+        if (facade.getLocal().updateLocaux(local)) {
             vueAcceuil.success();
             crudLocaux(user);
         } else {
             vueAdmin.errorDoubleLocal();
+             crudLocaux(user);
         }
     }
 
@@ -617,7 +712,7 @@ class ControllerAdmin {
             idLocal = sc.nextInt();
         } while (facade.getCentre().getLocalById(idLocal) == null);
         local.setIdLocal(idLocal);
-        if (facade.getCentre().deleteLocaux(local)) {
+        if (facade.getLocal().deleteLocaux(local)) {
             vueAcceuil.success();
             crudLocaux(user);
         } else {
@@ -653,7 +748,7 @@ class ControllerAdmin {
         vueAdmin.inputdiscountStatut();
         Double discount = sc.nextDouble();
         statut.setDiscount(discount);
-        if (facade.getCentre().createStatut(statut)) {
+        if (facade.getStatut().createStatut(statut)) {
             vueAcceuil.success();
             crudStatut(user);
         } else {
@@ -681,7 +776,7 @@ class ControllerAdmin {
             discount = sc.nextDouble();
         } while (discount < 0 || discount > 100);
         statut.setDiscount(discount);
-        if (facade.getCentre().updateStatut(statut)) {
+        if (facade.getStatut().updateStatut(statut)) {
             vueAcceuil.success();
             crudStatut(user);
         } else {
@@ -738,7 +833,7 @@ class ControllerAdmin {
 
         if (facade.getCentre().getFormationByFormateur(idFormateur).isEmpty()) {
             vueFormateur.NotFormationForFormateur();
-            menuEnseigneFormation(user);
+            crudFormateur(user);
         } else {
             vueFormation.resultsListFormation(facade.getCentre().getFormationByFormateur(idFormateur));
             int idFormation;

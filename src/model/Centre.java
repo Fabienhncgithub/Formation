@@ -95,8 +95,6 @@ public class Centre {
         CentreDao centreDao = factory.createCentreDao();
         return centreDao.getAllFormateur();
     }
-    
-    
 
     public List<Session> listeSessionbyFormation(Formation formation) {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
@@ -205,36 +203,6 @@ public class Centre {
         centreDao.UpdateSession(session, formation);
     }
 
-    public boolean createLocaux(Local local) {
-        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
-        CentreDao centreDao = factory.createCentreDao();
-        return centreDao.createLocaux(local);
-    }
-
-    public boolean updateLocaux(Local local) {
-        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
-        CentreDao centreDao = factory.createCentreDao();
-        return centreDao.updateLocaux(local);
-    }
-
-    public boolean deleteLocaux(Local local) {
-        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
-        CentreDao centreDao = factory.createCentreDao();
-        return centreDao.deleteLocaux(local);
-    }
-
-    public boolean createStatut(Statut statut) {
-        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
-        CentreDao centreDao = factory.createCentreDao();
-        return centreDao.createStatut(statut);
-    }
-
-    public boolean updateStatut(Statut statut) {
-        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
-        CentreDao centreDao = factory.createCentreDao();
-        return centreDao.updateStatut(statut);
-    }
-
     public boolean addFormationToFormateur(int idFormation, int idFormateur) {
         AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
         CentreDao centreDao = factory.createCentreDao();
@@ -253,4 +221,15 @@ public class Centre {
         return centreDao.deleteFormationToFormateur(idFormation, idFormateur);
     }
 
+    public Formation getFormationByNom(String nomFormation) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.getFormationByNom(nomFormation);
+    }
+
+    public Local getLocalByNom(String nomLocal) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.getLocalByNom(nomLocal);
+    }
 }

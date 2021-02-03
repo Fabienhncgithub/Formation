@@ -34,6 +34,17 @@ public class Formation {
         this.participantMax = participantMax;
     }
 
+    public Formation(int idFormation, String nomFormation, double prix, int duree, int participantMax) {
+        this.idFormation = idFormation;
+        this.nomFormation = nomFormation;
+        this.prix = prix;
+        this.duree = duree;
+        this.participantMax = participantMax;
+    }
+    
+    
+    
+
     public Formation(String nomFormation, double prix, int duree, int participantMax) {
         this.nomFormation = nomFormation;
         this.prix = prix;

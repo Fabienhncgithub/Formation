@@ -253,4 +253,9 @@ public class VueAdmin {
         System.out.println("Tapez 3 pour revenir au meu précédent");
     }
 
+    public void SessionStillAvailable() {
+         System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Il n'est pas possible de supprimer cette formation car il y a des sessions dans le futur avec des participants");}
+
 }

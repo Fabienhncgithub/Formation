@@ -76,14 +76,14 @@ public class MySqlUserDao implements UserDao {
                 if (role == 1) {
                     u = new Stagiaire(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
                             new Role(rs.getInt("role"), rs.getString("role")),
-                            new Statut(rs.getInt("statut"), rs.getString("statut"),rs.getDouble("discount")));
+                            new Statut(rs.getInt("statut"), rs.getString("statut"), rs.getDouble("discount")));
 
                 } else if (role == 2) {
                     u = new Admin(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
                             new Role(rs.getInt("role"), rs.getString("role")));
                 } else if (role == 3) {
                     u = new Formateur(rs.getInt("idUser"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("email"), rs.getString("password"),
-                            new Role(rs.getInt("role"), rs.getString("role")),rs.getBoolean("supprime"));
+                            new Role(rs.getInt("role"), rs.getString("role")), rs.getBoolean("supprime"));
                 }
             }
         } catch (SQLException sqle) {
@@ -132,27 +132,24 @@ public class MySqlUserDao implements UserDao {
 
         String sql = "SELECT inscription.annule, inscription.idSession, inscription.idUser FROM session JOIN inscription ON session.idSession = inscription.idSession WHERE inscription.idSession = ? AND inscription.idUser = ?";
         String sql2 = "UPDATE inscription SET annule = 1 where inscription.idSession = ? and inscription.idUser = ? ";
-      
 
         try {
             ps = c.prepareStatement(sql);
             ps.setInt(1, idSession);
             ps.setInt(2, user.getIdUser());
             rs = ps.executeQuery();
-            
+
             if (rs.next()) {
                 result = true;
                 ps = c.prepareStatement(sql2);
                 ps.setInt(1, idSession);
                 ps.setInt(2, user.getIdUser());
                 ps.executeUpdate();
-                
-                
-                 ps = c.prepareStatement(sql2);
+
+                ps = c.prepareStatement(sql2);
                 ps.setInt(1, idSession);
                 ps.executeUpdate();
-                
-                
+
             }
         } catch (SQLException sqle) {
             System.err.println("MySqlUserDao, method deletelInscription(User user, int idSession): \n" + sqle.getMessage());
@@ -163,25 +160,60 @@ public class MySqlUserDao implements UserDao {
     }
 
     @Override
-    public void deleteFormation(Formation formation) {
+    public boolean deleteFormation(Formation formation) {
+        boolean result = false;
         Connection c;
         ResultSet rs = null;
         PreparedStatement ps = null;
-        int statutPaiement = 0;
-        int notificationPaiement = 0;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "UPDATE formation SET supprime =1 WHERE idFormation = ? ";
+        String sql = "SELECT * FROM formation WHERE idFormation = ? AND idFormation NOT IN(SELECT idFormation FROM session)";
+
+        String sql1 = "SELECT idSession FROM `session` WHERE `idFormation` = ? AND DATEDIFF(session.dateDebut,CURRENT_DATE)<0 AND session.idSession NOT IN(SELECT idSession FROM inscription)";
+
+        String sql2 = "UPDATE formation SET supprime = 1 WHERE idFormation = ? ";
+
+        String sql3 = "UPDATE session SET supprime = 1 WHERE session.idSession = ? ";
 
         try {
+
             ps = c.prepareStatement(sql);
             ps.setInt(1, formation.getIdFormation());
-            ps.executeUpdate();
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                ps = c.prepareStatement(sql2);
+                ps.setInt(1, formation.getIdFormation());
+                ps.executeUpdate();
+
+            } else {
+
+                ps = c.prepareStatement(sql1);
+                ps.setInt(1, formation.getIdFormation());
+                rs = ps.executeQuery();
+
+                    
+                while (rs.next()) {
+                    result = true;
+
+                int idSession = rs.getInt(1);
+                
+                    ps = c.prepareStatement(sql3);
+                    ps.setInt(1, idSession);
+                    ps.executeUpdate();
+
+                    ps = c.prepareStatement(sql2);
+                    ps.setInt(1, formation.getIdFormation());
+                    ps.executeUpdate();
+                }
+            }
         } catch (SQLException sqle) {
             System.err.println("MySqlUserDao, method deleteFormation(Formation formation): \n" + sqle.getMessage());
         } finally {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
+
+        return result;
     }
 
 }

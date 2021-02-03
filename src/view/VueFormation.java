@@ -49,24 +49,24 @@ public class VueFormation {
         System.out.println("");
         System.out.println("Tapez 3 pour gérer une formation ou une session");
         System.out.println("");
-        System.out.println("Tapez 4 pour afficher la liste des stagiaires inscrit à une session avec le prix et son statut");
+        System.out.println("Tapez 4 pour afficher la liste des stagiaires");
         System.out.println("");
-        System.out.println("Tapez 5 pour communiquer à chaque formateur les prestations qu'il doit assurer(jour, local, formation)");
+        System.out.println("Tapez 5 pour afficher la liste des prestations des formateurs");
         System.out.println("");
-        System.out.println("Tapez 6 pour afficher pour chaque formation la liste des sessions planifiées et le nombre de places encore dispo");
+        System.out.println("Tapez 6 pour afficher la liste des sessions planifiées pour chaque formation");
         System.out.println("");
-        System.out.println("Tapez 7 pour vérifier s'il reste encore des places libre pour une session. ");
+        System.out.println("Tapez 7 pour vérifier s'il reste encore des places libre pour une session");
         System.out.println("");
         System.out.println("Tapez 8 pour rechercher le formateur d'une session");
         System.out.println("");
-        System.out.println("Tapez 9 pour afficher les personnes inscrites à une session donnée");
+        System.out.println("Tapez 9 pour afficher les personnes inscrites à une session");
         System.out.println("");
         System.out.println("Tapez 10 pour revenir au menu précédent");
     }
 
     public void inputFormationNom() {
         System.out.println("------------------------------------------------------------------------------------------------------");
-        System.out.println("Entrez le nom de la formation");
+        System.out.println("Entrez le nom de la formation valide");
     }
 
     public void inputFormationId() {

@@ -91,16 +91,14 @@ public class MySqlCentreDao implements CentreDao {
         c = MySqlDaoFactory.getInstance().getConnection();
         List<Formation> listFormation = new ArrayList<>();
 
-        String sql = "SELECT * FROM formation WHERE nomFormation LIKE ?";
+        String sql = "SELECT idFormation, nomFormation, prix, duree, participantMax  FROM formation WHERE nomFormation LIKE ?";
 
         try {
             ps = c.prepareStatement(sql);
-            ps.setString(1, search);
+            ps.setString(1, "%" + search + "%");
             rs = ps.executeQuery();
-
             while (rs.next()) {
-
-                Formation formation = new Formation(rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMax"));
+                Formation formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getInt("prix"), rs.getInt("duree"), rs.getInt("participantMax"));
                 listFormation.add(formation);
             }
         } catch (SQLException sqle) {
@@ -684,7 +682,7 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "UPDATE session SET supprime = 1 WHERE DATEDIFF(now(),session.dateFin)> 365 ";
+        String sql = "call cleanDb()";
 
         try {
             ps = c.prepareStatement(sql);
@@ -952,20 +950,14 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql1 = "SELECT nomLocal FROM local WHERE nomLocal = ?";
-        String sql2 = "UPDATE local SET nomLocal=? WHERE idLocal = ?";
+        String sql2 = "UPDATE local SET nomLocal=? WHERE idLocal = ? ";
 
         try {
-            ps = c.prepareStatement(sql1);
+            ps = c.prepareStatement(sql2);
             ps.setString(1, local.getNomLocal());
-            rs = ps.executeQuery();
-            if (!rs.next()) {
-                result = true;
-                ps = c.prepareStatement(sql2);
-                ps.setString(1, local.getNomLocal());
-                ps.setInt(2, local.getIdLocal());
-                ps.executeUpdate();
-            }
+            ps.setInt(2, local.getIdLocal());
+            ps.executeUpdate();
+            result = true;
         } catch (SQLException sqle) {
             System.err.println("MySqlCentreDao, method boolean boolean updateLocaux(Local local): \n" + sqle.getMessage());
         } finally {
@@ -1141,5 +1133,54 @@ public class MySqlCentreDao implements CentreDao {
         return result;
     }
 
-  
+    @Override
+    public Formation getFormationByNom(String nomFormation) {
+        Connection c = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        Formation formation = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql = "SELECT idFormation, nomFormation, prix, duree, participantMax, supprime  FROM formation where nomFormation = ? AND supprime = 0";
+
+        try {
+            ps = c.prepareStatement(sql);
+            ps.setString(1, nomFormation);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                formation = new Formation(rs.getInt("idFormation"), rs.getString("nomFormation"), rs.getDouble("prix"), rs.getInt("duree"), rs.getInt("participantMax"), rs.getBoolean("supprime"));
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDAO, method getFormationyId(int idFormation): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return formation;
+    }
+
+    @Override
+    public Local getLocalByNom(String nomLocal) {
+        Connection c = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        Local local = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+
+        String sql = "SELECT idLocal,nomLocal FROM local where nomLocal = ? ";
+
+        try {
+            ps = c.prepareStatement(sql);
+            ps.setString(1, nomLocal);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                local = new Local(rs.getInt("idLocal"), rs.getString("nomLocal"));
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDAO, method getLocalById(int idLocal)): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return local;
+    }
+
 }

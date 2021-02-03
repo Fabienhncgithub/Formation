@@ -22,6 +22,7 @@ public class Facade {
     private Role role;
     private Statut statut;
     private Inscription inscription;
+    private Local local;
 
     public Facade() {
         this.centre = new Centre();
@@ -33,6 +34,7 @@ public class Facade {
         this.role = new Role();
         this.statut = new Statut();
         this.inscription = new Inscription();
+        this.local = new Local();
     }
 
  
@@ -99,6 +101,14 @@ public class Facade {
 
     public void setInscription(Inscription inscription) {
         this.inscription = inscription;
+    }
+
+    public Local getLocal() {
+        return local;
+    }
+
+    public void setLocal(Local local) {
+        this.local = local;
     }
 
  

@@ -5,11 +5,15 @@
  */
 package model;
 
+import model.DAO.AbstractDaoFactory;
+import model.DAO.CentreDao;
+
 /**
  *
  * @author Fabien
  */
 public class Local {
+
     private int idLocal;
     private String nomLocal;
 
@@ -36,10 +40,23 @@ public class Local {
     public void setNomLocal(String nomLocal) {
         this.nomLocal = nomLocal;
     }
-    
-    
-    
-    
-    
-    
+
+    public boolean createLocaux(Local local) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.createLocaux(local);
+    }
+
+    public boolean updateLocaux(Local local) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.updateLocaux(local);
+    }
+
+    public boolean deleteLocaux(Local local) {
+        AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+        return centreDao.deleteLocaux(local);
+    }
+
 }

@@ -6,14 +6,9 @@
 package model.DAO;
 
 import model.Formation;
-import model.Inscription;
 import model.User;
-import java.util.List;
 
-/**
- *
- * @author Fabien
- */
+
 public interface UserDao {
 
     void registerUser(User user);
@@ -27,7 +22,7 @@ public interface UserDao {
 
     public boolean deletelInscription(User user, int idSession);
 
-    void deleteFormation(Formation formation);
+    public boolean deleteFormation(Formation formation);
 
 
 

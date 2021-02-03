@@ -103,4 +103,10 @@ public class VueStagiaire {
         System.out.println("");
         System.out.println("Tapez 2 pour revenir au menu précédent");
     }
+
+    public static void nbrPlaceMax() {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("La session est complète, il n'y a plus de place");
+    }
 }

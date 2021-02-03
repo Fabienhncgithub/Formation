@@ -18,6 +18,7 @@ import model.Stagiaire;
 
 public interface CentreDao {
 
+    //ALL
     public List<Statut> getAllStatut();
 
     public List<Formation> getAllFormation();
@@ -30,6 +31,7 @@ public interface CentreDao {
 
     public List<Formation> searchFormation(String search);
 
+    //byID
     public Formation getFormationyId(int idFormation);
 
     public Session getSessionbyId(int idSession);
@@ -46,10 +48,23 @@ public interface CentreDao {
 
     public Inscription getInscriptionbyId(int inscriptionId);
 
+    //USER
+    public List<Stagiaire> resultListStagiaireBySession(int sessionId);
+
+    public void cleanDb();
+
+    public User getUserByEmail(String email);
+
+    public Formateur getFormateurBySession(int idSession);
+
+    public List<Formateur> getFormateurAvailable(Session session, Formation formation);
+
+    //INSCRIPTION
     public List<Inscription> getInscritpionPaiementNotification();
 
     public List<Inscription> listeInscriptionbySession(Session session);
 
+    //SESSION
     public boolean CreateNewSession(Session session, Formation formation);
 
     public void UpdateSession(Session session, Formation formation);
@@ -64,36 +79,33 @@ public interface CentreDao {
 
     public void validationStatutPaiment(int inscriptionId);
 
-    public List<Stagiaire> resultListStagiaireBySession(int sessionId);
-
-    public void cleanDb();
-
-    public User getUserByEmail(String email);
-
-    public Formateur getFormateurBySession(int idSession);
-
-    public List<Formateur> getFormateurAvailable(Session session, Formation formation);
-
-    public List<Local> getLocalAvailable(Session session, Formation formation);
-
+    //FORMATION
     public void createNewFormation(Formation formation);
 
     public void updateFormation(Formation formation);
-
-    public boolean createLocaux(Local local);
-
-    public boolean updateLocaux(Local local);
-
-    public boolean deleteLocaux(Local local);
-
-    public boolean createStatut(Statut statut);
-
-    public boolean updateStatut(Statut statut);
 
     public boolean addFormationToFormateur(int idFormation, int idFormateur);
 
     public List<Formation> getFormationByFormateur(int idFormateur);
 
     public boolean deleteFormationToFormateur(int idFormation, int idFormateur);
+
+    public Formation getFormationByNom(String nomFormation);
+
+    //LOCAUX
+    public boolean createLocaux(Local local);
+
+    public boolean updateLocaux(Local local);
+
+    public boolean deleteLocaux(Local local);
+
+    public List<Local> getLocalAvailable(Session session, Formation formation);
+
+    public Local getLocalByNom(String nomLocal);
+
+    //STATUT
+    public boolean createStatut(Statut statut);
+
+    public boolean updateStatut(Statut statut);
 
 }

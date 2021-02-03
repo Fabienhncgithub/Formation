@@ -4,7 +4,6 @@ import model.Admin;
 import model.Formation;
 import model.Stagiaire;
 import model.User;
-import view.VueAcceuil;
 import view.VueFormation;
 import java.util.List;
 import model.DAO.AbstractDaoFactory;
@@ -18,11 +17,12 @@ public class ControllerAcceuil {
     private User usr = null;
 
     public ControllerAcceuil() {
+        AbstractDaoFactory.setFactory(MySqlDaoFactory.getInstance());
+        cleanDB();
     }
 
     public void firstMenu() {
-        AbstractDaoFactory.setFactory(MySqlDaoFactory.getInstance());
-        cleanDB();
+
         vueAcceuil.choices();
 
         int menuchoice = 4;
@@ -73,7 +73,7 @@ public class ControllerAcceuil {
 
     public void searchCatalogue() {
         vueFormation.cataloguesChoices();
-        
+
         int menuchoice = 3;
         switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
@@ -91,19 +91,15 @@ public class ControllerAcceuil {
     }
 
     public void searchFormation(VueFormation vueFormation) {
-        vueFormation.inputFormationNom();
-        String search = sc.next();
-        List<Formation> formationsList = facade.getCentre().searchFormation(search);
+        String search = null;
+        sc.nextLine();
         do {
-            vueFormation.errorSearchFormation();
             vueFormation.inputFormationNom();
             search = sc.next();
-        } while (formationsList == null);
-        formationsList = facade.getCentre().searchFormation(search.toUpperCase());
-        vueFormation.resultsListFormation(formationsList);
+        } while (facade.getCentre().searchFormation(search.toUpperCase()).isEmpty());
+        vueFormation.resultsListFormation(facade.getCentre().searchFormation(search.toUpperCase()));
         firstMenu();
     }
-    //Nettoyer la base de données (suppression des données relatives aux sessions > 365 jours)
 
     public void cleanDB() {
         facade.getCentre().cleanDb();
