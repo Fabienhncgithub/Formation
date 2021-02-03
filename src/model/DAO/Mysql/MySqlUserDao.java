@@ -167,14 +167,14 @@ public class MySqlUserDao implements UserDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT * FROM formation WHERE idFormation = ? AND idFormation NOT IN(SELECT idFormation FROM session)";
+        String sql = "SELECT idFormation FROM formation WHERE idFormation = ? AND idFormation NOT IN(SELECT idFormation FROM session)";
 
-        String sql1 = "SELECT idSession FROM `session` WHERE `idFormation` = ? AND DATEDIFF(session.dateDebut,CURRENT_DATE)<0 AND session.idSession NOT IN(SELECT idSession FROM inscription)";
+        String sql1 = "SELECT idSession FROM `session` as sess WHERE `idFormation` = ? "
+                + " AND DATEDIFF(sess.dateDebut,CURRENT_DATE)>0 AND  sess.IdSession not in(select idSession from inscription) ";
 
         String sql2 = "UPDATE formation SET supprime = 1 WHERE idFormation = ? ";
 
-        String sql3 = "UPDATE session SET supprime = 1 WHERE session.idSession = ? ";
-
+        // String sql3 = "UPDATE session SET supprime = 1 WHERE session.idSession = ? ";
         try {
 
             ps = c.prepareStatement(sql);
@@ -185,6 +185,7 @@ public class MySqlUserDao implements UserDao {
                 ps = c.prepareStatement(sql2);
                 ps.setInt(1, formation.getIdFormation());
                 ps.executeUpdate();
+                 result = true;
 
             } else {
 
@@ -192,15 +193,13 @@ public class MySqlUserDao implements UserDao {
                 ps.setInt(1, formation.getIdFormation());
                 rs = ps.executeQuery();
 
-                    
                 while (rs.next()) {
                     result = true;
 
-                int idSession = rs.getInt(1);
-                
-                    ps = c.prepareStatement(sql3);
-                    ps.setInt(1, idSession);
-                    ps.executeUpdate();
+//                     int idSession = rs.getInt(1);
+//                    ps = c.prepareStatement(sql3);
+//                    ps.setInt(1, idSession);
+//                    ps.executeUpdate();
 
                     ps = c.prepareStatement(sql2);
                     ps.setInt(1, formation.getIdFormation());
