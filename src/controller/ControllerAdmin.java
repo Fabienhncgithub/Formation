@@ -184,12 +184,16 @@ class ControllerAdmin {
     }
 
     public void deleteFormation(User user, Formation formation) {
-        if (user.deleteFormation(formation)) {
+       
+        if (!user.deleteFormation(formation)) {
+         
             vueAdmin.SessionStillAvailable();
             crudSelectedFormation(user, formation);
+
         } else {
             vueAcceuil.success();
             crudSelectedFormation(user, formation);
+
         }
     }
 
@@ -388,7 +392,10 @@ class ControllerAdmin {
             DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             formatter.setLenient(false);
             date = formatter.parse(dateDebut);
-            session.setDateDebut(date);
+
+            if (date.before(new Date())) {
+                session.setDateDebut(date);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -440,18 +447,26 @@ class ControllerAdmin {
     }
 
     private void validationPaiment(User user) {
-        List<Inscription> listeInscriptionNotificationPaiment = facade.getCentre().getInscritpionPaiementNotification();
-        vueStagiaire.resultsListInscription(listeInscriptionNotificationPaiment);
-        int inscriptionId;
-        do {
-            vueAdmin.inputPaiement();
-            sc.nextLine();
-            controller.checkInt();
-            inscriptionId = sc.nextInt();
-            controller.retourMenuAdmin(inscriptionId, user);
-        } while (facade.getCentre().getInscriptionbyId(inscriptionId) == null);
-        facade.getCentre().validationStatutPaiment(inscriptionId);
-        adminChoices(user);
+        if (!facade.getCentre().getInscritpionPaiementNotification().isEmpty()) {
+            List<Inscription> listeInscriptionNotificationPaiment = facade.getCentre().getInscritpionPaiementNotification();
+            vueStagiaire.resultsListInscription(listeInscriptionNotificationPaiment);
+            int inscriptionId;
+            do {
+                vueAdmin.inputPaiement();
+                sc.nextLine();
+                controller.checkInt();
+                inscriptionId = sc.nextInt();
+                controller.retourMenuAdmin(inscriptionId, user);
+
+            } while (facade.getCentre().getInscriptionbyId(inscriptionId) == null);
+
+            facade.getCentre().validationStatutPaiment(inscriptionId);
+            vueAcceuil.success();
+            adminChoices(user);
+        } else {
+            vueAcceuil.zeroInscription();
+            adminChoices(user);
+        }
     }
 
     private void ListeStagiaireBySession(User user) {
@@ -699,7 +714,7 @@ class ControllerAdmin {
             crudLocaux(user);
         } else {
             vueAdmin.errorDoubleLocal();
-             crudLocaux(user);
+            crudLocaux(user);
         }
     }
 

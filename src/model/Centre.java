@@ -232,4 +232,10 @@ public class Centre {
         CentreDao centreDao = factory.createCentreDao();
         return centreDao.getLocalByNom(nomLocal);
     }
+
+    public Object getInscriptionbyIdUser(int inscriptionId, User user) {
+     AbstractDaoFactory factory = AbstractDaoFactory.getFactory();
+        CentreDao centreDao = factory.createCentreDao();
+    return centreDao.getInscriptionbyIdUser(inscriptionId, user);
+    }
 }

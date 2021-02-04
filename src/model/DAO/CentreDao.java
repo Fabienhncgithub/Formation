@@ -108,4 +108,6 @@ public interface CentreDao {
 
     public boolean updateStatut(Statut statut);
 
+    public Inscription getInscriptionbyIdUser(int inscriptionId, User user);
+
 }

@@ -55,13 +55,13 @@ public class VueStagiaire {
             } else {
                 statut = "annulé";
             }
-            if ((i.getNotificationPaiement())) {
+            if ((!i.getNotificationPaiement())) {
                 notificationPaiement = " Aucun paiment de votre part";
             } else {
                 notificationPaiement = " En attente de confirmation de paiement par le système";
             }
 
-            if (i.getStatutPaiement()) {
+            if (!i.getStatutPaiement()) {
                 statutPaiement = " impayé";
             } else {
                 statutPaiement = " payé";

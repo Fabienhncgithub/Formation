@@ -580,8 +580,8 @@ public class MySqlCentreDao implements CentreDao {
         PreparedStatement ps = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql1 = "SELECT idSession, idUser FROM inscription WHERE idSession = ? AND idUser  = ? AND inscription.notificationPaiement = 1";
-        String sql2 = "UPDATE inscription SET notificationPaiement = 1  WHERE idSession = ?";
+        String sql1 = "SELECT idSession, idUser FROM inscription WHERE idSession = ? AND idUser  = ? AND inscription.notificationPaiement = 1 ";
+        String sql2 = "UPDATE inscription SET notificationPaiement = 1  WHERE idInscription = ? ";
 
         try {
             ps = c.prepareStatement(sql1);
@@ -837,7 +837,7 @@ public class MySqlCentreDao implements CentreDao {
         Inscription inscription = null;
         c = MySqlDaoFactory.getInstance().getConnection();
 
-        String sql = "SELECT idInscription,statutPaiement,notificationPaiement,prix  WHERE inscriptionId = ? ";
+        String sql = "SELECT idInscription,statutPaiement,notificationPaiement,prix FROM inscription WHERE idInscription = ? AND notificationPaiement = 1 ";
 
         try {
             ps = c.prepareStatement(sql);
@@ -1181,6 +1181,37 @@ public class MySqlCentreDao implements CentreDao {
             MySqlDaoFactory.closeAll(rs, ps, c);
         }
         return local;
+    }
+
+    @Override
+    public Inscription getInscriptionbyIdUser(int inscriptionId, User user) {
+        Connection c = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        Inscription inscription = null;
+        c = MySqlDaoFactory.getInstance().getConnection();
+        
+        
+        System.out.println(inscriptionId);
+        System.out.println(user.getIdUser());
+        
+
+        String sql = "SELECT idInscription,statutPaiement,notificationPaiement,prix FROM inscription WHERE idInscription = ? AND idUser = ? AND notificationPaiement = 1 ";
+
+        try {
+            ps = c.prepareStatement(sql);
+            ps.setInt(1, inscriptionId);
+            ps.setInt(2, user.getIdUser());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                inscription = new Inscription(rs.getInt("idInscription"), rs.getBoolean("statutPaiement"), rs.getBoolean("notificationPaiement"), rs.getDouble("prix"));
+            }
+        } catch (SQLException sqle) {
+            System.err.println("MySqlCentreDAO, method Inscription getInscriptionbyId(int inscriptionId): \n" + sqle.getMessage());
+        } finally {
+            MySqlDaoFactory.closeAll(rs, ps, c);
+        }
+        return inscription;
     }
 
 }

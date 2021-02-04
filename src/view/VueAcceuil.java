@@ -134,4 +134,10 @@ public class VueAcceuil {
         System.out.println("Cette opération a déjà été effectué");
     }
 
+    public void zeroInscription() {
+            System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("");
+        System.out.println("Il n'y a pas d'inscription");
+    }
+
 }

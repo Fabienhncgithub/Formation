@@ -97,6 +97,7 @@ class ControllerStagiaire {
                 inscriptionsByUser(user);
                 break;
             case 5:
+                sc.nextLine();
                 controllerAcceuil.firstMenu();
                 break;
         }
@@ -187,16 +188,16 @@ class ControllerStagiaire {
                 selSession = sc.nextInt();
             } while (facade.getCentre().getSessionbyId(selSession) == null);
 //vérifie si place disponible pour cette formation
-            if (formation.getParticipantMax() > facade.getCentre().getSessionbyId(selSession).getListeInscriptionbySession().size()) {
+         //   if (formation.getParticipantMax() > facade.getCentre().getSessionbyId(selSession).getListeInscriptionbySession().size()) {
 
                 if (!user.registerUserToSession(selSession)) {
                     vueStagiaire.erreurDoubleInscription();
                 } else {
                     vueStagiaire.StatutInscription(user, facade.getCentre().getSessionbyId(selSession));
                 }
-            } else {
-                VueStagiaire.nbrPlaceMax();
-            }
+         //   } else {
+           //     VueStagiaire.nbrPlaceMax();
+            //}
         }
 
         loginStagiaire(user);
@@ -219,13 +220,14 @@ class ControllerStagiaire {
         int menuchoice = 2;
         switch (controller.checkMenuChoice(menuchoice)) {
             case 1:
-                int sessionId;
+                int inscriptionId;
                 do {
                     vueSession.inputSessionId();
                     controller.checkInt();
-                    sessionId = sc.nextInt();
-                } while (facade.getCentre().getSessionbyId(sessionId) == null);
-                if (facade.getCentre().validationPaiement(sessionId, stagiaire)) {
+                    inscriptionId = sc.nextInt();
+                } while (facade.getCentre().getInscriptionbyId(inscriptionId) == null);
+                
+                if (facade.getCentre().validationPaiement(inscriptionId, stagiaire)) {
                     vueAcceuil.success();
                     loginStagiaire(stagiaire);
                 } else {

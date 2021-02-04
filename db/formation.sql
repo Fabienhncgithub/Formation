@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le :  mer. 03 fév. 2021 à 13:00
+-- Généré le :  jeu. 04 fév. 2021 à 09:42
 -- Version du serveur :  10.1.30-MariaDB
 -- Version de PHP :  7.2.2
 
@@ -59,10 +59,10 @@ INSERT INTO `enseigne` (`idUser`, `idFormation`) VALUES
 
 CREATE TABLE `formation` (
   `idFormation` int(255) NOT NULL,
-  `nomFormation` varchar(255) DEFAULT NULL,
-  `prix` double(255,0) DEFAULT NULL,
-  `duree` int(255) DEFAULT NULL,
-  `participantMax` int(255) DEFAULT NULL,
+  `nomFormation` varchar(255) NOT NULL,
+  `prix` double(255,0) NOT NULL,
+  `duree` int(255) NOT NULL,
+  `participantMax` int(255) NOT NULL,
   `supprime` tinyint(4) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
@@ -78,12 +78,12 @@ INSERT INTO `formation` (`idFormation`, `nomFormation`, `prix`, `duree`, `partic
 (8, 'HTML', 10, 10, 10, 0),
 (9, 'NEDER', 200, 400, 5, 0),
 (10, 'NONONONO', 12, 23, 56, 0),
-(11, 'SGBD2', 36, 71, 9, 1),
-(13, 'NONONONO', 12, 23, 56, 1),
-(14, 'NONONONO', 12, 23, 56, 1),
+(11, 'SGBD2', 36, 71, 9, 0),
+(13, 'NONONONO', 12, 23, 56, 0),
+(14, 'NONONONO', 12, 23, 56, 0),
 (15, 'Amin', 12, 3, 13, 0),
-(16, 'Strucute des ordinateurs', 10, 3, 1, 0),
-(17, 'Latin', 134, 4, 1, 0),
+(16, 'Strucute des ordinateurs', 10, 3, 1, 1),
+(17, 'Latin', 134, 4, 1, 1),
 (18, 'Nederlands', 424, 10, 11, 1);
 
 -- --------------------------------------------------------
@@ -96,8 +96,8 @@ CREATE TABLE `inscription` (
   `idinscription` int(11) NOT NULL,
   `idSession` int(255) NOT NULL,
   `idUser` int(255) DEFAULT NULL,
-  `statutPaiement` int(255) DEFAULT NULL,
-  `notificationPaiement` int(255) DEFAULT NULL,
+  `statutPaiement` int(255) DEFAULT '0',
+  `notificationPaiement` int(255) DEFAULT '0',
   `prix` double(255,0) DEFAULT '0',
   `annule` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
@@ -109,8 +109,7 @@ CREATE TABLE `inscription` (
 INSERT INTO `inscription` (`idinscription`, `idSession`, `idUser`, `statutPaiement`, `notificationPaiement`, `prix`, `annule`) VALUES
 (1, 2, 1, 1, 1, 0, 0),
 (3, 22, 1, 0, 0, 0, 0),
-(4, 23, 1, 0, 0, 12, 0),
-(6, 28, 20, 0, 0, 39, 0);
+(4, 23, 1, 1, 1, 12, 0);
 
 -- --------------------------------------------------------
 
@@ -167,9 +166,9 @@ CREATE TABLE `session` (
   `idFormation` int(255) DEFAULT NULL,
   `idFormateur` int(255) DEFAULT NULL,
   `idLocal` int(11) DEFAULT '0',
-  `dateDebut` date DEFAULT NULL,
-  `dateFin` date DEFAULT NULL,
-  `supprime` tinyint(4) DEFAULT '0'
+  `dateDebut` date NOT NULL,
+  `dateFin` date NOT NULL,
+  `supprime` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
@@ -196,7 +195,7 @@ INSERT INTO `session` (`idSession`, `idFormation`, `idFormateur`, `idLocal`, `da
 (25, 15, 14, 2, '2020-10-10', '2021-01-24', 0),
 (26, 15, 14, 4, '2023-10-10', '2023-10-12', 0),
 (27, 15, 14, 1, '1290-10-10', '1290-10-12', 1),
-(28, 17, 15, 6, '2021-12-31', '2022-01-05', 0);
+(28, 17, 15, 6, '2021-12-31', '2022-01-05', 1);
 
 -- --------------------------------------------------------
 
@@ -336,7 +335,7 @@ ALTER TABLE `formation`
 -- AUTO_INCREMENT pour la table `inscription`
 --
 ALTER TABLE `inscription`
-  MODIFY `idinscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idinscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `local`
